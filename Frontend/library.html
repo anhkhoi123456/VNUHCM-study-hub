@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VNU - StudyHub | Kho tài liệu</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/dev-banner.css" />
+  <style>
+    .filter-bar {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 20px; flex-wrap: wrap;
+    }
+    .filter-chip {
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 1px solid var(--gray-200);
+      background: #fff;
+      font-size: 12.5px; font-weight: 500; color: var(--gray-600);
+      cursor: pointer;
+      transition: background .15s, border-color .15s, color .15s;
+    }
+    .filter-chip:hover, .filter-chip.active {
+      background: var(--blue-600); border-color: var(--blue-600); color: #fff;
+    }
+    .lib-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 14px;
+    }
+    .lib-file-card {
+      background: #fff;
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius);
+      padding: 16px;
+      cursor: pointer;
+      transition: box-shadow .15s, border-color .15s;
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .lib-file-card:hover { box-shadow: var(--shadow); border-color: var(--blue-200); }
+    .lib-file-card .top-row { display: flex; align-items: flex-start; gap: 10px; }
+    .lib-file-card .title { font-size: 13px; font-weight: 600; line-height: 1.4; color: var(--gray-800); }
+    .lib-file-card .meta  { font-size: 11.5px; color: var(--gray-400); display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .lib-file-card .bottom-row {
+      display: flex; align-items: center; justify-content: space-between;
+      border-top: 1px solid var(--gray-100); padding-top: 10px;
+    }
+    .lib-file-card .size { font-size: 12px; color: var(--gray-500); font-weight: 500; }
+    .sort-btn {
+      display: flex; align-items: center; gap: 6px;
+      padding: 7px 12px;
+      border: 1px solid var(--gray-200); border-radius: 8px;
+      background: #fff; font-size: 12.5px; color: var(--gray-600);
+      cursor: pointer;
+    }
+    .sort-btn:hover { background: var(--gray-50); }
+  </style>
+</head>
+<body>
+
+<div class="app-shell">
+
+  <!-- ═══ Sidebar ═════════════════════════════════════════════════ -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon"><i class="fa-solid fa-book-open"></i></div>
+      <div class="logo-text">
+        <h2>VNU - StudyHub</h2>
+        <p>Học thông minh · Vững tương lai</p>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="dashboard.html" class="nav-item" data-page="dashboard.html">
+        <i class="fa-solid fa-house"></i><span>Trang chủ</span>
+      </a>
+      <a href="library.html" class="nav-item active" data-page="library.html">
+        <i class="fa-regular fa-calendar-check"></i><span>Kho tài liệu</span>
+      </a>
+      <a href="planner.html" class="nav-item" data-page="planner.html">
+        <i class="fa-solid fa-brain"></i><span>AI Planner</span>
+      </a>
+      <a href="chatbot.html" class="nav-item" data-page="chatbot.html">
+        <i class="fa-regular fa-comment-dots"></i><span>AI Chatbot</span>
+      </a>
+      <a href="#" class="nav-item">
+        <i class="fa-regular fa-user"></i><span>Space cá nhân</span>
+      </a>
+    </nav>
+    <div class="sidebar-user">
+      <div class="user-avatar">NA</div>
+      <div class="user-info">
+        <h4>Nguyễn Văn A</h4>
+        <p>Sinh viên</p>
+      </div>
+      <i class="fa-solid fa-chevron-up chevron"></i>
+    </div>
+  </aside>
+
+  <!-- ═══ Main ═════════════════════════════════════════════════════ -->
+  <div class="main-content">
+    <header class="topbar">
+      <div>
+        <h2 style="font-size:18px;font-weight:700;">Kho tài liệu</h2>
+        <p style="font-size:12px;color:var(--gray-400);margin-top:1px;">Cấu trúc dữ liệu và giải thuật</p>
+      </div>
+      <div class="topbar-search">
+        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+        <input type="text" placeholder="Tìm kiếm tài liệu…" />
+      </div>
+      <div class="topbar-actions">
+        <button class="topbar-icon-btn"><i class="fa-regular fa-bell"></i></button>
+        <div class="avatar-btn">NA</div>
+      </div>
+    </header>
+
+    <div class="page-body">
+
+      <!-- Breadcrumb -->
+      <div style="display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--gray-400);margin-bottom:20px;">
+        <a href="dashboard.html" style="color:var(--blue-500);">Trang chủ</a>
+        <i class="fa-solid fa-chevron-right" style="font-size:10px;"></i>
+        <span style="color:var(--gray-500);">ĐHQG TP.HCM</span>
+        <i class="fa-solid fa-chevron-right" style="font-size:10px;"></i>
+        <span style="color:var(--gray-500);">Khoa CNTT</span>
+        <i class="fa-solid fa-chevron-right" style="font-size:10px;"></i>
+        <span style="color:var(--gray-800);font-weight:500;">Cấu trúc dữ liệu và giải thuật</span>
+      </div>
+
+      <!-- Filter + Sort bar -->
+      <div class="filter-bar">
+        <button class="filter-chip active" onclick="filterFiles(this,'all')">Tất cả</button>
+        <button class="filter-chip" onclick="filterFiles(this,'pdf')">📄 PDF</button>
+        <button class="filter-chip" onclick="filterFiles(this,'doc')">📝 DOC</button>
+        <button class="filter-chip" onclick="filterFiles(this,'ppt')">📊 PPT</button>
+        <button class="filter-chip" onclick="filterFiles(this,'xlsx')">📈 XLSX</button>
+        <div style="margin-left:auto;">
+          <button class="sort-btn">
+            <i class="fa-solid fa-sort"></i> Mới nhất
+          </button>
+        </div>
+      </div>
+
+      <!-- File grid -->
+      <div class="lib-grid" id="fileGrid">
+
+        <div class="lib-file-card" data-type="pdf" onclick="window.location='chatbot.html'">
+          <div class="top-row">
+            <div class="file-type-badge file-type-pdf" style="flex-shrink:0;">PDF</div>
+            <div>
+              <div class="title">Cấu trúc dữ liệu và giải thuật – Bài giảng Chương 1</div>
+              <div class="meta"><span>Nguyễn Văn Hùng</span>·<span>20/06/2024</span></div>
+            </div>
+          </div>
+          <div class="bottom-row">
+            <span class="size">2.4 MB</span>
+            <button class="bookmark-btn" onclick="event.stopPropagation();this.classList.toggle('saved')">
+              <i class="fa-regular fa-bookmark"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="lib-file-card" data-type="doc" onclick="window.location='chatbot.html'">
+          <div class="top-row">
+            <div class="file-type-badge file-type-doc" style="flex-shrink:0;">DOC</div>
+            <div>
+              <div class="title">Hệ điều hành – Chương 1: Giới thiệu</div>
+              <div class="meta"><span>Trần Thị Bảo</span>·<span>15/06/2024</span></div>
+            </div>
+          </div>
+          <div class="bottom-row">
+            <span class="size">1.8 MB</span>
+            <button class="bookmark-btn" onclick="event.stopPropagation();this.classList.toggle('saved')">
+              <i class="fa-regular fa-bookmark"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="lib-file-card" data-type="pdf" onclick="window.location='chatbot.html'">
+          <div class="top-row">
+            <div class="file-type-badge file-type-pdf" style="flex-shrink:0;">PDF</div>
+            <div>
+              <div class="title">Xác suất thống kê – Bài giảng tổng hợp</div>
+              <div class="meta"><span>Phạm Minh Đức</span>·<span>10/06/2024</span></div>
+            </div>
+          </div>
+          <div class="bottom-row">
+            <span class="size">1.2 MB</span>
+            <button class="bookmark-btn" onclick="event.stopPropagation();this.classList.toggle('saved')">
+              <i class="fa-regular fa-bookmark"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="lib-file-card" data-type="ppt" onclick="window.location='chatbot.html'">
+          <div class="top-row">
+            <div class="file-type-badge file-type-ppt" style="flex-shrink:0;">PPT</div>
+            <div>
+              <div class="title">Mạng máy tính – Slide bài giảng Chương 3</div>
+              <div class="meta"><span>Lê Hoàng Nam</span>·<span>08/06/2024</span></div>
+            </div>
+          </div>
+          <div class="bottom-row">
+            <span class="size">3.6 MB</span>
+            <button class="bookmark-btn" onclick="event.stopPropagation();this.classList.toggle('saved')">
+              <i class="fa-regular fa-bookmark"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="lib-file-card" data-type="pdf" onclick="window.location='chatbot.html'">
+          <div class="top-row">
+            <div class="file-type-badge file-type-pdf" style="flex-shrink:0;">PDF</div>
+            <div>
+              <div class="title">Đề thi giữa kỳ CTDL – HK1 2023-2024</div>
+              <div class="meta"><span>BM CNTT</span>·<span>05/06/2024</span></div>
+            </div>
+          </div>
+          <div class="bottom-row">
+            <span class="size">0.8 MB</span>
+            <button class="bookmark-btn" onclick="event.stopPropagation();this.classList.toggle('saved')">
+              <i class="fa-regular fa-bookmark"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="lib-file-card" data-type="xlsx" onclick="window.location='chatbot.html'">
+          <div class="top-row">
+            <div class="file-type-badge file-type-xlsx" style="flex-shrink:0;">XLS</div>
+            <div>
+              <div class="title">Danh sách bài tập lập trình CTDL</div>
+              <div class="meta"><span>BM CNTT</span>·<span>01/06/2024</span></div>
+            </div>
+          </div>
+          <div class="bottom-row">
+            <span class="size">0.4 MB</span>
+            <button class="bookmark-btn" onclick="event.stopPropagation();this.classList.toggle('saved')">
+              <i class="fa-regular fa-bookmark"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="lib-file-card" data-type="doc" onclick="window.location='chatbot.html'">
+          <div class="top-row">
+            <div class="file-type-badge file-type-doc" style="flex-shrink:0;">DOC</div>
+            <div>
+              <div class="title">Báo cáo thực hành CTDL – Lab 01</div>
+              <div class="meta"><span>Nguyễn Văn A</span>·<span>25/05/2024</span></div>
+            </div>
+          </div>
+          <div class="bottom-row">
+            <span class="size">1.1 MB</span>
+            <button class="bookmark-btn" onclick="event.stopPropagation();this.classList.toggle('saved')">
+              <i class="fa-regular fa-bookmark"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="lib-file-card" data-type="ppt" onclick="window.location='chatbot.html'">
+          <div class="top-row">
+            <div class="file-type-badge file-type-ppt" style="flex-shrink:0;">PPT</div>
+            <div>
+              <div class="title">Giải thuật sắp xếp – Bubble, Quick, Merge Sort</div>
+              <div class="meta"><span>Nguyễn Văn Hùng</span>·<span>20/05/2024</span></div>
+            </div>
+          </div>
+          <div class="bottom-row">
+            <span class="size">2.9 MB</span>
+            <button class="bookmark-btn" onclick="event.stopPropagation();this.classList.toggle('saved')">
+              <i class="fa-regular fa-bookmark"></i>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="js/main.js"></script>
+<script src="js/dev-banner.js"></script>
+<script>
+  function filterFiles(btn, type) {
+    document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.lib-file-card').forEach(card => {
+      card.style.display = (type === 'all' || card.dataset.type === type) ? '' : 'none';
+    });
+  }
+</script>
+</body>
+</html>
+

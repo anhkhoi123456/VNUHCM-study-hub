@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VNU - StudyHub | Trang chủ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/dev-banner.css" />
+  <style>
+    /* ── Dashboard-specific ─────────────────────────────────── */
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+    @media (max-width: 1100px) { .category-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 640px)  { .category-grid { grid-template-columns: 1fr; } }
+
+    .file-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+    @media (max-width: 1100px) { .file-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 640px)  { .file-grid { grid-template-columns: 1fr; } }
+
+    .category-card-header {
+      display: flex; align-items: center; gap: 10px; margin-bottom: 12px;
+    }
+    .category-card h4 { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
+    .category-card .sub {
+      font-size: 12px; color: var(--gray-400);
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .category-card .arrow-row {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-top: 10px; border-top: 1px solid var(--gray-100); padding-top: 10px;
+    }
+    .category-card .stat { font-size: 12px; color: var(--gray-500); }
+    .arrow-btn {
+      width: 26px; height: 26px; border-radius: 50%;
+      background: var(--blue-50);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--blue-600); font-size: 11px; cursor: pointer;
+      border: none;
+      transition: background .15s;
+    }
+    .arrow-btn:hover { background: var(--blue-100); }
+
+    .file-card { cursor: pointer; }
+    .file-card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+    .file-card h4 { font-size: 13px; font-weight: 600; line-height: 1.3; margin-bottom: 4px; }
+    .file-card .file-meta {
+      display: flex; align-items: center; justify-content: space-between;
+      font-size: 11.5px; color: var(--gray-400);
+    }
+    .bookmark-btn {
+      background: none; border: none; color: var(--gray-300);
+      cursor: pointer; font-size: 15px; padding: 4px;
+      transition: color .15s;
+    }
+    .bookmark-btn:hover, .bookmark-btn.saved { color: var(--blue-500); }
+
+    /* welcome banner illustration */
+    .banner-books {
+      position: absolute;
+      right: 32px; top: 50%; transform: translateY(-50%);
+      display: flex; flex-direction: column; align-items: center;
+      gap: 2px; pointer-events: none;
+    }
+    .book-stack {
+      display: flex; gap: 6px; align-items: flex-end;
+    }
+    .book {
+      border-radius: 4px 8px 8px 4px;
+    }
+    .b1 { width: 28px; height: 70px; background: linear-gradient(180deg,#60a5fa,#2563eb); }
+    .b2 { width: 22px; height: 55px; background: linear-gradient(180deg,#a78bfa,#7c3aed); }
+    .b3 { width: 26px; height: 62px; background: linear-gradient(180deg,#34d399,#059669); }
+    .cap {
+      width: 70px; height: 12px;
+      background: #1e3a8a;
+      border-radius: 3px;
+      position: relative;
+      margin-bottom: 4px;
+    }
+    .cap::before {
+      content: '';
+      position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
+      width: 12px; height: 10px;
+      background: #1e3a8a;
+      border-radius: 3px;
+    }
+    .cap-string {
+      position: absolute; right: -18px; top: 50%; transform: translateY(-50%);
+      width: 36px; height: 2px; background: #f59e0b;
+      border-radius: 2px;
+    }
+    .cap-tassel {
+      position: absolute; right: -20px; top: 6px;
+      width: 2px; height: 14px; background: #f59e0b;
+      border-radius: 2px;
+    }
+    .banner-label {
+      position: absolute; right: 150px; top: 18px;
+      font-size: 10.5px; font-weight: 700; color: var(--blue-600);
+      line-height: 1.4; font-style: italic; text-align: right;
+    }
+    @media (max-width: 900px) {
+      .banner-books, .banner-label { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="app-shell">
+
+  <!-- ═══ Sidebar ═════════════════════════════════════════════════ -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon"><i class="fa-solid fa-book-open"></i></div>
+      <div class="logo-text">
+        <h2>VNU - StudyHub</h2>
+        <p>Học thông minh · Vững tương lai</p>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="dashboard.html" class="nav-item" data-page="dashboard.html">
+        <i class="fa-solid fa-house"></i><span>Trang chủ</span>
+      </a>
+      <a href="library.html" class="nav-item" data-page="library.html">
+        <i class="fa-regular fa-calendar-check"></i><span>Kho tài liệu</span>
+      </a>
+      <a href="planner.html" class="nav-item" data-page="planner.html">
+        <i class="fa-solid fa-brain"></i><span>AI Planner</span>
+      </a>
+      <a href="chatbot.html" class="nav-item" data-page="chatbot.html">
+        <i class="fa-regular fa-comment-dots"></i><span>AI Chatbot</span>
+      </a>
+      <a href="#" class="nav-item">
+        <i class="fa-regular fa-user"></i><span>Space cá nhân</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-user">
+      <div class="user-avatar">NA</div>
+      <div class="user-info">
+        <h4>Nguyễn Văn A</h4>
+        <p>Sinh viên</p>
+      </div>
+      <i class="fa-solid fa-chevron-up chevron"></i>
+    </div>
+  </aside>
+
+  <!-- ═══ Main ═════════════════════════════════════════════════════ -->
+  <div class="main-content">
+
+    <!-- Topbar -->
+    <header class="topbar">
+      <div class="topbar-search">
+        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+        <input type="text" placeholder="Tìm kiếm tài liệu, môn học, ngành, khoa…" id="topSearch" />
+      </div>
+      <div class="topbar-actions">
+        <button class="topbar-icon-btn" title="Thông báo" onclick="showToast('Không có thông báo mới','info')">
+          <i class="fa-regular fa-bell"></i>
+        </button>
+        <div class="avatar-btn">NA</div>
+      </div>
+    </header>
+
+    <!-- Page body -->
+    <div class="page-body">
+
+      <!-- Welcome Banner -->
+      <div class="welcome-banner">
+        <h2>Chào mừng trở lại, Nguyễn Văn A 👋</h2>
+        <p>Hành trình tri thức của bạn bắt đầu từ đây. Cùng VNU – StudyHub khám phá kho tài liệu và chinh phục mục tiêu nhé!</p>
+
+        <div class="banner-search" style="margin-top:16px;">
+          <div class="search-bar">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" placeholder="Tìm kiếm tài liệu, môn học, ngành, khoa…" />
+            <button style="background:none;border:none;color:var(--gray-400);cursor:pointer;font-size:13px;">
+              <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="banner-label">Your Study<br>Journey<br><em>Starts Here</em></div>
+
+        <div class="banner-books">
+          <div class="cap">
+            <div class="cap-string"></div>
+            <div class="cap-tassel"></div>
+          </div>
+          <div class="book-stack">
+            <div class="book b1"></div>
+            <div class="book b2"></div>
+            <div class="book b3"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Document Library -->
+      <div class="section-header">
+        <h3>Kho tài liệu của bạn</h3>
+        <span class="see-all">Xem tất cả <i class="fa-solid fa-arrow-right" style="font-size:11px;"></i></span>
+      </div>
+
+      <div class="category-grid">
+        <!-- Trường đại học -->
+        <div class="category-card" onclick="showToast('Mở Trường đại học…','info')">
+          <div class="category-card-header">
+            <div class="category-icon" style="background:#eff6ff;">🏛️</div>
+            <div>
+              <h4>Trường đại học</h4>
+              <p class="sub">Đại học Quốc gia TP. Hồ Chí Minh</p>
+            </div>
+          </div>
+          <div class="arrow-row">
+            <span class="stat">6 trường thành viên</span>
+            <button class="arrow-btn"><i class="fa-solid fa-arrow-right"></i></button>
+          </div>
+        </div>
+
+        <!-- Khoa -->
+        <div class="category-card" onclick="showToast('Mở Khoa…','info')">
+          <div class="category-card-header">
+            <div class="category-icon" style="background:#f0fdf4;">🏢</div>
+            <div>
+              <h4>Khoa</h4>
+              <p class="sub">Khoa Công nghệ Thông tin</p>
+            </div>
+          </div>
+          <div class="arrow-row">
+            <span class="stat">12 ngành học</span>
+            <button class="arrow-btn"><i class="fa-solid fa-arrow-right"></i></button>
+          </div>
+        </div>
+
+        <!-- Ngành -->
+        <div class="category-card" onclick="showToast('Mở Ngành…','info')">
+          <div class="category-card-header">
+            <div class="category-icon" style="background:#fdf4ff;">🎓</div>
+            <div>
+              <h4>Ngành</h4>
+              <p class="sub">Công nghệ thông tin</p>
+            </div>
+          </div>
+          <div class="arrow-row">
+            <span class="stat">4 chuyên ngành</span>
+            <button class="arrow-btn"><i class="fa-solid fa-arrow-right"></i></button>
+          </div>
+        </div>
+
+        <!-- Môn học -->
+        <div class="category-card" onclick="showToast('Mở Môn học…','info')">
+          <div class="category-card-header">
+            <div class="category-icon" style="background:#fff7ed;">📚</div>
+            <div>
+              <h4>Môn học</h4>
+              <p class="sub">Cấu trúc dữ liệu và giải thuật</p>
+            </div>
+          </div>
+          <div class="arrow-row">
+            <span class="stat">Tài liệu, đề thi, bài giảng…</span>
+            <button class="arrow-btn"><i class="fa-solid fa-arrow-right"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Featured Documents -->
+      <div class="section-header">
+        <h3>Tài liệu nổi bật</h3>
+        <span class="see-all">Xem tất cả <i class="fa-solid fa-arrow-right" style="font-size:11px;"></i></span>
+      </div>
+
+      <div class="file-grid">
+
+        <div class="file-card card card-sm" onclick="window.location='chatbot.html'">
+          <div class="file-card-header">
+            <div class="file-type-badge file-type-pdf">PDF</div>
+            <div style="flex:1;min-width:0;">
+              <h4>Cấu trúc dữ liệu và giải thuật – Bài giảng</h4>
+            </div>
+          </div>
+          <div class="file-meta">
+            <span>2.4 MB</span>
+            <button class="bookmark-btn" onclick="event.stopPropagation(); this.classList.toggle('saved')">
+              <i class="fa-regular fa-bookmark"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="file-card card card-sm" onclick="window.location='chatbot.html'">
+          <div class="file-card-header">
+            <div class="file-type-badge file-type-doc">DOC</div>
+            <div style="flex:1;min-width:0;">
+              <h4>Hệ điều hành – Chương 1</h4>
+            </div>
+          </div>
+          <div class="file-meta">
+            <span>1.8 MB</span>
+            <button class="bookmark-btn" onclick="event.stopPropagation(); this.classList.toggle('saved')">
+              <i class="fa-regular fa-bookmark"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="file-card card card-sm" onclick="window.location='chatbot.html'">
+          <div class="file-card-header">
+            <div class="file-type-badge file-type-pdf">PDF</div>
+            <div style="flex:1;min-width:0;">
+              <h4>Xác suất thống kê – Bài giảng</h4>
+            </div>
+          </div>
+          <div class="file-meta">
+            <span>1.2 MB</span>
+            <button class="bookmark-btn" onclick="event.stopPropagation(); this.classList.toggle('saved')">
+              <i class="fa-regular fa-bookmark"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="file-card card card-sm" onclick="window.location='chatbot.html'">
+          <div class="file-card-header">
+            <div class="file-type-badge file-type-ppt">PPT</div>
+            <div style="flex:1;min-width:0;">
+              <h4>Mạng máy tính – Slide bài giảng</h4>
+            </div>
+          </div>
+          <div class="file-meta">
+            <span>3.6 MB</span>
+            <button class="bookmark-btn" onclick="event.stopPropagation(); this.classList.toggle('saved')">
+              <i class="fa-regular fa-bookmark"></i>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+    </div><!-- /page-body -->
+  </div><!-- /main-content -->
+</div><!-- /app-shell -->
+
+<script src="js/main.js"></script>
+<script src="js/dev-banner.js"></script>
+<script>
+  // Sync search bars
+  const topSearch = document.getElementById('topSearch');
+  topSearch.addEventListener('input', debounce(e => {
+    if (e.target.value.trim()) showToast(`Tìm kiếm: "${e.target.value}"`, 'info', 1500);
+  }, 500));
+</script>
+</body>
+</html>
+

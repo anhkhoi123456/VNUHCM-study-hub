@@ -1,0 +1,221 @@
+/* ============================================================
+   VNU - StudyHub  |  Login Page Styles
+   ============================================================ */
+
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+.login-page {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ── Left branding panel ─────────────────────────────────── */
+.login-left {
+  flex: 1;
+  background: linear-gradient(160deg, #e0e7ff 0%, #c7d7fd 40%, #f0f4ff 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 40px 52px;
+  position: relative;
+  overflow: hidden;
+}
+
+.login-left::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 100%; height: 260px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%232563eb' fill-opacity='0.06' d='M0,192L60,186.7C120,181,240,171,360,176C480,181,600,203,720,213.3C840,224,960,224,1080,208C1200,192,1320,160,1380,144L1440,128L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z'/%3E%3C/svg%3E") no-repeat bottom;
+  background-size: cover;
+  pointer-events: none;
+}
+
+.login-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.login-logo-icon {
+  width: 44px; height: 44px;
+  background: #2563eb;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 20px;
+  box-shadow: 0 4px 12px rgba(37,99,235,.35);
+}
+
+.login-logo h1 {
+  font-size: 18px; font-weight: 700; color: #1e3a8a; line-height: 1.2;
+}
+.login-logo p { font-size: 11.5px; color: #6b7280; }
+
+.login-hero { position: relative; z-index: 1; }
+.login-hero h2 {
+  font-size: 40px; font-weight: 800;
+  color: #1e3a8a; line-height: 1.2; margin-bottom: 16px;
+}
+.login-hero .subtitle {
+  font-size: 14.5px; color: #4b5563; max-width: 340px; line-height: 1.6;
+  margin-bottom: 40px;
+}
+
+.login-features {
+  display: flex; flex-direction: column; gap: 16px;
+}
+.login-feature {
+  display: flex; align-items: center; gap: 14px;
+}
+.feature-icon {
+  width: 40px; height: 40px;
+  background: rgba(255,255,255,.75);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  color: #2563eb; font-size: 16px;
+  box-shadow: 0 2px 6px rgba(0,0,0,.08);
+}
+.login-feature span { font-size: 13px; font-weight: 500; color: #374151; }
+
+.login-footer {
+  display: flex; align-items: center; gap: 12px; position: relative; z-index: 1;
+}
+.vnu-badge {
+  width: 42px; height: 42px;
+  border: 2px solid #bfdbfe;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: #2563eb; font-size: 16px;
+}
+.login-footer-text h4 { font-size: 12px; font-weight: 600; color: #374151; }
+.login-footer-text p  { font-size: 11px; color: #9ca3af; }
+
+/* ── Right form panel ────────────────────────────────────── */
+.login-right {
+  width: 480px;
+  min-width: 400px;
+  background: #f5f7ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 32px;
+}
+
+.login-card {
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 8px 40px rgba(0,0,0,.10);
+  padding: 44px 40px;
+  width: 100%;
+  border: 1px solid #e5e7eb;
+}
+
+.login-card h2 {
+  font-size: 24px; font-weight: 700; color: #111827; margin-bottom: 6px;
+}
+.login-card .tagline {
+  font-size: 13.5px; color: #6b7280; margin-bottom: 32px;
+}
+
+.form-group {
+  position: relative;
+  margin-bottom: 16px;
+}
+.form-group .icon {
+  position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+  color: #9ca3af; font-size: 14px; pointer-events: none;
+}
+.form-group input {
+  width: 100%; padding: 12px 14px 12px 40px;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 10px;
+  font-size: 13.5px; color: #1f2937;
+  outline: none;
+  transition: border-color .18s, box-shadow .18s;
+  background: #fff;
+}
+.form-group input::placeholder { color: #9ca3af; }
+.form-group input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59,130,246,.18);
+}
+.form-group .eye-toggle {
+  position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+  background: none; border: none;
+  color: #9ca3af; cursor: pointer; font-size: 15px;
+  padding: 4px;
+}
+.form-group .eye-toggle:hover { color: #6b7280; }
+
+.form-row {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 22px; margin-top: 4px;
+}
+.remember-label {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 13px; color: #4b5563; cursor: pointer;
+}
+.remember-label input[type="checkbox"] {
+  width: 15px; height: 15px;
+  accent-color: #2563eb; cursor: pointer;
+}
+.forgot-link { font-size: 13px; color: #2563eb; font-weight: 500; }
+.forgot-link:hover { text-decoration: underline; }
+
+.btn-login {
+  width: 100%;
+  padding: 13px;
+  background: #2563eb;
+  color: #fff;
+  border: none; border-radius: 10px;
+  font-size: 15px; font-weight: 600;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  transition: background .18s, box-shadow .18s;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 14px rgba(37,99,235,.35);
+}
+.btn-login:hover {
+  background: #1d4ed8;
+  box-shadow: 0 6px 20px rgba(37,99,235,.45);
+}
+
+.divider {
+  display: flex; align-items: center; gap: 12px; margin-bottom: 20px;
+}
+.divider span { font-size: 12.5px; color: #9ca3af; white-space: nowrap; }
+.divider::before, .divider::after {
+  content: ''; flex: 1; height: 1px; background: #e5e7eb;
+}
+
+.social-btns {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+  margin-bottom: 24px;
+}
+.social-btn {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 10px;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 10px;
+  background: #fff; font-size: 13px; font-weight: 500;
+  color: #374151; cursor: pointer;
+  transition: background .18s, border-color .18s;
+}
+.social-btn:hover { background: #f9fafb; border-color: #d1d5db; }
+.social-btn img { width: 18px; height: 18px; }
+
+.signup-row {
+  text-align: center; font-size: 13.5px; color: #6b7280;
+}
+.signup-row a { color: #2563eb; font-weight: 600; }
+.signup-row a:hover { text-decoration: underline; }
+
+@media (max-width: 900px) {
+  .login-left { display: none; }
+  .login-right { width: 100%; }
+}
+

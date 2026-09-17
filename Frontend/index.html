@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VNU - StudyHub | Đăng nhập</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/login.css" />
+  <link rel="stylesheet" href="css/dev-banner.css" />
+</head>
+<body>
+
+<div class="login-page">
+
+  <!-- ═══ Left Branding ═══════════════════════════════════════════ -->
+  <div class="login-left">
+
+    <div class="login-logo">
+      <div class="login-logo-icon">
+        <i class="fa-solid fa-book-open"></i>
+      </div>
+      <div>
+        <h1>VNU - StudyHub</h1>
+        <p>Học thông minh · Vững tương lai</p>
+      </div>
+    </div>
+
+    <div class="login-hero">
+      <h2>Tri thức hôm nay<br>Kiến tạo tương lai</h2>
+      <p class="subtitle">
+        Nền tảng lưu trữ và hỗ trợ học tập của Đại học Quốc gia TP.HCM
+      </p>
+
+      <div class="login-features">
+        <div class="login-feature">
+          <div class="feature-icon"><i class="fa-regular fa-folder-open"></i></div>
+          <span>Kho tài liệu đầy đủ theo trường, khoa, ngành</span>
+        </div>
+        <div class="login-feature">
+          <div class="feature-icon"><i class="fa-solid fa-robot"></i></div>
+          <span>AI hỗ trợ học tập thông minh 24/7</span>
+        </div>
+        <div class="login-feature">
+          <div class="feature-icon"><i class="fa-solid fa-route"></i></div>
+          <span>Lộ trình ôn thi cá nhân hóa với AI Planner</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="login-footer">
+      <div class="vnu-badge">
+        <i class="fa-solid fa-building-columns"></i>
+      </div>
+      <div class="login-footer-text">
+        <h4>Đại học Quốc gia TP.HCM</h4>
+        <p>VNU – Vietnam National University, Ho Chi Minh City</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══ Right Form ══════════════════════════════════════════════ -->
+  <div class="login-right">
+    <div class="login-card">
+
+      <h2>Đăng nhập</h2>
+      <p class="tagline">Chào mừng bạn quay lại VNU - StudyHub!</p>
+
+      <form id="loginForm" novalidate>
+
+        <div class="form-group">
+          <i class="fa-regular fa-envelope icon"></i>
+          <input type="text" id="email" placeholder="Email / MSSV" autocomplete="username" required />
+        </div>
+
+        <div class="form-group">
+          <i class="fa-solid fa-lock icon"></i>
+          <input type="password" id="password" placeholder="Mật khẩu" autocomplete="current-password" required />
+          <button type="button" class="eye-toggle" aria-label="Hiện / ẩn mật khẩu">
+            <i class="fa-regular fa-eye"></i>
+          </button>
+        </div>
+
+        <div class="form-row">
+          <label class="remember-label">
+            <input type="checkbox" id="remember" />
+            Ghi nhớ đăng nhập
+          </label>
+          <a href="#" class="forgot-link">Quên mật khẩu?</a>
+        </div>
+
+        <button type="submit" class="btn-login">
+          Đăng nhập <i class="fa-solid fa-arrow-right"></i>
+        </button>
+
+      </form>
+
+      <div class="divider"><span>Hoặc đăng nhập bằng</span></div>
+
+      <div class="social-btns">
+        <button class="social-btn" onclick="showToast('Đang kết nối Google…', 'info')">
+          <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" />
+          Google
+        </button>
+        <button class="social-btn" onclick="showToast('Đang kết nối Microsoft…', 'info')">
+          <img src="https://www.svgrepo.com/show/448236/microsoft.svg" alt="Microsoft" />
+          Microsoft
+        </button>
+      </div>
+
+      <p class="signup-row">
+        Chưa có tài khoản?&nbsp;
+        <a href="#">Đăng ký ngay</a>
+      </p>
+
+    </div>
+  </div>
+
+</div>
+
+<script src="js/main.js"></script>
+<script src="js/dev-banner.js"></script>
+<script>
+  document.getElementById('loginForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const email    = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+    if (!email || !password) {
+      showToast('Vui lòng nhập đầy đủ thông tin.', 'error');
+      return;
+    }
+    const btn = this.querySelector('.btn-login');
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Đang đăng nhập…';
+    btn.disabled = true;
+    setTimeout(() => { window.location.href = 'dashboard.html'; }, 1200);
+  });
+</script>
+</body>
+</html>
