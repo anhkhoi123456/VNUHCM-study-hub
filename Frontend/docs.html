@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VNU - StudyHub | Frontend Documentation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Reset & base ─────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      font-size: 14.5px;
+      line-height: 1.7;
+      color: #1e293b;
+      background: #f8fafc;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Layout ───────────────────────────────────────────────── */
+    .layout { display: flex; min-height: 100vh; }
+
+    /* ── Sidebar / TOC ────────────────────────────────────────── */
+    .toc {
+      width: 260px;
+      min-width: 260px;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      background: #fff;
+      border-right: 1px solid #e2e8f0;
+      padding: 28px 0 40px;
+      flex-shrink: 0;
+    }
+    .toc-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 20px 20px;
+      border-bottom: 1px solid #f1f5f9;
+      margin-bottom: 16px;
+    }
+    .toc-brand-icon {
+      width: 34px; height: 34px;
+      background: #2563eb;
+      border-radius: 9px;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-size: 16px;
+      flex-shrink: 0;
+    }
+    .toc-brand h2 { font-size: 13px; font-weight: 700; color: #1e3a8a; }
+    .toc-brand p  { font-size: 10.5px; color: #94a3b8; }
+    .toc-label {
+      font-size: 10px; font-weight: 700; letter-spacing: .08em;
+      text-transform: uppercase; color: #94a3b8;
+      padding: 0 20px; margin-bottom: 6px; margin-top: 12px;
+    }
+    .toc a {
+      display: block;
+      padding: 5px 20px;
+      font-size: 13px; color: #475569; text-decoration: none;
+      border-left: 2px solid transparent;
+      transition: color .15s, border-color .15s, background .15s;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .toc a:hover { color: #2563eb; background: #eff6ff; }
+    .toc a.active { color: #2563eb; border-left-color: #2563eb; background: #eff6ff; font-weight: 600; }
+    .toc a.sub { padding-left: 32px; font-size: 12.5px; color: #64748b; }
+    .toc a.sub:hover { color: #2563eb; }
+
+    /* ── Main content ─────────────────────────────────────────── */
+    .doc-content {
+      flex: 1;
+      min-width: 0;
+      padding: 0 48px 80px;
+      max-width: 900px;
+    }
+
+    /* ── Doc header ───────────────────────────────────────────── */
+    .doc-header {
+      padding: 44px 0 32px;
+      border-bottom: 1px solid #e2e8f0;
+      margin-bottom: 40px;
+    }
+    .doc-header h1 {
+      font-size: 30px; font-weight: 800; color: #0f172a; margin-bottom: 10px;
+    }
+    .doc-meta {
+      display: flex; flex-wrap: wrap; gap: 10px; align-items: center;
+    }
+    .meta-chip {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 3px 10px; border-radius: 20px;
+      font-size: 12px; font-weight: 500;
+    }
+    .chip-blue   { background: #dbeafe; color: #1d4ed8; }
+    .chip-amber  { background: #fef3c7; color: #92400e; }
+    .chip-gray   { background: #f1f5f9; color: #475569; }
+    .chip-green  { background: #dcfce7; color: #15803d; }
+
+    /* ── Sections ─────────────────────────────────────────────── */
+    .doc-section { margin-bottom: 56px; }
+    .doc-section h2 {
+      font-size: 22px; font-weight: 700; color: #0f172a;
+      margin-bottom: 20px; padding-bottom: 10px;
+      border-bottom: 2px solid #e2e8f0;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .doc-section h2 .sec-num {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 30px; height: 30px;
+      background: #2563eb; color: #fff;
+      border-radius: 8px; font-size: 13px; font-weight: 700;
+      flex-shrink: 0;
+    }
+    .doc-section h3 {
+      font-size: 16px; font-weight: 700; color: #1e293b;
+      margin: 28px 0 12px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .doc-section h3::before {
+      content: '';
+      display: inline-block;
+      width: 4px; height: 16px;
+      background: #2563eb;
+      border-radius: 2px;
+    }
+    .doc-section h4 {
+      font-size: 13.5px; font-weight: 700; color: #334155;
+      margin: 20px 0 8px;
+    }
+    .doc-section p { margin-bottom: 12px; color: #334155; }
+    .doc-section ul, .doc-section ol {
+      padding-left: 22px; margin-bottom: 14px;
+    }
+    .doc-section li { margin-bottom: 4px; color: #334155; }
+    .doc-section strong { color: #0f172a; }
+    a { color: #2563eb; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ── Inline code ──────────────────────────────────────────── */
+    code {
+      font-family: 'Fira Code', monospace;
+      font-size: 12.5px;
+      background: #f1f5f9;
+      color: #2563eb;
+      padding: 1px 5px;
+      border-radius: 4px;
+      border: 1px solid #e2e8f0;
+    }
+
+    /* ── Code blocks ──────────────────────────────────────────── */
+    pre {
+      background: #0f172a;
+      color: #e2e8f0;
+      border-radius: 10px;
+      padding: 18px 20px;
+      font-family: 'Fira Code', monospace;
+      font-size: 12.5px;
+      line-height: 1.65;
+      overflow-x: auto;
+      margin-bottom: 20px;
+      border: 1px solid #1e293b;
+    }
+    pre code {
+      background: none;
+      border: none;
+      color: inherit;
+      padding: 0;
+      font-size: inherit;
+    }
+    .pre-label {
+      display: flex; align-items: center; gap: 8px;
+      background: #1e293b;
+      border: 1px solid #334155; border-bottom: none;
+      border-radius: 10px 10px 0 0;
+      padding: 8px 16px;
+      font-size: 11.5px; color: #94a3b8; font-family: 'Fira Code', monospace;
+    }
+    .pre-label + pre { border-radius: 0 0 10px 10px; margin-top: 0; }
+    .kw { color: #7dd3fc; }
+    .fn { color: #86efac; }
+    .cm { color: #64748b; }
+    .st { color: #fda4af; }
+
+    /* ── Tables ───────────────────────────────────────────────── */
+    .table-wrap { overflow-x: auto; margin-bottom: 20px; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13.5px;
+    }
+    thead tr { background: #f1f5f9; }
+    thead th {
+      padding: 10px 14px;
+      text-align: left; font-weight: 600;
+      color: #475569; font-size: 12px; text-transform: uppercase; letter-spacing: .04em;
+      border-bottom: 2px solid #e2e8f0;
+    }
+    tbody tr { border-bottom: 1px solid #f1f5f9; transition: background .1s; }
+    tbody tr:hover { background: #f8fafc; }
+    tbody td { padding: 9px 14px; color: #334155; vertical-align: top; }
+    tbody td:first-child { font-family: 'Fira Code', monospace; font-size: 12px; color: #2563eb; white-space: nowrap; }
+
+    /* table without code first col */
+    table.plain tbody td:first-child { font-family: 'Inter', sans-serif; font-size: 13.5px; color: #334155; white-space: normal; font-weight: 500; }
+
+    /* ── Alerts ───────────────────────────────────────────────── */
+    .alert {
+      display: flex; gap: 12px;
+      padding: 14px 16px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      border: 1px solid;
+    }
+    .alert-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+    .alert-body { font-size: 13.5px; }
+    .alert-body strong { display: block; margin-bottom: 2px; }
+    .alert-note    { background: #eff6ff; border-color: #bfdbfe; }
+    .alert-note    .alert-icon { color: #2563eb; }
+    .alert-note    .alert-body strong { color: #1d4ed8; }
+    .alert-tip     { background: #f0fdf4; border-color: #bbf7d0; }
+    .alert-tip     .alert-icon { color: #16a34a; }
+    .alert-tip     .alert-body strong { color: #15803d; }
+    .alert-important { background: #faf5ff; border-color: #e9d5ff; }
+    .alert-important .alert-icon { color: #9333ea; }
+    .alert-important .alert-body strong { color: #7e22ce; }
+    .alert-caution { background: #fff7ed; border-color: #fed7aa; }
+    .alert-caution .alert-icon { color: #ea580c; }
+    .alert-caution .alert-body strong { color: #c2410c; }
+
+    /* ── File tree ────────────────────────────────────────────── */
+    .file-tree {
+      background: #0f172a;
+      border-radius: 10px;
+      padding: 20px 24px;
+      font-family: 'Fira Code', monospace;
+      font-size: 13px;
+      line-height: 2;
+      color: #94a3b8;
+      margin-bottom: 20px;
+    }
+    .file-tree .dir  { color: #7dd3fc; font-weight: 600; }
+    .file-tree .file { color: #e2e8f0; }
+    .file-tree .cm   { color: #475569; }
+
+    /* ── Flow diagram ─────────────────────────────────────────── */
+    .flow {
+      display: flex; align-items: center; flex-wrap: wrap; gap: 8px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 20px 24px;
+      margin-bottom: 20px;
+    }
+    .flow-node {
+      background: #fff;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 8px 14px;
+      font-size: 12.5px; font-weight: 600;
+      color: #1e293b;
+      text-align: center;
+      min-width: 100px;
+    }
+    .flow-node.active { background: #eff6ff; border-color: #93c5fd; color: #1d4ed8; }
+    .flow-arrow { color: #94a3b8; font-size: 14px; font-weight: 700; }
+    .flow-label { font-size: 11px; color: #64748b; text-align: center; }
+    .flow-group { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+
+    /* ── Badge grid ───────────────────────────────────────────── */
+    .badge-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+    .badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 4px 10px; border-radius: 6px;
+      font-size: 12px; font-weight: 600;
+      font-family: 'Fira Code', monospace;
+    }
+    .badge-pdf  { background: #fee2e2; color: #991b1b; }
+    .badge-doc  { background: #dbeafe; color: #1d4ed8; }
+    .badge-ppt  { background: #ffedd5; color: #9a3412; }
+    .badge-xlsx { background: #dcfce7; color: #15803d; }
+
+    /* ── Checklist ────────────────────────────────────────────── */
+    .checklist { list-style: none; padding: 0; }
+    .checklist li {
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 10px 14px;
+      border-radius: 8px;
+      margin-bottom: 6px;
+      background: #fff; border: 1px solid #e2e8f0;
+      font-size: 13.5px; color: #334155;
+    }
+    .checklist li .check-box {
+      width: 18px; height: 18px; border-radius: 4px;
+      border: 2px solid #cbd5e1; flex-shrink: 0; margin-top: 1px;
+    }
+
+    /* ── Divider ──────────────────────────────────────────────── */
+    hr { border: none; border-top: 1px solid #e2e8f0; margin: 40px 0; }
+
+    /* ── Token swatch ─────────────────────────────────────────── */
+    .token-row { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
+    .swatch { width: 18px; height: 18px; border-radius: 4px; border: 1px solid rgba(0,0,0,.1); flex-shrink: 0; }
+
+    /* ── Sticky section anchors ───────────────────────────────── */
+    .anchor { scroll-margin-top: 24px; }
+
+    /* ── Print ────────────────────────────────────────────────── */
+    @media print {
+      .toc { display: none; }
+      .doc-content { padding: 0 20px; max-width: 100%; }
+    }
+    @media (max-width: 900px) {
+      .toc { display: none; }
+      .doc-content { padding: 0 20px 60px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="layout">
+
+  <!-- ═══ Sidebar TOC ══════════════════════════════════════════ -->
+  <nav class="toc" id="toc">
+    <div class="toc-brand">
+      <div class="toc-brand-icon">📖</div>
+      <div>
+        <h2>StudyHub Docs</h2>
+        <p>Frontend v0.1.0-pre-alpha</p>
+      </div>
+    </div>
+
+    <div class="toc-label">Contents</div>
+    <a href="#s1">1. Directory Structure</a>
+    <a href="#s2">2. Pages Overview</a>
+    <a href="#s2-index" class="sub">index.html — Login</a>
+    <a href="#s2-dashboard" class="sub">dashboard.html — Home</a>
+    <a href="#s2-library" class="sub">library.html — Library</a>
+    <a href="#s2-planner" class="sub">planner.html — Planner</a>
+    <a href="#s2-chatbot" class="sub">chatbot.html — Chatbot</a>
+
+    <div class="toc-label">CSS</div>
+    <a href="#s3">3. CSS Architecture</a>
+    <a href="#s3-style" class="sub">style.css — Global</a>
+    <a href="#s3-login" class="sub">login.css — Login</a>
+    <a href="#s3-banner" class="sub">dev-banner.css</a>
+
+    <div class="toc-label">JavaScript</div>
+    <a href="#s4">4. JS Architecture</a>
+    <a href="#s4-main" class="sub">main.js — Utilities</a>
+    <a href="#s4-banner" class="sub">dev-banner.js</a>
+
+    <div class="toc-label">Reference</div>
+    <a href="#s5">5. Page-Level Scripts</a>
+    <a href="#s6">6. Asset Loading Order</a>
+    <a href="#s7">7. Navigation &amp; Routing</a>
+    <a href="#s8">8. Component Reference</a>
+    <a href="#s9">9. Production Checklist</a>
+  </nav>
+
+  <!-- ═══ Main Content ═════════════════════════════════════════ -->
+  <main class="doc-content">
+
+    <!-- Header -->
+    <div class="doc-header">
+      <h1>VNU – StudyHub<br>Frontend Documentation</h1>
+      <div class="doc-meta">
+        <span class="meta-chip chip-amber">🚧 v0.1.0-pre-alpha</span>
+        <span class="meta-chip chip-blue">Vanilla HTML · CSS · JS</span>
+        <span class="meta-chip chip-gray">Inter + Font Awesome 6.5</span>
+        <span class="meta-chip chip-green">No build step</span>
+      </div>
+    </div>
+
+
+    <!-- ═══ 1. Directory Structure ════════════════════════════ -->
+    <section class="doc-section anchor" id="s1">
+      <h2><span class="sec-num">1</span> Directory Structure</h2>
+
+      <div class="file-tree">
+        <span class="dir">Frontend/</span><br>
+        ├── <span class="file">index.html</span>         <span class="cm"># Login / Entry page</span><br>
+        ├── <span class="file">dashboard.html</span>     <span class="cm"># Home dashboard</span><br>
+        ├── <span class="file">library.html</span>       <span class="cm"># Document library browser</span><br>
+        ├── <span class="file">planner.html</span>       <span class="cm"># AI Planner</span><br>
+        ├── <span class="file">chatbot.html</span>       <span class="cm"># AI Chatbot + PDF viewer</span><br>
+        │<br>
+        ├── <span class="dir">css/</span><br>
+        │&nbsp;&nbsp;&nbsp;├── <span class="file">style.css</span>      <span class="cm"># Global design system (tokens, layout, components)</span><br>
+        │&nbsp;&nbsp;&nbsp;├── <span class="file">login.css</span>      <span class="cm"># Login page–specific styles</span><br>
+        │&nbsp;&nbsp;&nbsp;└── <span class="file">dev-banner.css</span> <span class="cm"># "Under Development" bottom banner styles</span><br>
+        │<br>
+        └── <span class="dir">js/</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;├── <span class="file">main.js</span>        <span class="cm"># Shared utility functions (all pages)</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;└── <span class="file">dev-banner.js</span>  <span class="cm"># Dev banner injection &amp; dismiss logic</span>
+      </div>
+
+      <div class="alert alert-note">
+        <span class="alert-icon">ℹ️</span>
+        <div class="alert-body">
+          <strong>No build step</strong>
+          All files are plain HTML/CSS/JS and open directly in any browser — no bundler, no compiler, no dependencies to install.
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ═══ 2. Pages Overview ══════════════════════════════════ -->
+    <section class="doc-section anchor" id="s2">
+      <h2><span class="sec-num">2</span> Pages Overview</h2>
+
+      <!-- index.html -->
+      <h3 id="s2-index" class="anchor"><code>index.html</code> — Login Page</h3>
+      <p><strong>Purpose:</strong> Entry point. Authenticates the user before redirecting to the dashboard.</p>
+
+      <div class="table-wrap">
+        <table class="plain">
+          <thead><tr><th>Column</th><th>Class</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td>Left</td><td><code>.login-left</code></td><td>Branding panel — gradient bg, hero text, feature list, VNU footer</td></tr>
+            <tr><td>Right</td><td><code>.login-right</code></td><td>Form panel — login card with email/password inputs</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p><strong>Assets loaded:</strong> <code>style.css</code> · <code>login.css</code> · <code>dev-banner.css</code> · <code>main.js</code> · <code>dev-banner.js</code> · inline <code>&lt;script&gt;</code></p>
+
+      <p><strong>Inline JS behaviour:</strong></p>
+      <ul>
+        <li>Intercepts <code>submit</code> on <code>#loginForm</code></li>
+        <li>Validates <code>#email</code> and <code>#password</code> are non-empty; on failure calls <code>showToast('...', 'error')</code></li>
+        <li>On success: shows a spinner for 1.2 s then navigates to <code>dashboard.html</code></li>
+      </ul>
+
+      <!-- dashboard.html -->
+      <h3 id="s2-dashboard" class="anchor"><code>dashboard.html</code> — Home Dashboard</h3>
+      <p><strong>Purpose:</strong> Post-login landing page. Shows the user's document library tree and featured documents.</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Section</th><th>Element</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td>Topbar</td><td><code>.topbar</code></td><td>Global search bar + notification bell + avatar</td></tr>
+            <tr><td>Welcome banner</td><td><code>.welcome-banner</code></td><td>Personalised greeting, inline search, decorative CSS book stack</td></tr>
+            <tr><td>Category grid</td><td><code>.category-grid</code></td><td>4 cards: Trường / Khoa / Ngành / Môn học</td></tr>
+            <tr><td>Featured files</td><td><code>.file-grid</code></td><td>4 clickable file cards linking to <code>chatbot.html</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p><strong>Inline JS:</strong> <code>#topSearch</code> input debounced at 500 ms → calls <code>showToast()</code> with query text.</p>
+
+      <!-- library.html -->
+      <h3 id="s2-library" class="anchor"><code>library.html</code> — Document Library</h3>
+      <p><strong>Purpose:</strong> Browse and filter documents within a faculty / subject context.</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Section</th><th>Element</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td>Breadcrumb</td><td>inline <code>div</code></td><td>Trang chủ → ĐHQG TP.HCM → Khoa CNTT → Môn học</td></tr>
+            <tr><td>Filter bar</td><td><code>.filter-bar</code></td><td>Chip buttons: Tất cả / PDF / DOC / PPT / XLSX</td></tr>
+            <tr><td>File grid</td><td><code>.lib-grid</code></td><td>Auto-fill grid of <code>.lib-file-card</code> items</td></tr>
+            <tr><td>Sort button</td><td><code>.sort-btn</code></td><td>Visual stub — no sort logic yet</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p><strong>Inline JS — <code>filterFiles(btn, type)</code>:</strong> Removes <code>.active</code> from all chips, adds it to the clicked chip, toggles <code>display: none</code> on cards whose <code>data-type</code> doesn't match (skips when <code>type === 'all'</code>).</p>
+
+      <!-- planner.html -->
+      <h3 id="s2-planner" class="anchor"><code>planner.html</code> — AI Planner</h3>
+      <p><strong>Purpose:</strong> Shows the AI-generated study sprint schedule; allows the user to mark sprints complete.</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Section</th><th>Element</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td>Goal banner</td><td><code>.goal-banner</code></td><td>Motivational card + animated SVG progress ring</td></tr>
+            <tr><td>Tab bar</td><td><code>.tabs</code></td><td>Lộ trình học / Theo môn học / Theo thời gian</td></tr>
+            <tr><td>Subject list</td><td><code>.subject-panel</code></td><td>Left column — registered subjects</td></tr>
+            <tr><td>Sprint list</td><td><code>#sprintList</code></td><td>Right column — AI-generated sprint items</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="table-wrap">
+        <table class="plain">
+          <thead><tr><th>Inline Function</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td>Tab switcher (anonymous)</td><td>Iterates <code>.tab</code> buttons; removes <code>.active</code> from all, shows matching <code>#tab-{id}</code> div</td></tr>
+            <tr><td><code>toggleSprint(el)</code></td><td>Toggles <code>.checked</code> on checkbox, updates <code>.sprint-num</code> class (<code>done</code>/<code>idle</code>), calls <code>showToast()</code></td></tr>
+            <tr><td>Ring animation (<code>window load</code>)</td><td>After 200 ms delay, sets <code>stroke-dashoffset</code> on <code>#goalRing</code> to animate the SVG ring to 80% fill</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- chatbot.html -->
+      <h3 id="s2-chatbot" class="anchor"><code>chatbot.html</code> — AI Chatbot</h3>
+      <p><strong>Purpose:</strong> Three-panel workspace — sidebar, PDF document viewer, and an AI chat assistant.</p>
+      <p><strong>Layout:</strong> <code>.chatbot-body</code> = CSS grid <code>1fr 1px 380px</code></p>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Panel</th><th>Element</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td>PDF viewer</td><td><code>.pdf-panel</code></td><td>Toolbar + scrollable document with code blocks &amp; array visualiser</td></tr>
+            <tr><td>Divider</td><td><code>.divider-col</code></td><td>1 px vertical separator</td></tr>
+            <tr><td>AI chat</td><td><code>.ai-panel</code></td><td>Header + scrollable message list + text input</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="table-wrap">
+        <table class="plain">
+          <thead><tr><th>Inline Function</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><code>changePage(delta)</code></td><td>Increments/decrements <code>currentPage</code> (clamped 1–14), updates <code>#pageNum</code> text</td></tr>
+            <tr><td><code>sendMessage()</code></td><td>Reads <code>#chatInput</code>, appends user bubble, inserts typing indicator, appends rotating AI response after 1.2–1.8 s, scrolls to bottom</td></tr>
+            <tr><td><code>resetChat()</code></td><td>Clears <code>#aiMessages</code> to initial state, resets <code>responseIdx = 0</code>, calls <code>showToast()</code></td></tr>
+            <tr><td><code>escHtml(str)</code></td><td>Escapes <code>&amp;</code>, <code>&lt;</code>, <code>&gt;</code> in user input before DOM injection</td></tr>
+            <tr><td>Enter-key listener</td><td>Calls <code>sendMessage()</code> on <kbd>Enter</kbd> (without <kbd>Shift</kbd>) in <code>#chatInput</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p><strong>AI response rotation:</strong> <code>responses[]</code> is a 5-item preset array. Responses cycle via <code>responseIdx % responses.length</code>.</p>
+    </section>
+
+
+    <!-- ═══ 3. CSS Architecture ════════════════════════════════ -->
+    <section class="doc-section anchor" id="s3">
+      <h2><span class="sec-num">3</span> CSS Architecture</h2>
+
+      <!-- style.css -->
+      <h3 id="s3-style" class="anchor"><code>style.css</code> — Design Tokens &amp; Global Styles</h3>
+      <p>Loaded by all 5 pages. Defines the entire design system.</p>
+
+      <h4>Colour Tokens (<code>:root</code>)</h4>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Token</th><th>Value</th><th>Usage</th></tr></thead>
+          <tbody>
+            <tr><td>--blue-50</td><td>#eff6ff <span class="swatch" style="background:#eff6ff;display:inline-block;vertical-align:middle;margin-left:4px;"></span></td><td>Hover backgrounds, banners</td></tr>
+            <tr><td>--blue-100</td><td>#dbeafe <span class="swatch" style="background:#dbeafe;display:inline-block;vertical-align:middle;margin-left:4px;"></span></td><td>Ring track, badge backgrounds</td></tr>
+            <tr><td>--blue-400</td><td>#60a5fa <span class="swatch" style="background:#60a5fa;display:inline-block;vertical-align:middle;margin-left:4px;"></span></td><td>Focus rings, avatar gradient start</td></tr>
+            <tr><td>--blue-600</td><td>#2563eb <span class="swatch" style="background:#2563eb;display:inline-block;vertical-align:middle;margin-left:4px;"></span></td><td><strong>Primary brand colour</strong> — buttons, active nav, links</td></tr>
+            <tr><td>--blue-700</td><td>#1d4ed8 <span class="swatch" style="background:#1d4ed8;display:inline-block;vertical-align:middle;margin-left:4px;"></span></td><td>Hover state for primary</td></tr>
+            <tr><td>--blue-900</td><td>#1e3a8a <span class="swatch" style="background:#1e3a8a;display:inline-block;vertical-align:middle;margin-left:4px;"></span></td><td>Logo text, hero headings</td></tr>
+            <tr><td>--gray-50 → --gray-900</td><td>#f9fafb → #111827</td><td>All neutral surfaces and text</td></tr>
+            <tr><td>--green-500</td><td>#22c55e <span class="swatch" style="background:#22c55e;display:inline-block;vertical-align:middle;margin-left:4px;"></span></td><td>Success states, sprint done</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h4>Structural Tokens</h4>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Token</th><th>Value</th><th>Usage</th></tr></thead>
+          <tbody>
+            <tr><td>--sidebar-width</td><td>220px</td><td>Fixed sidebar width</td></tr>
+            <tr><td>--header-height</td><td>64px</td><td>Topbar height</td></tr>
+            <tr><td>--shadow-sm</td><td>0 1px 2px rgba(0,0,0,.06)</td><td>Subtle card lift</td></tr>
+            <tr><td>--shadow</td><td>0 4px 12px rgba(0,0,0,.08)</td><td>Standard card hover shadow</td></tr>
+            <tr><td>--shadow-lg</td><td>0 10px 30px rgba(0,0,0,.12)</td><td>Modal-level elevation</td></tr>
+            <tr><td>--radius</td><td>.75rem (12px)</td><td>Default border radius</td></tr>
+            <tr><td>--radius-sm</td><td>.5rem (8px)</td><td>Small elements — nav items</td></tr>
+            <tr><td>--radius-lg</td><td>1.25rem (20px)</td><td>Large cards, banners</td></tr>
+            <tr><td>--transition</td><td>.18s ease</td><td>Standard transition duration</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h4>Layout Classes</h4>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Class</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td>.app-shell</td><td>Root flex container — <code>display:flex; height:100vh; overflow:hidden</code></td></tr>
+            <tr><td>.sidebar</td><td>Left column, 220 px wide, <code>z-index:20</code>, scrollable vertically</td></tr>
+            <tr><td>.main-content</td><td>Right column, <code>flex:1</code>, column flex — holds topbar + page body</td></tr>
+            <tr><td>.topbar</td><td>Fixed-height (64 px) header bar inside <code>.main-content</code></td></tr>
+            <tr><td>.page-body</td><td>Scrollable (<code>overflow-y:auto</code>) content area, <code>padding:24px</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h4>Sidebar Sub-components</h4>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Class</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td>.sidebar-logo</td><td>Logo icon + text block at top of sidebar</td></tr>
+            <tr><td>.logo-icon</td><td>36×36 px blue rounded square containing the book icon</td></tr>
+            <tr><td>.sidebar-nav</td><td>Column flex nav list with <code>gap:2px</code></td></tr>
+            <tr><td>.nav-item</td><td>Individual nav link — <code>.active</code> applied by JS</td></tr>
+            <tr><td>.nav-item.active</td><td>Blue-tinted bg (<code>--blue-50</code>) with <code>--blue-600</code> text</td></tr>
+            <tr><td>.sidebar-user</td><td>Bottom user row — avatar, name, role, chevron</td></tr>
+            <tr><td>.user-avatar</td><td>34×34 px circular avatar with gradient background</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h4>Shared UI Components</h4>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Class</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td>.card</td><td>White bordered card, <code>radius:var(--radius)</code>, <code>padding:20px</code></td></tr>
+            <tr><td>.card-sm</td><td>Modifier — reduces padding to <code>14px 16px</code></td></tr>
+            <tr><td>.btn</td><td>Base button — inline flex, 8 px radius, weight 600</td></tr>
+            <tr><td>.btn-primary</td><td>Blue fill button (<code>--blue-600</code>)</td></tr>
+            <tr><td>.btn-outline</td><td>White button with gray border</td></tr>
+            <tr><td>.btn-sm</td><td>Size modifier — smaller padding and font</td></tr>
+            <tr><td>.badge / .badge-blue / .badge-green / .badge-gray</td><td>Pill label variants</td></tr>
+            <tr><td>.section-header</td><td>Row with title <code>h3</code> + <code>.see-all</code> link</td></tr>
+            <tr><td>.search-bar</td><td>In-page search input row with focus ring</td></tr>
+            <tr><td>.tabs / .tab / .tab.active</td><td>Segmented tab control</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h4>File Type Badges</h4>
+      <div class="badge-grid">
+        <span class="badge badge-pdf">PDF — #ef4444</span>
+        <span class="badge badge-doc">DOC — #3b82f6</span>
+        <span class="badge badge-ppt">PPT — #f97316</span>
+        <span class="badge badge-xlsx">XLSX — #22c55e</span>
+      </div>
+
+      <h4>Planner Components</h4>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Class</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td>.ring-wrap</td><td>90×90 px SVG wrapper; SVG rotated −90° so arc starts at top</td></tr>
+            <tr><td>.ring-track</td><td>SVG circle — light blue background track</td></tr>
+            <tr><td>.ring-fill</td><td>SVG circle — animated blue fill arc, controlled via <code>stroke-dashoffset</code></td></tr>
+            <tr><td>.sprint-item</td><td>Flex row — sprint number, body, duration, checkbox</td></tr>
+            <tr><td>.sprint-num.done</td><td>Green circle (<code>--green-500</code>)</td></tr>
+            <tr><td>.sprint-num.active</td><td>Blue circle (<code>--blue-600</code>)</td></tr>
+            <tr><td>.sprint-num.idle</td><td>Gray circle (<code>--gray-300</code>)</td></tr>
+            <tr><td>.sprint-check.checked</td><td>Green filled checkmark circle</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h4>Chat Components</h4>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Class</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td>.chat-bubble</td><td>Message bubble, max-width 80%, 16 px radius</td></tr>
+            <tr><td>.chat-bubble.user</td><td>Right-aligned, blue fill, bottom-right corner flattened</td></tr>
+            <tr><td>.chat-bubble.ai</td><td>Left-aligned, gray fill, bottom-left corner flattened</td></tr>
+            <tr><td>.chat-bubble.ai pre</td><td>Dark code block inside AI bubble, Fira Code font</td></tr>
+            <tr><td>.send-btn</td><td>36×36 px circular blue send button</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h4>Responsive Breakpoints</h4>
+      <div class="table-wrap">
+        <table class="plain">
+          <thead><tr><th>Breakpoint</th><th>Rule</th></tr></thead>
+          <tbody>
+            <tr><td>≤ 768 px</td><td>Sidebar collapses to 60 px icon-only; text labels, user info, chevron hidden; page-body padding → 16 px; banner deco hidden</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- login.css -->
+      <h3 id="s3-login" class="anchor"><code>login.css</code> — Login Page Styles</h3>
+      <p>Loaded by <code>index.html</code> only.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Class</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td>.login-page</td><td>Full-viewport flex container (<code>height:100vh</code>)</td></tr>
+            <tr><td>.login-left</td><td>Left branding panel — multi-stop blue gradient; <code>::after</code> pseudo adds inline SVG wave at the bottom</td></tr>
+            <tr><td>.login-logo-icon</td><td>44×44 px blue rounded square with glow shadow</td></tr>
+            <tr><td>.login-hero</td><td>Middle hero block — large heading, subtitle, feature list</td></tr>
+            <tr><td>.feature-icon</td><td>40×40 px frosted white icon badge</td></tr>
+            <tr><td>.login-footer</td><td>Bottom VNU attribution row with circular badge</td></tr>
+            <tr><td>.login-right</td><td>Right form panel — 480 px wide, light blue-gray background</td></tr>
+            <tr><td>.login-card</td><td>White card — <code>border-radius:20px</code>, heavy box shadow</td></tr>
+            <tr><td>.form-group</td><td>Input wrapper with absolutely positioned leading icon + optional eye toggle</td></tr>
+            <tr><td>.form-group .eye-toggle</td><td>Password show/hide button — right-aligned inside the group</td></tr>
+            <tr><td>.btn-login</td><td>Full-width blue submit button with drop shadow</td></tr>
+            <tr><td>.divider</td><td>CSS <code>::before</code>/<code>::after</code> line divider with centred "Or" text</td></tr>
+            <tr><td>.social-btn</td><td>OAuth button with logo (Google / Microsoft)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p><strong>Responsive:</strong> At ≤ 900 px, <code>.login-left</code> hides and <code>.login-right</code> expands to full width.</p>
+
+      <!-- dev-banner.css -->
+      <h3 id="s3-banner" class="anchor"><code>dev-banner.css</code> — Dev Banner Styles</h3>
+      <p>Loaded by all 5 pages. Fully isolated — removing this file removes all banner styling.</p>
+
+      <div class="alert alert-tip">
+        <span class="alert-icon">💡</span>
+        <div class="alert-body">
+          <strong>Going live?</strong>
+          Remove the <code>&lt;link&gt;</code> and <code>&lt;script&gt;</code> tags for the dev banner files from each page. No other CSS or JS needs to change.
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Selector</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td>#devBanner</td><td>Fixed bottom-0, full-width, 44 px tall dark bar; <code>z-index:9000</code></td></tr>
+            <tr><td>#devBanner::before</td><td>Animated shimmer sweep — <code>devBannerSweep</code> @ 4 s, linear, infinite</td></tr>
+            <tr><td>#devBanner.hidden</td><td>Slides bar off-screen: <code>translateY(100%)</code> + <code>opacity:0</code></td></tr>
+            <tr><td>.dev-pulse-core</td><td>Solid amber (<code>#f59e0b</code>) circle, 10×10 px</td></tr>
+            <tr><td>.dev-pulse-ring</td><td>Expanding amber ring — <code>devPulseRing</code> @ 2 s, ease-out, infinite</td></tr>
+            <tr><td>.dev-icon</td><td>26×26 px indigo rounded badge containing <code>fa-code</code></td></tr>
+            <tr><td>.dev-label</td><td>Bold white heading text</td></tr>
+            <tr><td>.dev-desc</td><td>Muted gray description (hidden at ≤ 600 px)</td></tr>
+            <tr><td>.dev-chip</td><td>Indigo pill version badge (hidden at ≤ 480 px)</td></tr>
+            <tr><td>.dev-dismiss</td><td>26×26 px ghost dismiss button — red tint on hover</td></tr>
+            <tr><td>body.has-dev-banner .app-shell</td><td>Adds <code>padding-bottom:44px</code> so content clears the bar</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="table-wrap">
+        <table class="plain">
+          <thead><tr><th>Animation</th><th>Duration</th><th>Effect</th></tr></thead>
+          <tbody>
+            <tr><td><code>devBannerSweep</code></td><td>4 s linear infinite</td><td>Blue-indigo shimmer sweeps left-to-right across the bar</td></tr>
+            <tr><td><code>devPulseRing</code></td><td>2 s ease-out infinite</td><td>Amber ring expands 0.6× → 1.9× scale while fading to transparent</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+
+    <!-- ═══ 4. JavaScript Architecture ════════════════════════ -->
+    <section class="doc-section anchor" id="s4">
+      <h2><span class="sec-num">4</span> JavaScript Architecture</h2>
+
+      <!-- main.js -->
+      <h3 id="s4-main" class="anchor"><code>main.js</code> — Shared Utilities</h3>
+      <p>Loaded by all 5 pages before <code>&lt;/body&gt;</code>. All functions are <strong>globally scoped</strong> on <code>window</code>.</p>
+
+      <h4><code>setActiveNav()</code></h4>
+      <div class="pre-label">js — called automatically on DOMContentLoaded</div>
+      <pre><code><span class="kw">function</span> <span class="fn">setActiveNav</span>() {
+  <span class="kw">const</span> currentPage = window.location.pathname.split(<span class="st">'/'</span>).pop() || <span class="st">'index.html'</span>;
+  document.querySelectorAll(<span class="st">'.nav-item[data-page]'</span>).forEach(item =&gt; {
+    item.classList.toggle(<span class="st">'active'</span>, item.dataset.page === currentPage);
+  });
+}</code></pre>
+      <p>Reads the current filename from <code>window.location.pathname</code> and toggles <code>.active</code> on the matching <code>.nav-item[data-page]</code> element. Requires every sidebar link to carry a <code>data-page="filename.html"</code> attribute.</p>
+
+      <h4><code>initPasswordToggles()</code></h4>
+      <div class="pre-label">js — called automatically on DOMContentLoaded</div>
+      <pre><code><span class="kw">function</span> <span class="fn">initPasswordToggles</span>() {
+  document.querySelectorAll(<span class="st">'.eye-toggle'</span>).forEach(btn =&gt; {
+    btn.addEventListener(<span class="st">'click'</span>, () =&gt; { <span class="cm">/* toggle input.type + icon class */</span> });
+  });
+}</code></pre>
+      <p>Finds all <code>.eye-toggle</code> buttons and wires a click handler that toggles the sibling <code>input.type</code> between <code>"password"</code> and <code>"text"</code>, and swaps the <code>&lt;i&gt;</code> icon class between <code>fa-eye</code> / <code>fa-eye-slash</code>.</p>
+
+      <h4><code>showToast(message, type, duration)</code></h4>
+      <div class="pre-label">js — globally callable</div>
+      <pre><code><span class="kw">function</span> <span class="fn">showToast</span>(message, type = <span class="st">'info'</span>, duration = <span class="nm">3000</span>)</code></pre>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Parameter</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td>message</td><td>string</td><td>—</td><td>Text displayed in the toast</td></tr>
+            <tr><td>type</td><td>'info' | 'success' | 'error'</td><td>'info'</td><td>Controls background colour and icon</td></tr>
+            <tr><td>duration</td><td>number</td><td>3000</td><td>Auto-dismiss delay in milliseconds</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="table-wrap">
+        <table class="plain">
+          <thead><tr><th>Type</th><th>Background</th><th>Icon</th></tr></thead>
+          <tbody>
+            <tr><td><code>info</code></td><td>#2563eb (blue)</td><td>fa-circle-info</td></tr>
+            <tr><td><code>success</code></td><td>#22c55e (green)</td><td>fa-circle-check</td></tr>
+            <tr><td><code>error</code></td><td>#ef4444 (red)</td><td>fa-circle-xmark</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Creates a <code>div</code>, injects icon + message HTML, appends to <code>&lt;body&gt;</code>, fades in via <code>requestAnimationFrame</code>, auto-removes after <code>duration</code> ms with a 300 ms fade-out. <code>z-index:9999</code> — always above the dev banner (<code>z-index:9000</code>).</p>
+
+      <h4><code>formatSize(bytes)</code></h4>
+      <div class="pre-label">js — utility, available for dynamic file listings</div>
+      <pre><code><span class="kw">function</span> <span class="fn">formatSize</span>(bytes) → string
+<span class="cm">// ≥ 1 048 576  →  "X.X MB"
+// ≥ 1 024      →  "X KB"
+// otherwise    →  "X B"</span></code></pre>
+
+      <h4><code>debounce(fn, ms)</code></h4>
+      <div class="pre-label">js — used in dashboard.html for topbar search</div>
+      <pre><code><span class="kw">function</span> <span class="fn">debounce</span>(fn, ms = <span class="nm">300</span>) → Function</code></pre>
+      <p>Returns a debounced wrapper around <code>fn</code>. The inner call fires only after <code>ms</code> milliseconds of silence. Uses <code>setTimeout</code> / <code>clearTimeout</code> with a closure over <code>t</code>.</p>
+
+      <!-- dev-banner.js -->
+      <h3 id="s4-banner" class="anchor"><code>dev-banner.js</code> — Dev Banner Logic</h3>
+      <p>Loaded by all 5 pages after <code>main.js</code>. Wrapped in a self-invoking <strong>IIFE</strong> — no global namespace pollution.</p>
+
+      <h4><code>CONFIG</code> object</h4>
+      <div class="pre-label">js — edit this to change any banner text or version</div>
+      <pre><code><span class="kw">const</span> CONFIG = {
+  version:     <span class="st">'v0.1.0-pre-alpha'</span>,
+  label:       <span class="st">'🚧 Đang phát triển'</span>,
+  description: <span class="st">'Nền tảng hiện đang trong giai đoạn phát triển...'</span>,
+  storageKey:  <span class="st">'devBannerDismissed'</span>,  <span class="cm">// sessionStorage key</span>
+};</code></pre>
+      <p>All user-facing strings are centralised here. No HTML files need to be edited to change the version or message.</p>
+
+      <h4><code>buildBanner()</code> <em>(private)</em></h4>
+      <pre><code><span class="kw">function</span> <span class="fn">buildBanner</span>() → HTMLElement</code></pre>
+      <p>Creates and returns the <code>#devBanner</code> div with all inner HTML populated from <code>CONFIG</code>. Sets <code>role="status"</code> and <code>aria-live="polite"</code> for accessibility.</p>
+
+      <h4><code>init()</code> <em>(private, IIFE entry point)</em></h4>
+      <pre><code><span class="kw">function</span> <span class="fn">init</span>()</code></pre>
+      <ol>
+        <li>Reads <code>sessionStorage.getItem(CONFIG.storageKey)</code> — if <code>'true'</code>, adds <code>.hidden</code> to the banner (no body padding applied)</li>
+        <li>Calls <code>buildBanner()</code> and appends to <code>document.body</code></li>
+        <li>Attaches <code>click</code> on <code>.dev-dismiss</code>: adds <code>.hidden</code>, removes <code>has-dev-banner</code> from body, writes <code>'true'</code> to <code>sessionStorage</code></li>
+      </ol>
+      <p><strong>Session behaviour:</strong> Dismissed state resets when the browser tab closes. On the next session the banner reappears automatically.</p>
+    </section>
+
+
+    <!-- ═══ 5. Page-Level Scripts ══════════════════════════════ -->
+    <section class="doc-section anchor" id="s5">
+      <h2><span class="sec-num">5</span> Page-Level Scripts</h2>
+      <p>Each page has an inline <code>&lt;script&gt;</code> for logic too small to warrant a separate file.</p>
+      <div class="table-wrap">
+        <table class="plain">
+          <thead><tr><th>Page</th><th>Functions / Listeners</th></tr></thead>
+          <tbody>
+            <tr><td><code>index.html</code></td><td><code>submit</code> listener on <code>#loginForm</code> — validates inputs, animates button, redirects</td></tr>
+            <tr><td><code>dashboard.html</code></td><td><code>input</code> listener on <code>#topSearch</code> — debounced <code>showToast()</code> with search text</td></tr>
+            <tr><td><code>library.html</code></td><td><code>filterFiles(btn, type)</code> — chip-based file type filter</td></tr>
+            <tr><td><code>planner.html</code></td><td>Tab switcher, <code>toggleSprint(el)</code>, SVG ring animation on <code>window load</code></td></tr>
+            <tr><td><code>chatbot.html</code></td><td><code>changePage(delta)</code>, <code>sendMessage()</code>, <code>resetChat()</code>, <code>escHtml(str)</code>, Enter-key listener</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+
+    <!-- ═══ 6. Asset Loading Order ═════════════════════════════ -->
+    <section class="doc-section anchor" id="s6">
+      <h2><span class="sec-num">6</span> Asset Loading Order</h2>
+      <p>All pages follow this exact sequence for predictable style and script resolution:</p>
+      <div class="pre-label">html — head + body load order</div>
+      <pre><code><span class="cm">&lt;!-- 1. Google Fonts --&gt;</span>
+&lt;link rel="preconnect" href="https://fonts.googleapis.com" /&gt;
+&lt;link href="...Inter...&amp;display=swap" rel="stylesheet" /&gt;
+
+<span class="cm">&lt;!-- 2. Font Awesome 6.5 (CDN) --&gt;</span>
+&lt;link rel="stylesheet" href="https://cdnjs.cloudflare.com/.../all.min.css" /&gt;
+
+<span class="cm">&lt;!-- 3. Global design system --&gt;</span>
+&lt;link rel="stylesheet" href="css/style.css" /&gt;
+
+<span class="cm">&lt;!-- 4. Login-only (index.html only) --&gt;</span>
+&lt;link rel="stylesheet" href="css/login.css" /&gt;
+
+<span class="cm">&lt;!-- 5. Dev banner styles (all pages) --&gt;</span>
+&lt;link rel="stylesheet" href="css/dev-banner.css" /&gt;
+
+<span class="cm">&lt;!-- 6. Page-specific inline &lt;style&gt; --&gt;</span>
+
+&lt;!-- ... page HTML ... --&gt;
+
+<span class="cm">&lt;!-- 7. Shared utilities --&gt;</span>
+&lt;script src="js/main.js"&gt;&lt;/script&gt;
+
+<span class="cm">&lt;!-- 8. Dev banner logic (all pages) --&gt;</span>
+&lt;script src="js/dev-banner.js"&gt;&lt;/script&gt;
+
+<span class="cm">&lt;!-- 9. Page-specific inline &lt;script&gt; --&gt;</span></code></pre>
+    </section>
+
+
+    <!-- ═══ 7. Navigation & Routing ════════════════════════════ -->
+    <section class="doc-section anchor" id="s7">
+      <h2><span class="sec-num">7</span> Navigation &amp; Routing</h2>
+      <p>No client-side router. Navigation uses standard <code>&lt;a href="..."&gt;</code> links and <code>window.location.href</code> in JS.</p>
+
+      <div class="flow">
+        <div class="flow-group">
+          <div class="flow-node active">index.html<br><small>Login</small></div>
+        </div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-group">
+          <div class="flow-node">dashboard.html<br><small>Home</small></div>
+          <div class="flow-label">Submit form (1.2 s)</div>
+        </div>
+        <span class="flow-arrow">→</span>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div class="flow-group">
+            <div class="flow-node">library.html</div>
+            <div class="flow-label">Kho tài liệu</div>
+          </div>
+          <div class="flow-group">
+            <div class="flow-node">planner.html</div>
+            <div class="flow-label">AI Planner</div>
+          </div>
+          <div class="flow-group">
+            <div class="flow-node">chatbot.html</div>
+            <div class="flow-label">AI Chatbot</div>
+          </div>
+        </div>
+      </div>
+
+      <p>Additional routes: <code>library.html</code> and <code>dashboard.html</code> file cards both link to <code>chatbot.html</code>. All pages link back to <code>dashboard.html</code> via the Trang chủ nav item.</p>
+
+      <p><strong>Active nav detection:</strong> <code>setActiveNav()</code> in <code>main.js</code> reads <code>window.location.pathname</code> on every page load and applies <code>.active</code> to the matching <code>.nav-item[data-page]</code> automatically.</p>
+    </section>
+
+
+    <!-- ═══ 8. Component Reference ═════════════════════════════ -->
+    <section class="doc-section anchor" id="s8">
+      <h2><span class="sec-num">8</span> Component Reference</h2>
+
+      <h3>Sidebar</h3>
+      <p>Used identically across <code>dashboard.html</code>, <code>library.html</code>, <code>planner.html</code>, <code>chatbot.html</code>.</p>
+
+      <div class="alert alert-important">
+        <span class="alert-icon">⚠️</span>
+        <div class="alert-body">
+          <strong>Required attribute</strong>
+          Every <code>&lt;a class="nav-item"&gt;</code> must carry <code>data-page="exact-filename.html"</code> for <code>setActiveNav()</code> to highlight it correctly.
+        </div>
+      </div>
+
+      <div class="pre-label">html — sidebar structure</div>
+      <pre><code>&lt;aside class="sidebar"&gt;
+  &lt;div class="sidebar-logo"&gt; ... &lt;/div&gt;
+  &lt;nav class="sidebar-nav"&gt;
+    &lt;a href="dashboard.html" class="nav-item" data-page="dashboard.html"&gt;
+      &lt;i class="fa-solid fa-house"&gt;&lt;/i&gt;&lt;span&gt;Trang chủ&lt;/span&gt;
+    &lt;/a&gt;
+    <span class="cm">&lt;!-- more nav items --&gt;</span>
+  &lt;/nav&gt;
+  &lt;div class="sidebar-user"&gt; ... &lt;/div&gt;
+&lt;/aside&gt;</code></pre>
+
+      <h3>File Type Badge</h3>
+      <div class="pre-label">html</div>
+      <pre><code>&lt;div class="file-type-badge file-type-pdf"&gt;PDF&lt;/div&gt;
+<span class="cm">&lt;!-- modifiers: file-type-pdf | file-type-doc | file-type-ppt | file-type-xlsx --&gt;</span></code></pre>
+
+      <h3>Toast Notification</h3>
+      <div class="pre-label">js</div>
+      <pre><code><span class="fn">showToast</span>(<span class="st">'Message text'</span>, <span class="st">'success'</span>, <span class="nm">3000</span>);
+<span class="cm">// type: 'info' | 'success' | 'error'</span></code></pre>
+
+      <h3>Dev Banner (auto-injected)</h3>
+      <p>The banner requires no HTML. <code>dev-banner.js</code> injects it automatically. Just link the two files:</p>
+      <div class="pre-label">html — required in every page</div>
+      <pre><code>&lt;link rel="stylesheet" href="css/dev-banner.css" /&gt;
+&lt;script src="js/dev-banner.js"&gt;&lt;/script&gt;</code></pre>
+      <p>To update the version string or description, edit the <code>CONFIG</code> object at the top of <code>js/dev-banner.js</code>.</p>
+    </section>
+
+
+    <!-- ═══ 9. Production Checklist ════════════════════════════ -->
+    <section class="doc-section anchor" id="s9">
+      <h2><span class="sec-num">9</span> Going to Production Checklist</h2>
+
+      <div class="alert alert-caution">
+        <span class="alert-icon">🚨</span>
+        <div class="alert-body">
+          <strong>Complete all items before deploying to a public URL.</strong>
+        </div>
+      </div>
+
+      <ul class="checklist">
+        <li><span class="check-box"></span><div><strong>Remove the dev banner</strong> — delete <code>&lt;link rel="stylesheet" href="css/dev-banner.css" /&gt;</code> and <code>&lt;script src="js/dev-banner.js"&gt;&lt;/script&gt;</code> from all 5 pages</div></li>
+        <li><span class="check-box"></span><div><strong>Connect a real auth backend</strong> — replace the <code>setTimeout</code> redirect in <code>index.html</code> with an actual API call</div></li>
+        <li><span class="check-box"></span><div><strong>Implement search</strong> — replace <code>showToast()</code> stubs in <code>dashboard.html</code> and <code>library.html</code> with real search/filter requests</div></li>
+        <li><span class="check-box"></span><div><strong>Implement AI endpoints</strong> — replace the rotating <code>responses[]</code> array in <code>chatbot.html</code> with calls to an LLM API</div></li>
+        <li><span class="check-box"></span><div><strong>Implement AI Planner generation</strong> — connect the "Tạo lại lộ trình" button to a backend sprint-generation API</div></li>
+        <li><span class="check-box"></span><div><strong>Add real document data</strong> — replace hard-coded file cards with dynamic API responses</div></li>
+        <li><span class="check-box"></span><div><strong>Minify assets</strong> — run CSS and JS through a minifier for production builds</div></li>
+        <li><span class="check-box"></span><div><strong>Add a favicon</strong> — add <code>&lt;link rel="icon"&gt;</code> to all pages</div></li>
+        <li><span class="check-box"></span><div><strong>Update meta description tags</strong> on each page for SEO</div></li>
+        <li><span class="check-box"></span><div><strong>Test on mobile</strong> — verify the 768 px and 900 px responsive breakpoints on real devices</div></li>
+      </ul>
+    </section>
+
+    <hr>
+    <p style="font-size:12px;color:#94a3b8;text-align:center;">
+      VNU - StudyHub Frontend Documentation · Generated 2026-09-17 · v0.1.0-pre-alpha
+    </p>
+
+  </main>
+</div>
+
+<script>
+  // ── Active TOC highlight on scroll ──────────────────────────
+  const sections = document.querySelectorAll('.anchor[id]');
+  const tocLinks = document.querySelectorAll('.toc a[href^="#"]');
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        tocLinks.forEach(l => l.classList.remove('active'));
+        const link = document.querySelector(`.toc a[href="#${entry.target.id}"]`);
+        if (link) link.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20px 0px -75% 0px' });
+
+  sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>
+
