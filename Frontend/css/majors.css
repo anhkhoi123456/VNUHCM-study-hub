@@ -1,0 +1,23 @@
+.major-heading-icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--art-from), var(--art-wave));
+  color: var(--folder-icon);
+  font-size: 38px;
+}
+
+.majors-page .main-content { min-width: 0; }
+.majors-page .faculty-card h2 { min-height: 0; }
+
+@media (max-width: 680px) {
+  .major-heading-icon { width: 56px; height: 56px; font-size: 28px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .majors-page .faculty-card,
+  .majors-page .card-arrow { transition: none; }
+}

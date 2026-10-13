@@ -11,59 +11,19 @@
   <link rel="stylesheet" href="css/dev-banner.css" />
   <link rel="stylesheet" href="css/dashboard.css" />
 </head>
-<body class="dashboard-page">
+<body data-active-nav="dashboard.html" class="dashboard-page">
 
 <div class="app-shell">
 
   <!-- ═══ Sidebar ═════════════════════════════════════════════════ -->
-  <aside class="sidebar">
-    <div class="sidebar-logo">
-      <div class="logo-icon"><i class="fa-solid fa-book-open"></i></div>
-      <div class="logo-text">
-        <h2>VNU - StudyHub</h2>
-        <p>Học thông minh · Vững tương lai</p>
-      </div>
-    </div>
-
-    <nav class="sidebar-nav">
-      <a href="dashboard.html" class="nav-item" data-page="dashboard.html">
-        <i class="fa-solid fa-house"></i><span>Trang chủ</span>
-      </a>
-      <a href="library.html" class="nav-item" data-page="library.html">
-        <i class="fa-regular fa-calendar-check"></i><span>Kho tài liệu</span>
-      </a>
-      <a href="planner.html" class="nav-item" data-page="planner.html">
-        <i class="fa-solid fa-brain"></i><span>AI Planner</span>
-      </a>
-      <a href="chatbot.html" class="nav-item" data-page="chatbot.html">
-        <i class="fa-regular fa-comment-dots"></i><span>AI Chatbot</span>
-      </a>
-      <a href="#" class="nav-item">
-        <i class="fa-regular fa-user"></i><span>Space cá nhân</span>
-      </a>
-    </nav>
-
-    <div class="sidebar-user">
-      <div class="user-avatar">NA</div>
-      <div class="user-info">
-        <h4>Nguyễn Văn A</h4>
-        <p>Sinh viên</p>
-      </div>
-      <i class="fa-solid fa-chevron-up chevron"></i>
-    </div>
-  </aside>
+  <aside class="sidebar" data-app-sidebar></aside>
 
   <!-- ═══ Main ═════════════════════════════════════════════════════ -->
   <div class="main-content">
 
     <!-- Topbar -->
     <header class="topbar">
-      <div class="topbar-actions">
-        <button class="topbar-icon-btn" title="Thông báo" onclick="showToast('Không có thông báo mới','info')">
-          <i class="fa-regular fa-bell"></i>
-        </button>
-        <div class="avatar-btn">NA</div>
-      </div>
+      <div class="topbar-actions" data-app-actions></div>
     </header>
 
     <main class="page-body dashboard-body">
@@ -80,38 +40,17 @@
 
       <section class="school-section" aria-labelledby="schoolHeading">
         <h2 id="schoolHeading">CHỌN TRƯỜNG ĐẠI HỌC</h2>
-        <div class="school-grid">
-          <a class="school-button" href="uit-faculties.html" data-school="UIT" aria-label="Chọn Trường Đại học Công nghệ Thông tin" title="Trường Đại học Công nghệ Thông tin">
-            <span class="school-image-frame"><img class="school-logo" src="../resources/Logo/UIT.webp" alt="" loading="lazy" /></span>
-          </a>
-          <button class="school-button" type="button" data-school="HCMUS" aria-label="Chọn Trường Đại học Khoa học Tự nhiên" title="Trường Đại học Khoa học Tự nhiên">
-            <span class="school-image-frame"><img class="school-logo" src="../resources/Logo/US.webp" alt="" loading="lazy" /></span>
-          </button>
-          <button class="school-button" type="button" data-school="HCMUT" aria-label="Chọn Trường Đại học Bách khoa" title="Trường Đại học Bách khoa">
-            <span class="school-image-frame"><img class="school-logo" src="../resources/Logo/BK.webp" alt="" loading="lazy" /></span>
-          </button>
-          <button class="school-button" type="button" data-school="UEL" aria-label="Chọn Trường Đại học Kinh tế – Luật" title="Trường Đại học Kinh tế – Luật">
-            <span class="school-image-frame"><img class="school-logo" src="../resources/Logo/UEL.webp" alt="" loading="lazy" /></span>
-          </button>
-          <button class="school-button" type="button" data-school="IU" aria-label="Chọn Trường Đại học Quốc tế" title="Trường Đại học Quốc tế">
-            <span class="school-image-frame"><img class="school-logo" src="../resources/Logo/IU.webp" alt="" loading="lazy" /></span>
-          </button>
-          <button class="school-button" type="button" data-school="USSH" aria-label="Chọn Trường Đại học Khoa học Xã hội và Nhân văn" title="Trường Đại học Khoa học Xã hội và Nhân văn">
-            <span class="school-image-frame"><img class="school-logo" src="../resources/Logo/USSH.webp" alt="" loading="lazy" /></span>
-          </button>
-          <button class="school-button" type="button" data-school="UHS" aria-label="Chọn Trường Đại học Khoa học Sức khỏe" title="Trường Đại học Khoa học Sức khỏe">
-            <span class="school-image-frame"><img class="school-logo" src="../resources/Logo/SK.webp" alt="" loading="lazy" /></span>
-          </button>
-          <button class="school-button" type="button" data-school="AGU" aria-label="Chọn Trường Đại học An Giang" title="Trường Đại học An Giang">
-            <span class="school-image-frame"><img class="school-logo" src="../resources/Logo/logo-truong-dai-hoc-an-giang-inkythuatso.svg" alt="" loading="lazy" /></span>
-          </button>
-        </div>
+        <div class="school-grid" data-school-grid></div>
       </section>
     </main>
   </div><!-- /main-content -->
 </div><!-- /app-shell -->
 
 <script src="js/main.js"></script>
+<script src="js/templates.js"></script>
+<script src="js/app-shell.js"></script>
+<script src="js/data/catalog.js"></script>
+<script src="js/catalog-pages.js"></script>
 <script src="js/dev-banner.js"></script>
 <script src="js/dashboard.js"></script>
 </body>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VNU - StudyHub | Ngành khoa Hệ thống thông tin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/dev-banner.css" />
+  <link rel="stylesheet" href="css/library.css" />
+  <link rel="stylesheet" href="css/majors.css" />
+</head>
+<body data-active-nav="dashboard.html" class="library-page majors-page">
+  <div class="app-shell">
+    <aside class="sidebar" data-app-sidebar></aside>
+
+    <div class="main-content">
+      <header class="topbar">
+        <label class="topbar-search">
+          <i class="fa-solid fa-magnifying-glass search-icon" aria-hidden="true"></i>
+          <input id="facultySearch" type="search" aria-label="Tìm ngành" placeholder="Tìm kiếm tài liệu, môn học, ngành, khoa..." />
+        </label>
+        <div class="topbar-actions" data-app-actions></div>
+      </header>
+
+      <main class="page-body library-body" data-catalog-page="majors"></main>
+    </div>
+  </div>
+  <script src="js/main.js"></script>
+<script src="js/templates.js"></script>
+<script src="js/app-shell.js"></script>
+<script src="js/data/catalog.js"></script>
+<script src="js/catalog-pages.js"></script>
+  <script src="js/dev-banner.js"></script>
+
+</body>
+</html>

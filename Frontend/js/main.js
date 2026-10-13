@@ -6,8 +6,12 @@
 // ── Active nav highlight ──────────────────────────────────────
 function setActiveNav() {
   const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+  const activePage = document.body.dataset.activeNav || currentPage;
   document.querySelectorAll('.nav-item[data-page]').forEach(item => {
-    item.classList.toggle('active', item.dataset.page === currentPage);
+    const active = item.dataset.page === activePage;
+    item.classList.toggle('active', active);
+    if (active) item.setAttribute('aria-current', 'page');
+    else item.removeAttribute('aria-current');
   });
 }
 

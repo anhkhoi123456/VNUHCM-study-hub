@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VNU - StudyHub | Môn HTTT (CTTT)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/dev-banner.css" />
+  <link rel="stylesheet" href="css/library.css" />
+  <link rel="stylesheet" href="css/subjects.css" />
+</head>
+<body data-active-nav="dashboard.html" class="library-page subjects-page">
+  <div class="app-shell">
+    <aside class="sidebar" data-app-sidebar></aside>
+
+    <div class="main-content">
+      <header class="topbar">
+        <div class="topbar-actions" data-app-actions></div>
+      </header>
+
+      <main class="page-body library-body">
+        <nav class="library-breadcrumb" aria-label="Đường dẫn"></nav>
+
+        <div class="library-heading">
+          <div class="subject-heading-icon" aria-hidden="true"><i class="fa-solid fa-layer-group"></i></div>
+          <div><h1>Môn</h1><p>Chọn môn học để xem danh sách tài liệu</p></div>
+        </div>
+        <div class="subject-search-row">
+          <label class="subject-search"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i><input id="subjectSearch" type="search" placeholder="Tìm kiếm môn học..." aria-label="Tìm kiếm môn học" /></label>
+          <button id="subjectFiltersToggle" class="subject-filter-button" type="button" aria-expanded="true" aria-controls="subjectFilters"><i class="fa-solid fa-filter" aria-hidden="true"></i>Bộ lọc<i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>
+        </div>
+        <div class="subject-filters" id="subjectFilters">
+          <label>Học kỳ<select id="semesterFilter"><option value="all">Tất cả</option><option value="1">Học kỳ 1</option><option value="2">Học kỳ 2</option></select></label>
+          <label>Loại môn<select id="courseTypeFilter"><option value="all">Tất cả</option><option value="dai-cuong">Đại cương</option><option value="co-so">Cơ sở ngành</option></select></label>
+          <label>Giảng viên<select id="lecturerFilter"><option value="all">Tất cả</option></select></label>
+          <label>Sắp xếp<select id="subjectSort"><option value="newest">Mới nhất</option><option value="oldest">Cũ nhất</option><option value="name">Tên môn A–Z</option></select></label>
+        </div>
+        <!-- Sample course metadata, matching the reference. Replace with API data when available. -->
+        <div class="subject-grid" id="subjectGrid" data-subject-group="uit-is-cttt"></div>
+        <p id="subjectsEmpty" class="faculty-empty" role="status" hidden>Không tìm thấy môn học phù hợp.</p>
+      </main>
+    </div>
+  </div>
+  <script src="js/main.js"></script>
+<script src="js/templates.js"></script>
+<script src="js/app-shell.js"></script>
+<script src="js/data/catalog.js"></script>
+<script src="js/catalog-pages.js"></script>
+  <script src="js/dev-banner.js"></script>
+  <script src="js/subjects.js"></script>
+</body>
+</html>

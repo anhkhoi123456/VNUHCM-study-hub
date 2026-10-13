@@ -85,7 +85,21 @@ const facultyNames = {
   'khoa-hoc-va-ky-thuat-thong-tin': 'Khoa học và Kỹ thuật Thông tin'
 };
 const faculty = facultyNames[new URLSearchParams(location.search).get('faculty')];
-if (faculty) {
+const subjectNames = Object.fromEntries(StudyHubCatalog.subjects.map(subject => [subject.id, subject.name]));
+const selectedSubject = new URLSearchParams(location.search).get('subject');
+if (Object.hasOwn(subjectNames, selectedSubject)) {
+  const subjectName = subjectNames[selectedSubject];
+  const subjectSelect = document.getElementById('subjectFilter');
+  if (![...subjectSelect.options].some(option => option.value === selectedSubject)) {
+    subjectSelect.add(new Option(subjectName, selectedSubject));
+  }
+  subjectSelect.value = selectedSubject;
+  filters.subject = selectedSubject;
+  document.getElementById('breadcrumbCurrent').textContent = subjectName;
+  document.querySelector('.library-topbar-title p').textContent = subjectName;
+  document.title = `VNU - StudyHub | ${subjectName}`;
+  document.querySelector('.filter-chip[data-filter="school"][data-value="UIT"]').click();
+} else if (faculty) {
   document.getElementById('breadcrumbCurrent').textContent = faculty;
   document.title = `VNU - StudyHub | ${faculty}`;
   document.querySelector('.filter-chip[data-filter="school"][data-value="UIT"]').click();
