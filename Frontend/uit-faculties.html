@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VNU - StudyHub | Khoa UIT</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/dev-banner.css" />
+  <link rel="stylesheet" href="css/library.css" />
+</head>
+<body class="library-page">
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <div class="logo-icon"><i class="fa-solid fa-book-open" aria-hidden="true"></i></div>
+        <div class="logo-text"><h2>VNU - StudyHub</h2><p>Học thông minh · Vững tương lai</p></div>
+      </div>
+      <nav class="sidebar-nav" aria-label="Điều hướng chính">
+        <a href="dashboard.html" class="nav-item active" data-page="uit-faculties.html"><i class="fa-solid fa-house" aria-hidden="true"></i><span>Trang chủ</span></a>
+        <a href="library.html" class="nav-item" data-page="library.html"><i class="fa-regular fa-calendar-check" aria-hidden="true"></i><span>Kho tài liệu</span></a>
+        <a href="planner.html" class="nav-item" data-page="planner.html"><i class="fa-solid fa-brain" aria-hidden="true"></i><span>AI Planner</span></a>
+        <a href="chatbot.html" class="nav-item" data-page="chatbot.html"><i class="fa-regular fa-comment-dots" aria-hidden="true"></i><span>AI Chatbot</span></a>
+        <a href="#" class="nav-item"><i class="fa-regular fa-user" aria-hidden="true"></i><span>Space cá nhân</span></a>
+      </nav>
+      <div class="sidebar-user">
+        <div class="user-avatar">NA</div>
+        <div class="user-info"><h4>Nguyễn Văn A</h4><p>Sinh viên</p></div>
+        <i class="fa-solid fa-chevron-up chevron" aria-hidden="true"></i>
+      </div>
+    </aside>
+
+    <div class="main-content">
+      <header class="topbar">
+        <label class="topbar-search">
+          <i class="fa-solid fa-magnifying-glass search-icon" aria-hidden="true"></i>
+          <input id="facultySearch" type="search" aria-label="Tìm khoa" placeholder="Tìm kiếm tài liệu, môn học, ngành, khoa..." />
+        </label>
+        <div class="topbar-actions">
+          <button class="topbar-icon-btn" type="button" title="Thông báo" aria-label="Thông báo" onclick="showToast('Không có thông báo mới','info')"><i class="fa-regular fa-bell" aria-hidden="true"></i></button>
+          <div class="avatar-btn">NA</div>
+        </div>
+      </header>
+
+      <main class="page-body library-body">
+        <nav class="library-breadcrumb" aria-label="Đường dẫn">
+          <a href="dashboard.html">Trang chủ</a><i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+          <span>ĐHQG TP.HCM</span><i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+          <span>UIT</span><i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+          <strong aria-current="page">Khoa</strong>
+        </nav>
+
+        <div class="library-heading">
+          <img src="../resources/Logo/UIT.webp" alt="Logo Đại học Công nghệ Thông tin" />
+          <div><h1>Đại học Công nghệ Thông tin (UIT)</h1><p>Chọn khoa để xem danh sách tài liệu</p></div>
+        </div>
+
+        <!-- Uncomment an image in each card after adding its file; it will cover the CSS placeholder. -->
+        <div class="faculty-grid" id="facultyGrid">
+          <a class="faculty-card theme-blue" href="library.html?faculty=ky-thuat-may-tinh" data-name="Kỹ thuật máy tính">
+            <div class="faculty-art" aria-hidden="true">
+              <div class="folder"><div class="folder-back"></div><div class="folder-front"><i class="fa-solid fa-code"></i></div></div>
+              <!-- <img class="faculty-image" src="../resources/faculty/ky-thuat-may-tinh.webp" alt="" /> -->
+            </div>
+            <div class="faculty-card-content"><h2>Kỹ thuật máy tính</h2><div class="faculty-card-bottom"><span class="document-count"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>128 tài liệu</span><span class="card-arrow" aria-hidden="true"><i class="fa-solid fa-arrow-right"></i></span></div></div>
+          </a>
+          <a class="faculty-card theme-purple" href="library.html?faculty=he-thong-thong-tin" data-name="Hệ thống thông tin">
+            <div class="faculty-art" aria-hidden="true">
+              <div class="folder"><div class="folder-back"></div><div class="folder-front"><i class="fa-solid fa-sitemap"></i></div></div>
+              <!-- <img class="faculty-image" src="../resources/faculty/he-thong-thong-tin.webp" alt="" /> -->
+            </div>
+            <div class="faculty-card-content"><h2>Hệ thống thông tin</h2><div class="faculty-card-bottom"><span class="document-count"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>96 tài liệu</span><span class="card-arrow" aria-hidden="true"><i class="fa-solid fa-arrow-right"></i></span></div></div>
+          </a>
+          <a class="faculty-card theme-green" href="library.html?faculty=cong-nghe-phan-mem" data-name="Công nghệ phần mềm">
+            <div class="faculty-art" aria-hidden="true">
+              <div class="folder"><div class="folder-back"></div><div class="folder-front"><i class="fa-solid fa-gears"></i></div></div>
+              <!-- <img class="faculty-image" src="../resources/faculty/cong-nghe-phan-mem.webp" alt="" /> -->
+            </div>
+            <div class="faculty-card-content"><h2>Công nghệ phần mềm</h2><div class="faculty-card-bottom"><span class="document-count"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>143 tài liệu</span><span class="card-arrow" aria-hidden="true"><i class="fa-solid fa-arrow-right"></i></span></div></div>
+          </a>
+          <a class="faculty-card theme-yellow" href="library.html?faculty=khoa-hoc-may-tinh" data-name="Khoa học máy tính">
+            <div class="faculty-art" aria-hidden="true">
+              <div class="folder"><div class="folder-back"></div><div class="folder-front"><i class="fa-solid fa-database"></i></div></div>
+              <!-- <img class="faculty-image" src="../resources/faculty/khoa-hoc-may-tinh.webp" alt="" /> -->
+            </div>
+            <div class="faculty-card-content"><h2>Khoa học máy tính</h2><div class="faculty-card-bottom"><span class="document-count"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>152 tài liệu</span><span class="card-arrow" aria-hidden="true"><i class="fa-solid fa-arrow-right"></i></span></div></div>
+          </a>
+          <a class="faculty-card theme-pink" href="library.html?faculty=mang-may-tinh-va-truyen-thong" data-name="Mạng máy tính và truyền thông">
+            <div class="faculty-art" aria-hidden="true">
+              <div class="folder"><div class="folder-back"></div><div class="folder-front"><i class="fa-solid fa-tower-broadcast"></i></div></div>
+              <!-- <img class="faculty-image" src="../resources/faculty/mang-may-tinh-va-truyen-thong.webp" alt="" /> -->
+            </div>
+            <div class="faculty-card-content"><h2>Mạng máy tính và truyền thông</h2><div class="faculty-card-bottom"><span class="document-count"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>87 tài liệu</span><span class="card-arrow" aria-hidden="true"><i class="fa-solid fa-arrow-right"></i></span></div></div>
+          </a>
+          <a class="faculty-card theme-orange" href="library.html?faculty=khoa-hoc-va-ky-thuat-thong-tin" data-name="Khoa học và Kỹ thuật Thông tin">
+            <div class="faculty-art" aria-hidden="true">
+              <div class="folder"><div class="folder-back"></div><div class="folder-front"><i class="fa-solid fa-microchip"></i></div></div>
+              <!-- <img class="faculty-image" src="../resources/faculty/khoa-hoc-va-ky-thuat-thong-tin.webp" alt="" /> -->
+            </div>
+            <div class="faculty-card-content"><h2>Khoa học và Kỹ thuật Thông tin</h2><div class="faculty-card-bottom"><span class="document-count"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>110 tài liệu</span><span class="card-arrow" aria-hidden="true"><i class="fa-solid fa-arrow-right"></i></span></div></div>
+          </a>
+        </div>
+        <p class="faculty-empty" id="facultyEmpty" hidden>Không tìm thấy khoa phù hợp.</p>
+      </main>
+    </div>
+  </div>
+  <script src="js/main.js"></script>
+  <script src="js/dev-banner.js"></script>
+  <script>
+    const facultySearch = document.getElementById('facultySearch');
+    facultySearch.addEventListener('input', () => {
+      const query = facultySearch.value.trim().toLocaleLowerCase('vi');
+      let visible = 0;
+      document.querySelectorAll('.faculty-card').forEach(card => {
+        const match = card.dataset.name.toLocaleLowerCase('vi').includes(query);
+        card.hidden = !match;
+        if (match) visible++;
+      });
+      document.getElementById('facultyEmpty').hidden = visible > 0;
+    });
+  </script>
+</body>
+</html>
