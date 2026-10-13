@@ -38,6 +38,7 @@ html[data-theme="dark"] {
 [data-theme="dark"] :is(.suggestion-grid button:hover, .document-options button:hover, .picker-document:hover) { background: #352047; }
 [data-theme="dark"] :is(.generate-button, .new-plan, .primary-button, .chat-send, .hour-options button.selected, .filter-chip.active) { background: #8845df; color: #fff; border-color: #a365f0; }
 [data-theme="dark"] .generate-button:is(:hover, :focus-visible):not(:disabled) { background: #245fff; box-shadow: 0 6px 22px #245fff35; }
+[data-theme="dark"] .chat-send:is(:hover, :focus-visible) { background: #0875ff; box-shadow: 0 5px 18px #0875ff55; }
 [data-theme="dark"] :is(.plan-tags span, .school-tag, .school-badge, .subject-count, .question-badge, .subject-format, .document-pin, .heading-icon, .book-icon) { background: #2e1c44; color: #c5a0f5; }
 [data-theme="dark"] .overall-progress progress { background: #30273d; }
 [data-theme="dark"] progress::-webkit-progress-bar { background: #30273d; }
