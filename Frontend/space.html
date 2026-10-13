@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VNU - StudyHub | Space cá nhân</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/dev-banner.css" />
+  <link rel="stylesheet" href="css/space.css" />
+  <link rel="stylesheet" href="css/background.css" />
+  <script src="js/background.js" defer></script>
+</head>
+<body data-active-nav="space.html">
+  <div class="app-shell">
+    <aside class="sidebar" data-app-sidebar></aside>
+    <div class="main-content">
+      <header class="topbar space-topbar"><div><h1>Space cá nhân</h1><p>Quản lý và chia sẻ lộ trình học, tài liệu đã lưu và các nội dung của bạn</p></div><div class="topbar-actions" data-app-actions></div></header>
+      <main class="page-body space-body">
+        <div class="space-toolbar"><div class="active-section"><i class="fa-regular fa-calendar-check"></i> Lộ trình học</div><form id="receiveForm" class="receive-form"><label class="share-input"><i class="fa-solid fa-link"></i><input id="shareCode" aria-label="Mã chia sẻ lộ trình" placeholder="Nhập mã chia sẻ lộ trình..." maxlength="10000" required /></label><button type="submit" class="outline-button">Nhận lộ trình</button></form><a class="new-plan" href="planner.html"><i class="fa-solid fa-plus"></i> Tạo lộ trình mới</a></div>
+        <div class="space-filters"><label class="plan-search"><i class="fa-solid fa-magnifying-glass"></i><input id="planSearch" type="search" placeholder="Tìm lộ trình học..." aria-label="Tìm lộ trình học" /></label><label class="school-filter"><span class="sr-only">Trường</span><select id="schoolFilter"><option value="all">Tất cả trường</option><option value="UIT">UIT</option><option value="BKU">BKU</option></select></label><label class="sort-filter"><span>Sắp xếp</span><select id="planSort"><option value="newest">Mới nhất</option><option value="oldest">Cũ nhất</option><option value="name">Tên A – Z</option></select></label></div>
+        <section id="planGrid" class="plan-grid" aria-label="Lộ trình học đã lưu"></section>
+        <div id="spaceEmpty" class="space-empty" hidden><i class="fa-regular fa-folder-open"></i><h2>Không tìm thấy lộ trình</h2><p>Thử từ khóa khác hoặc tạo lộ trình mới.</p><a href="planner.html">Tạo lộ trình với AI Planner <i class="fa-solid fa-arrow-right"></i></a></div>
+        <p class="storage-note" id="storageNote">Lộ trình mẫu · Thay đổi được lưu trên trình duyệt này. Mã chia sẻ chứa thông tin lộ trình, không đồng bộ tài khoản.</p>
+      </main>
+    </div>
+  </div>
+  <dialog id="planDialog" class="space-dialog"><div class="dialog-heading"><h2 id="dialogHeading"></h2><button id="closeDialog" aria-label="Đóng"><i class="fa-solid fa-xmark"></i></button></div><div id="dialogContent"></div></dialog>
+  <script src="js/main.js"></script>
+  <script src="js/templates.js"></script>
+  <script src="js/app-shell.js"></script>
+  <script src="js/dev-banner.js"></script>
+  <script src="js/space.js"></script>
+</body>
+</html>

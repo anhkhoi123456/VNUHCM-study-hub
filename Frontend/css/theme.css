@@ -1,0 +1,66 @@
+/* Shared palette: near-black violet surfaces, purple accents and cyan highlights. */
+:root { --theme-bg: #f9fafb; --theme-panel: #fff; --theme-border: #e5e7eb; }
+.theme-toggle { color: #e59b22; flex-shrink: 0; }
+.theme-toggle svg { overflow: visible; transition: transform .55s cubic-bezier(.4, 0, .2, 1); }
+.theme-toggle .sun-disc { transform-origin: 12px 12px; transition: r .5s ease; }
+.theme-toggle .sun-rays { transform-origin: 12px 12px; transition: opacity .35s ease, transform .55s ease; }
+.theme-toggle .moon-cutout { transition: cx .5s ease, cy .5s ease; }
+[data-theme="dark"] .theme-toggle { color: #c4a0ff; }
+[data-theme="dark"] .theme-toggle svg { transform: rotate(-25deg); }
+[data-theme="dark"] .theme-toggle .sun-disc { r: 8; }
+[data-theme="dark"] .theme-toggle .sun-rays { opacity: 0; transform: rotate(90deg) scale(.65); }
+[data-theme="dark"] .theme-toggle .moon-cutout { cx: 16; cy: 7; }
+.theme-toggle:focus-visible { outline: 3px solid #ae7cf1; outline-offset: 3px; }
+body, .sidebar, .topbar, .page-body, .setup-card, .plan-card, .saved-plan, .document-card, .subject-card, .conversation-panel, .learning-panel, dialog { transition: background-color .3s ease, border-color .3s ease, color .3s ease; }
+html[data-theme="dark"] {
+  color-scheme: dark;
+  --theme-bg: #0b0913; --theme-panel: #141020; --theme-border: #30213f;
+  --blue-50: #211535; --blue-100: #30204b; --blue-200: #5d3982; --blue-400: #b284f3; --blue-500: #a76bef; --blue-600: #9253e8; --blue-700: #c19aff; --blue-900: #e0cbff;
+  --gray-50: #0b0913; --gray-100: #1b1528; --gray-200: #30213f; --gray-300: #554464; --gray-400: #9585a9; --gray-500: #b0a2c1; --gray-600: #c4b7d5; --gray-700: #dacfe8; --gray-800: #eee7f7; --gray-900: #f6f1ff;
+  --shadow: 0 4px 15px #0005;
+}
+[data-theme="dark"] body { background: var(--theme-bg); color: #eee7f7; }
+[data-theme="dark"] :is(.sidebar, .topbar, .sidebar-logo, .sidebar-user) { background: #0e0b17; border-color: var(--theme-border); }
+[data-theme="dark"] :is(.page-body, .chatbot-workspace) { color: #eee7f7; background-color: var(--theme-bg); background-image: radial-gradient(ellipse at 0 0, #52278018, transparent 55%), radial-gradient(ellipse at 100% 100%, #00c6ef08, transparent 50%), linear-gradient(#a563dc06 1px, transparent 1px), linear-gradient(90deg, #a563dc06 1px, transparent 1px); background-size: auto, auto, 64px 64px, 64px 64px; }
+[data-theme="dark"] :is(.setup-card, .plan-card, .saved-plan, .document-card, .subject-card, .faculty-card, .course-workspace, .file-workspace, .quiz-card, .knowledge-panel, .document-toolbar, .conversation-panel, .composer-wrap, .space-dialog, .library-picker, .document-options, .pdf-content, .card) { background: var(--theme-panel); color: #eee7f7; border-color: var(--theme-border); }
+[data-theme="dark"] :is(.learning-panel, .subject-panel, .plan-header, .composer-wrap, .conversation-panel, .selected-heading) { border-color: var(--theme-border); }
+[data-theme="dark"] :is(h1, h2, h3, h4, .planner-page, .subject-detail h4, .sprint-info h4, .document-details h2, .saved-plan h2, .school-section h2, .library-heading h1, .course-title h1, .file-title-line h1) { color: #eee7f7; }
+[data-theme="dark"] :is(.panel-description, .plan-note, .plan-metadata, .storage-note, .sprint-info p, .sprint-tasks label, .sprint-end, .document-size, .subject-detail p, .section-heading p, .daily-heading, .source-option small, .quiz-answers label, .welcome-intro p, .space-topbar p, .file-metadata, .file-status, .subject-meta p) { color: #b2a4c4; }
+[data-theme="dark"] :is(.time-card, .request-card, .welcome-card) { background: linear-gradient(130deg, #1c122e, #141323); border-color: #402951; }
+[data-theme="dark"] :is(.duration-card, .daily-card, .planner-sprint, .planner-subject-row, .planner-subject, .source-option, .picker-document, .sprint-status, .chat-composer, .subject-search, .library-search, .share-input, .plan-search, .week-filter, .model-select, .file-toolbar, .file-controls, .file-status) { background: #181323; color: #d7c9e8; border-color: #352747; }
+[data-theme="dark"] :where(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea, select) { background-color: #181323; color: #e6dcf2; border-color: #402c55; }
+[data-theme="dark"] :is(input, textarea)::placeholder { color: #9787ab; }
+[data-theme="dark"] :is(.subject-search input, .library-search input, .share-input input, .plan-search input, .chat-composer textarea, .model-select select, .week-filter select) { background: transparent; }
+[data-theme="dark"] .dashboard-search input { background: transparent; color: #334155; }
+[data-theme="dark"] .dashboard-search input::placeholder { color: #7d8ba3; }
+[data-theme="dark"] :is(.planner-subject.selected, .planner-subject-row.selected, .source-option.selected, .picker-document:has(input:checked), .message-content) { background: #27183d; border-color: #8850c1; color: #e5d5f7; }
+[data-theme="dark"] :is(.suggestion-grid button, .soft-button, .hour-options button, .plan-card-actions button, .outline-button, .plan-actions button, .filter-chip, .subject-filter-button, .file-action) { background: #251837; color: #cda7ff; border-color: #46305c; }
+[data-theme="dark"] :is(.suggestion-grid button:hover, .document-options button:hover, .picker-document:hover) { background: #352047; }
+[data-theme="dark"] :is(.generate-button, .new-plan, .primary-button, .chat-send, .hour-options button.selected, .filter-chip.active) { background: #8845df; color: #fff; border-color: #a365f0; }
+[data-theme="dark"] .generate-button:is(:hover, :focus-visible):not(:disabled) { background: #245fff; box-shadow: 0 6px 22px #245fff35; }
+[data-theme="dark"] :is(.plan-tags span, .school-tag, .school-badge, .subject-count, .question-badge, .subject-format, .document-pin, .heading-icon, .book-icon) { background: #2e1c44; color: #c5a0f5; }
+[data-theme="dark"] .overall-progress progress { background: #30273d; }
+[data-theme="dark"] progress::-webkit-progress-bar { background: #30273d; }
+[data-theme="dark"] progress::-webkit-progress-value { background: linear-gradient(90deg, #9a52ec, #28c9ec); }
+[data-theme="dark"] progress::-moz-progress-bar { background: #a765ee; }
+[data-theme="dark"] :is(#progressPercent, .duration-card output, .active-section, .plan-header h3 i) { color: #b482f3; }
+[data-theme="dark"] :is(.hour-stepper, .hour-stepper output, .hour-stepper button) { background: #271b37; color: #d5b9fc; border-color: #433053; }
+[data-theme="dark"] :is(.plan-card-actions button:last-child, .quiz-navigation button:not(.primary-button), .dialog-actions button.secondary, .dialog-heading button) { background: #282031; color: #cfbfdc; }
+[data-theme="dark"] :is(.document-menu, .plan-menu-button) { background: #160e24dc; color: #e1c9fb; }
+[data-theme="dark"] .document-options button { color: #ddd0ef; }
+[data-theme="dark"] .document-options button.delete-document { color: #ff8c9b; }
+[data-theme="dark"] .deleted-documents-notice { background: #261a38; color: #cfbddf; }
+[data-theme="dark"] .done .sprint-status { background: #12362c; color: #7cdbac; }
+[data-theme="dark"] .robot-avatar { background: radial-gradient(circle at 40% 30%, #30224d, #171227); box-shadow: 0 10px 22px #0004; }
+[data-theme="dark"] :is(.quiz-feedback, .space-empty a, #pickerEmpty a) { color: #56d6e9; }
+[data-theme="dark"] :is(.document-breadcrumb, .library-breadcrumb, .subject-filters label, .filter-group h2, .filter-select span, .space-dialog p, .plan-detail-list) { color: #b2a4c4; }
+[data-theme="dark"] :is(.document-breadcrumb strong, .library-breadcrumb strong, .file-empty h2) { color: #e0d3ef; }
+[data-theme="dark"] :is(.subject-placeholder, .plan-cover, .document-preview) { box-shadow: inset 0 0 0 1px #a577e622; }
+[data-theme="dark"] .dev-banner { background: #100a1c; border-color: #352047; }
+[data-theme="dark"] .school-image-frame { background: #08060d; border-color: #9b51e8; box-shadow: 0 0 12px #994bea40, inset 0 0 10px #994bea16; }
+[data-theme="dark"] .school-button:is(:hover, :focus-visible) .school-image-frame { border-color: #c28aff; box-shadow: 0 0 24px #a55af077, inset 0 0 14px #a55af025; }
+[data-theme="dark"] .school-logo { filter: none; }
+@media (prefers-reduced-motion: reduce) {
+  .theme-toggle svg, .theme-toggle .sun-disc, .theme-toggle .sun-rays, .theme-toggle .moon-cutout,
+  body, .sidebar, .topbar, .page-body, .setup-card, .plan-card, .saved-plan, .document-card, .subject-card, .conversation-panel, .learning-panel, dialog { transition: none; }
+}

@@ -1,34 +1,43 @@
 /** Sample documents for the library grid. Add an image path to replace a CSS preview. */
-const documents = [
-  { title: 'Cấu trúc dữ liệu và giải thuật – Bài giảng Chương 1', type: 'pdf', school: 'UIT', subject: 'ctdl', size: '2.4 MB', date: '2024-06-20', art: 'math', visual: '∫ f(x)dx  ∑', image: '' }, // image: '../resources/documents/cau-truc-du-lieu.webp'
-  { title: 'Hệ điều hành – Chương 1: Giới thiệu', type: 'doc', school: 'UIT', subject: 'he-dieu-hanh', size: '1.8 MB', date: '2024-06-15', art: 'tree', visual: '<i class="fa-solid fa-sitemap"></i>', image: '' }, // image: '../resources/documents/he-dieu-hanh.webp'
-  { title: 'Xác suất thống kê – Bài giảng tổng hợp', type: 'pdf', school: 'HCMUS', subject: 'xac-suat', size: '1.2 MB', date: '2024-06-10', art: 'terminal', visual: '<i class="fa-solid fa-microchip"></i><span>&gt;_</span>', image: '' }, // image: '../resources/documents/xac-suat-thong-ke.webp'
-  { title: 'Mạng máy tính – Slide bài giảng Chương 3', type: 'ppt', school: 'UIT', subject: 'mang-may-tinh', size: '3.6 MB', date: '2024-06-08', art: 'statistics', visual: '<i class="fa-solid fa-chart-area"></i>', image: '' }, // image: '../resources/documents/mang-may-tinh.webp'
-  { title: 'Đề thi giữa kỳ CTDL – HK1 2023-2024', type: 'pdf', school: 'HCMUS', subject: 'ctdl', size: '0.8 MB', date: '2024-06-05', art: 'network', visual: '<i class="fa-solid fa-network-wired"></i>', image: '' }, // image: '../resources/documents/de-thi-ctdl.webp'
-  { title: 'Danh sách bài tập lập trình CTDL', type: 'xlsx', school: 'UIT', subject: 'ctdl', size: '0.4 MB', date: '2024-06-01', art: 'database', visual: '<i class="fa-solid fa-database"></i><span>SQL</span>', image: '' }, // image: '../resources/documents/bai-tap-ctdl.webp'
-  { title: 'Báo cáo thực hành CTDL – Lab 01', type: 'doc', school: 'UIT', subject: 'ctdl', size: '1.1 MB', date: '2024-05-25', art: 'bars', visual: '<i class="fa-solid fa-chart-column"></i>', image: '' }, // image: '../resources/documents/bao-cao-ctdl.webp'
-  { title: 'Giải thuật sắp xếp – Bubble, Quick, Merge Sort', type: 'ppt', school: 'UIT', subject: 'ctdl', size: '2.9 MB', date: '2024-05-20', art: 'code', visual: '<span>for (int i = 0; i &lt; n; i++) {<br>&nbsp; swap(a[i], a[j]);<br>}</span>', image: '' } // image: '../resources/documents/giai-thuat-sap-xep.webp'
-];
+const documents = window.StudyHubLibraryDocuments;
 
 const filters = { school: 'all', type: 'all', subject: 'all' };
 const grid = document.getElementById('documentGrid');
 const emptyMessage = document.getElementById('documentsEmpty');
+const libraryStateKey = 'studyhub-library-actions-v1';
+let libraryState = { pinned: [], deleted: [] };
+try {
+  const saved = JSON.parse(localStorage.getItem(libraryStateKey));
+  if (saved && Array.isArray(saved.pinned) && Array.isArray(saved.deleted)) {
+    const ids = new Set(documents.map(item => item.id));
+    libraryState = { pinned: saved.pinned.filter(id => ids.has(id)), deleted: saved.deleted.filter(id => ids.has(id)) };
+  }
+} catch { /* Actions remain usable without browser storage. */ }
+function saveLibraryState() {
+  try { localStorage.setItem(libraryStateKey, JSON.stringify(libraryState)); }
+  catch { showToast('Thay đổi chỉ được lưu trong phiên này.', 'info'); }
+}
+function closeDocumentMenus() {
+  grid.querySelectorAll('.document-options').forEach(menu => { menu.hidden = true; });
+  grid.querySelectorAll('.document-menu').forEach(button => button.setAttribute('aria-expanded', 'false'));
+}
 
 function renderDocuments() {
   const query = document.getElementById('documentSearch').value.trim().toLocaleLowerCase('vi');
   const sort = document.getElementById('sortDocuments').value;
   const visible = documents.filter(item =>
+    !libraryState.deleted.includes(item.id) &&
     (filters.school === 'all' || item.school === filters.school) &&
     (filters.type === 'all' || item.type === filters.type) &&
     (filters.subject === 'all' || item.subject === filters.subject) &&
     (!query || [item.title, item.school, item.subject, item.type].some(value => value.toLocaleLowerCase('vi').includes(query)))
   );
-  visible.sort((a, b) => sort === 'title'
+  visible.sort((a, b) => Number(libraryState.pinned.includes(b.id)) - Number(libraryState.pinned.includes(a.id)) || (sort === 'title'
     ? a.title.localeCompare(b.title, 'vi')
-    : sort === 'oldest' ? a.date.localeCompare(b.date) : b.date.localeCompare(a.date));
+    : sort === 'oldest' ? a.date.localeCompare(b.date) : b.date.localeCompare(a.date)));
 
   grid.innerHTML = visible.map(item => `
-    <article class="document-card">
+    <article class="document-card" data-document="${item.id}">
       <a class="document-card-link" href="chatbot.html" aria-label="Mở ${item.title}">
         <div class="document-preview art-${item.art}">
           <span class="preview-visual" aria-hidden="true">${item.visual}</span>
@@ -37,10 +46,17 @@ function renderDocuments() {
         </div>
         <div class="document-details"><h2>${item.title}</h2><span class="school-tag">${item.school}</span><span class="document-size">${item.size}</span></div>
       </a>
-      <button class="document-menu" type="button" aria-label="Lưu ${item.title}" aria-pressed="false" title="Lưu tài liệu"><i class="fa-solid fa-ellipsis-vertical" aria-hidden="true"></i></button>
+      ${libraryState.pinned.includes(item.id) ? '<span class="document-pin" title="Đã ghim"><i class="fa-solid fa-thumbtack" aria-hidden="true"></i><span>Đã ghim</span></span>' : ''}
+      <button class="document-menu" type="button" aria-label="Tùy chọn ${item.title}" aria-expanded="false" aria-controls="options-${item.id}" title="Tùy chọn tài liệu"><i class="fa-solid fa-ellipsis-vertical" aria-hidden="true"></i></button>
+      <div class="document-options" id="options-${item.id}" hidden>
+        <button type="button" data-action="pin"><i class="fa-solid fa-thumbtack" aria-hidden="true"></i>${libraryState.pinned.includes(item.id) ? 'Unpin' : 'Pin'}</button>
+        <button type="button" data-action="delete" class="delete-document"><i class="fa-regular fa-trash-can" aria-hidden="true"></i>Delete</button>
+      </div>
     </article>
   `).join('');
   emptyMessage.hidden = visible.length > 0;
+  document.getElementById('deletedDocumentsNotice').hidden = libraryState.deleted.length === 0;
+  document.getElementById('deletedDocumentsCount').textContent = `${libraryState.deleted.length} tài liệu đã xóa khỏi kho trên trình duyệt này.`;
 }
 
 document.querySelectorAll('.filter-chip').forEach(button => {
@@ -70,10 +86,42 @@ document.getElementById('filtersToggle').addEventListener('click', event => {
 });
 grid.addEventListener('click', event => {
   const button = event.target.closest('.document-menu');
-  if (!button) return;
-  const saved = button.getAttribute('aria-pressed') !== 'true';
-  button.setAttribute('aria-pressed', String(saved));
-  button.setAttribute('title', saved ? 'Bỏ lưu tài liệu' : 'Lưu tài liệu');
+  if (button) {
+    const expanded = button.getAttribute('aria-expanded') === 'true';
+    closeDocumentMenus();
+    if (!expanded) {
+      button.setAttribute('aria-expanded', 'true');
+      const menu = button.closest('.document-card').querySelector('.document-options');
+      menu.hidden = false;
+      menu.querySelector('button').focus();
+    }
+    return;
+  }
+  const action = event.target.closest('[data-action]');
+  if (!action) return;
+  const id = action.closest('.document-card').dataset.document;
+  if (action.dataset.action === 'pin') {
+    libraryState.pinned = libraryState.pinned.includes(id) ? libraryState.pinned.filter(value => value !== id) : [...libraryState.pinned, id];
+  } else if (action.dataset.action === 'delete') {
+    libraryState.deleted.push(id);
+  } else return;
+  saveLibraryState();
+  renderDocuments();
+  if (action.dataset.action === 'pin') grid.querySelector(`[data-document="${id}"] .document-menu`).focus();
+  else document.getElementById('restoreDocuments').focus();
+});
+document.addEventListener('click', event => { if (!event.target.closest('.document-menu, .document-options')) closeDocumentMenus(); });
+document.addEventListener('keydown', event => {
+  if (event.key !== 'Escape') return;
+  const button = grid.querySelector('.document-menu[aria-expanded="true"]');
+  closeDocumentMenus();
+  if (button) button.focus();
+});
+document.getElementById('restoreDocuments').addEventListener('click', () => {
+  libraryState.deleted = [];
+  saveLibraryState();
+  renderDocuments();
+  document.getElementById('documentSearch').focus();
 });
 
 const facultyNames = {
@@ -96,7 +144,6 @@ if (Object.hasOwn(subjectNames, selectedSubject)) {
   subjectSelect.value = selectedSubject;
   filters.subject = selectedSubject;
   document.getElementById('breadcrumbCurrent').textContent = subjectName;
-  document.querySelector('.library-topbar-title p').textContent = subjectName;
   document.title = `VNU - StudyHub | ${subjectName}`;
   document.querySelector('.filter-chip[data-filter="school"][data-value="UIT"]').click();
 } else if (faculty) {

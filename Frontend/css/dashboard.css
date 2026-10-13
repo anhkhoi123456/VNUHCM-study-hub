@@ -118,12 +118,27 @@
   border-radius: 14px;
   overflow: hidden;
 }
-.school-image-frame { padding: 10px; }
+.school-image-frame {
+  padding: 18px;
+  overflow: visible;
+  background: #fff;
+  border: 1px solid #e1e8f3;
+  border-radius: 22px;
+  box-shadow: 0 4px 16px #24395b0a;
+  transition: transform .32s cubic-bezier(.22, 1.4, .45, 1), border-color .25s ease, box-shadow .25s ease;
+}
+.school-button:is(:hover, :focus-visible) .school-image-frame {
+  transform: translateY(-4px) scale(1.07);
+  border-color: #b5caff;
+  box-shadow: 0 8px 24px #4166b51c;
+}
 .school-logo {
   display: block;
   width: 100%;
   height: 100%;
   object-fit: contain;
+  transition: transform .32s cubic-bezier(.22, 1.4, .45, 1);
+  transform-origin: center;
 }
 .school-image-placeholder {
   flex-direction: column;
@@ -135,7 +150,7 @@
 .school-image-placeholder i { font-size: 32px; }
 .school-image-placeholder span { font-size: 10px; letter-spacing: .06em; }
 .school-image-placeholder strong { color: #344b75; font-size: 20px; }
-.school-button:hover { background: #e8eef9; transform: translateY(-4px); }
+.school-button:is(:hover, :focus-visible) .school-logo { transform: none; }
 .school-button:focus-visible,
 .dashboard-search button:focus-visible { outline: 3px solid #2563eb; outline-offset: 4px; }
 
@@ -172,4 +187,8 @@
 }
 @media (prefers-reduced-motion: reduce) {
   .school-button { transition: none; }
+  .school-logo { transition: none; }
+  .school-image-frame { transition: none; }
+  .school-button:is(:hover, :focus-visible) .school-image-frame { transform: none; }
+  .school-button:is(:hover, :focus-visible) .school-logo { transform: none; }
 }

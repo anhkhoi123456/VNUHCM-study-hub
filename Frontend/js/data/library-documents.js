@@ -1,0 +1,11 @@
+window.StudyHubLibraryDocuments = [
+  { title: 'Cấu trúc dữ liệu và giải thuật – Bài giảng Chương 1', type: 'pdf', school: 'UIT', subject: 'ctdl', size: '2.4 MB', date: '2024-06-20', art: 'math', visual: '∫ f(x)dx  ∑', image: '' }, // image: '../resources/documents/cau-truc-du-lieu.webp'
+  { title: 'Hệ điều hành – Chương 1: Giới thiệu', type: 'doc', school: 'UIT', subject: 'he-dieu-hanh', size: '1.8 MB', date: '2024-06-15', art: 'tree', visual: '<i class="fa-solid fa-sitemap"></i>', image: '' }, // image: '../resources/documents/he-dieu-hanh.webp'
+  { title: 'Xác suất thống kê – Bài giảng tổng hợp', type: 'pdf', school: 'HCMUS', subject: 'xac-suat', size: '1.2 MB', date: '2024-06-10', art: 'terminal', visual: '<i class="fa-solid fa-microchip"></i><span>&gt;_</span>', image: '' }, // image: '../resources/documents/xac-suat-thong-ke.webp'
+  { title: 'Mạng máy tính – Slide bài giảng Chương 3', type: 'ppt', school: 'UIT', subject: 'mang-may-tinh', size: '3.6 MB', date: '2024-06-08', art: 'statistics', visual: '<i class="fa-solid fa-chart-area"></i>', image: '' }, // image: '../resources/documents/mang-may-tinh.webp'
+  { title: 'Đề thi giữa kỳ CTDL – HK1 2023-2024', type: 'pdf', school: 'HCMUS', subject: 'ctdl', size: '0.8 MB', date: '2024-06-05', art: 'network', visual: '<i class="fa-solid fa-network-wired"></i>', image: '' }, // image: '../resources/documents/de-thi-ctdl.webp'
+  { title: 'Danh sách bài tập lập trình CTDL', type: 'xlsx', school: 'UIT', subject: 'ctdl', size: '0.4 MB', date: '2024-06-01', art: 'database', visual: '<i class="fa-solid fa-database"></i><span>SQL</span>', image: '' }, // image: '../resources/documents/bai-tap-ctdl.webp'
+  { title: 'Báo cáo thực hành CTDL – Lab 01', type: 'doc', school: 'UIT', subject: 'ctdl', size: '1.1 MB', date: '2024-05-25', art: 'bars', visual: '<i class="fa-solid fa-chart-column"></i>', image: '' }, // image: '../resources/documents/bao-cao-ctdl.webp'
+  { title: 'Giải thuật sắp xếp – Bubble, Quick, Merge Sort', type: 'ppt', school: 'UIT', subject: 'ctdl', size: '2.9 MB', date: '2024-05-20', art: 'code', visual: '<span>for (int i = 0; i &lt; n; i++) {<br>&nbsp; swap(a[i], a[j]);<br>}</span>', image: '' } // image: '../resources/documents/giai-thuat-sap-xep.webp'
+];
+window.StudyHubLibraryDocuments.forEach((item, index) => { item.id = `document-${index + 1}`; });

@@ -6,7 +6,7 @@
     ['library.html', 'fa-regular fa-calendar-check', 'Kho tài liệu'],
     ['planner.html', 'fa-solid fa-brain', 'AI Planner'],
     ['chatbot.html', 'fa-regular fa-comment-dots', 'AI Chatbot'],
-    ['#', 'fa-regular fa-user', 'Space cá nhân']
+    ['space.html', 'fa-regular fa-user', 'Space cá nhân']
   ];
   document.querySelectorAll('[data-app-sidebar]').forEach(sidebar => {
     sidebar.innerHTML = `<div class="sidebar-logo"><div class="logo-icon">${icon('fa-solid fa-book-open')}</div><div class="logo-text"><h2>VNU - StudyHub</h2><p>Học thông minh · Vững tương lai</p></div></div>

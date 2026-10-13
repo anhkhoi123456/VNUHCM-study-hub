@@ -10,6 +10,8 @@
   <link rel="stylesheet" href="css/style.css" />
   <link rel="stylesheet" href="css/dev-banner.css" />
   <link rel="stylesheet" href="css/document-library.css" />
+  <link rel="stylesheet" href="css/background.css" />
+  <script src="js/background.js" defer></script>
 </head>
 <body data-active-nav="library.html" class="document-library-page">
 <div class="app-shell">
@@ -17,7 +19,7 @@
 
   <div class="main-content">
     <header class="topbar library-topbar">
-      <div class="library-topbar-title"><h1>Kho tài liệu</h1><p>Cấu trúc dữ liệu và giải thuật</p></div>
+      <div class="library-topbar-title"><h1>Kho tài liệu</h1><p>Nơi lưu trữ tài liệu bạn đã lưu</p></div>
       <div class="topbar-actions" data-app-actions></div>
     </header>
 
@@ -52,6 +54,7 @@
         <label class="filter-group filter-select"><span>Sắp xếp</span><select id="sortDocuments"><option value="newest">Mới nhất</option><option value="oldest">Cũ nhất</option><option value="title">Tên A–Z</option></select></label>
       </section>
 
+      <div class="deleted-documents-notice" id="deletedDocumentsNotice" hidden><span id="deletedDocumentsCount" role="status"></span><button id="restoreDocuments" type="button">Khôi phục tài liệu đã xóa</button></div>
       <div class="document-grid" id="documentGrid" aria-live="polite"></div>
       <p class="documents-empty" id="documentsEmpty" hidden>Không tìm thấy tài liệu phù hợp.</p>
     </main>
@@ -63,6 +66,7 @@
 <script src="js/data/catalog.js"></script>
 <script src="js/catalog-pages.js"></script>
 <script src="js/dev-banner.js"></script>
+<script src="js/data/library-documents.js"></script>
 <script src="js/library.js"></script>
 </body>
 </html>

@@ -1,0 +1,32 @@
+:root {
+  --ambient-base: #f8faff;
+  --ambient-grid: #8250bd18;
+  --ambient-violet: #9254d51c;
+  --ambient-cyan: #02bedb14;
+  --rain-violet: #9456c8a0;
+  --rain-cyan: #008fa898;
+  --rain-blue: #357dd7a0;
+}
+html[data-theme="dark"] {
+  --ambient-base: #0b0913;
+  --ambient-grid: #a563dc22;
+  --ambient-violet: #52278038;
+  --ambient-cyan: #00c6ef18;
+  --rain-violet: #aa60eda0;
+  --rain-cyan: #00c6e99a;
+  --rain-blue: #477bda98;
+}
+body { isolation: isolate; }
+.ambient-background { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; background-color: var(--ambient-base); background-image: radial-gradient(ellipse at 10% 15%, var(--ambient-violet), transparent 55%), radial-gradient(ellipse at 90% 85%, var(--ambient-cyan), transparent 50%), linear-gradient(var(--ambient-grid) 1px, transparent 1px), linear-gradient(90deg, var(--ambient-grid) 1px, transparent 1px); background-size: auto, auto, 64px 64px, 64px 64px; transition: background-color .3s ease; }
+/* Let the shared background show through page surfaces; cards retain solid fills. */
+html body :is(.page-body, .chatbot-workspace, .login-right) { background: transparent !important; }
+.ambient-particle { position: absolute; left: var(--x); top: -10px; width: var(--size); height: var(--size); border-radius: 50%; background: var(--particle-color); box-shadow: 0 0 5px var(--particle-color); opacity: 0; animation: ambient-rain var(--duration) linear var(--delay) infinite; }
+@keyframes ambient-rain {
+  0% { transform: translate3d(0, -10px, 0); opacity: 0; }
+  12%, 82% { opacity: .85; }
+  100% { transform: translate3d(var(--drift), calc(100vh + 20px), 0); opacity: 0; }
+}
+.ambient-background.is-paused .ambient-particle { animation-play-state: paused; }
+@media (max-width: 700px) { .ambient-background { background-size: auto, auto, 48px 48px, 48px 48px; } }
+@media (prefers-reduced-motion: reduce) { .ambient-particle { display: none; animation: none; } .ambient-background { transition: none; } }
+@media print { .ambient-background { display: none; } }
