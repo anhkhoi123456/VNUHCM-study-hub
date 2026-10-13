@@ -1,0 +1,30 @@
+.study-reminder { position: fixed; right: 28px; bottom: 0; z-index: 8999; display: flex; align-items: flex-end; gap: 8px; max-width: calc(100vw - 32px); transform: translateY(calc(100% + 50px)); opacity: 0; transition: transform .85s cubic-bezier(.4, 0, .6, 1), opacity .7s ease; pointer-events: none; }
+.study-reminder[hidden] { display: none; }
+.has-dev-banner .study-reminder { bottom: 44px; }
+.study-reminder.is-visible { transform: translateY(0); opacity: 1; animation: study-bot-climb 1.8s both; }
+.study-bot-bubble { opacity: 0; transform: translateY(10px) scale(.96); transition: opacity .25s ease, transform .25s ease; }
+.study-reminder.is-visible .study-bot-bubble { opacity: 1; transform: none; transition-delay: 1.3s; }
+@keyframes study-bot-climb {
+  0% { transform: translateY(calc(100% + 50px)); opacity: 0; }
+  25% { transform: translateY(80px); opacity: 1; animation-timing-function: ease-out; }
+  48% { transform: translateY(72px) rotate(-2deg); animation-timing-function: ease-in-out; }
+  74% { transform: translateY(28px) rotate(1deg); animation-timing-function: ease-out; }
+  100% { transform: translateY(0) rotate(0); opacity: 1; }
+}
+.study-bot-character { width: 122px; height: 138px; flex-shrink: 0; overflow: visible; }
+.study-bot-bubble { position: relative; background: #fff; border: 1px solid #cbdfff; border-radius: 18px 18px 4px 18px; padding: 16px 32px 16px 18px; max-width: 280px; margin-bottom: 70px; box-shadow: 0 6px 24px #1d477d18; color: #273d63; pointer-events: auto; }
+.study-bot-bubble strong { display: block; color: #3973d4; font-size: 12px; margin-bottom: 6px; }
+.study-bot-line { font-size: 13px; line-height: 1.65; }
+.study-bot-close { position: absolute; top: 5px; right: 8px; border: 0; background: transparent; color: #8395b0; font-size: 22px; cursor: pointer; }
+.study-bot-close:focus-visible { outline: 2px solid #a76bef; outline-offset: 2px; }
+.study-reminder.is-visible .study-bot-wave { transform-origin: 108px 104px; animation: study-bot-wave .85s 1.6s ease-in-out infinite; }
+.study-reminder.is-visible .study-bot-eyes { transform-origin: 75px 58px; animation: study-bot-blink 3.2s infinite; }
+.study-reminder.is-visible .study-bot-mouth { transform-origin: 75px 74px; animation: study-bot-talk .45s ease-in-out infinite alternate; }
+@keyframes study-bot-wave { 0%, 100% { transform: rotate(-8deg); } 50% { transform: rotate(15deg); } }
+@keyframes study-bot-blink { 0%, 42%, 48%, 100% { transform: scaleY(1); } 45% { transform: scaleY(.1); } }
+@keyframes study-bot-talk { from { transform: scaleY(.5); } to { transform: scaleY(1.5); } }
+[data-theme="dark"] .study-bot-bubble { background: #1b122b; border-color: #8c4ddb; color: #e2d5f2; box-shadow: 0 0 22px #a35ae522; }
+[data-theme="dark"] .study-bot-bubble strong { color: #ba8cf5; }
+@media (max-width: 600px) { .study-reminder { right: 12px; gap: 0; } .study-bot-character { width: 90px; height: 102px; } .study-bot-bubble { max-width: 220px; margin-bottom: 48px; padding: 12px 26px 12px 14px; } .study-bot-line { font-size: 12px; } }
+@media (prefers-reduced-motion: reduce) { .study-reminder { transition: opacity .2s ease; transform: none; } .study-reminder.is-visible { animation: none; } .study-reminder.is-visible :is(.study-bot-wave, .study-bot-eyes, .study-bot-mouth) { animation: none; } .study-bot-bubble, .study-reminder.is-visible .study-bot-bubble { transition: none; transform: none; } }
+@media print { .study-reminder { display: none; } }
