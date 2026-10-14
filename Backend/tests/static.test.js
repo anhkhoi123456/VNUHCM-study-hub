@@ -46,3 +46,15 @@ test('api-config.js is served with the API enabled, while the repo file stays di
     assert.equal(res.text, repoFile.replace('enabled: false', 'enabled: true')); // nothing else changed
   }
 });
+
+test('CSP and COOP allow Firebase Authentication (SDK, Google popup, token endpoints)', async () => {
+  const res = await request(app).get('/Frontend/index.html');
+  const directive = name => res.headers['content-security-policy'].split(';').find(d => d.startsWith(name));
+  assert.match(directive('script-src'), /https:\/\/www\.gstatic\.com/);
+  assert.match(directive('script-src'), /https:\/\/apis\.google\.com/);
+  assert.match(directive('frame-src'), /https:\/\/\*\.firebaseapp\.com/);
+  for (const host of ['identitytoolkit', 'securetoken', 'www']) {
+    assert.match(directive('connect-src'), new RegExp(`https://${host}\\.googleapis\\.com`));
+  }
+  assert.equal(res.headers['cross-origin-opener-policy'], 'same-origin-allow-popups');
+});

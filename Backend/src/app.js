@@ -16,12 +16,13 @@ const contentSecurityPolicy = {
   useDefaults: false,
   directives: {
     defaultSrc: ["'self'"],
-    scriptSrc: ["'self'", "'unsafe-inline'", 'https://cdnjs.cloudflare.com'],
+    // www.gstatic.com serves the Firebase JS SDK; apis.google.com the Google sign-in popup helper.
+    scriptSrc: ["'self'", "'unsafe-inline'", 'https://cdnjs.cloudflare.com', 'https://www.gstatic.com', 'https://apis.google.com'],
     styleSrc: ["'self'", "'unsafe-inline'", 'https://cdnjs.cloudflare.com', 'https://fonts.googleapis.com'],
     fontSrc: ["'self'", 'data:', 'https://cdnjs.cloudflare.com', 'https://fonts.gstatic.com'],
     imgSrc: ["'self'", 'data:', 'https:'],
-    connectSrc: ["'self'"],
-    frameSrc: ["'self'"],
+    connectSrc: ["'self'", 'https://identitytoolkit.googleapis.com', 'https://securetoken.googleapis.com', 'https://www.googleapis.com'],
+    frameSrc: ["'self'", 'https://*.firebaseapp.com'], // Firebase auth handler iframe
     objectSrc: ["'self'"], // the native PDF viewer may embed via <object>/<embed>
     frameAncestors: ["'self'"],
     baseUri: ["'self'"],
@@ -40,7 +41,12 @@ function createApp({
 } = {}) {
   const app = express();
   app.disable('x-powered-by');
-  app.use(helmet({ contentSecurityPolicy, crossOriginResourcePolicy: { policy: 'same-site' } }));
+  app.use(helmet({
+    contentSecurityPolicy,
+    crossOriginResourcePolicy: { policy: 'same-site' },
+    // helmet's default `same-origin` severs window.opener, which breaks signInWithPopup (Google).
+    crossOriginOpenerPolicy: { policy: 'same-origin-allow-popups' }
+  }));
   // Development: reflect any origin. Elsewhere: only listed origins (same-origin needs no CORS).
   app.use('/api', cors({ origin: development ? true : corsOrigins, credentials: true }));
   const requireAuth = createRequireAuth({ verifier, repo, allowedDomains: allowedEmailDomains });

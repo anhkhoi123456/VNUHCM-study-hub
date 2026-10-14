@@ -65,6 +65,12 @@ Seed data mirrors `Frontend/js/data/`: 8 universities; under UIT 6 faculties; un
 | `GET /api/catalog` | `{ universities: [{ id, name, logoUrl, faculties: [{ ..., majors: [{ ..., courses: [{ id, name, semester, type, lecturer, updated, color, documentCount, formats }] }] }] }] }` |
 | `GET /api/courses/:id/documents` | `{ id, title, lecturer, updated, documents: [...] }` with the same document shape as above. |
 | `GET /api/health` | `{ "ok": true }` |
+| `GET /api/me` 🔒 | `{ id, email, displayName, role, emailVerified }` of the signed-in user. |
+| `GET /api/me/saved-documents` 🔒 | `{ documents: [...] }`, newest first, same document shape. |
+| `POST /api/me/saved-documents` 🔒 | Body `{ "documentId": "..." }`. 201 when saved, 200 if it already was, 404 for an unknown document. |
+| `DELETE /api/me/saved-documents/:documentId` 🔒 | 204, idempotent. |
+
+🔒 = needs `Authorization: Bearer <Firebase ID token>` (see Authentication). All other endpoints stay public.
 
 Errors are JSON: `{ "error": "Not found" }` (404) or `{ "error": "Internal server error" }` (500; details only go to the server log). Ids must match `[A-Za-z0-9_-]{1,50}`. File paths from the database are resolved inside `storage/` and anything escaping it is a 404.
 
@@ -74,16 +80,47 @@ Only `/`, `/Frontend/*` and `/resources/*` are served, so URLs match serving the
 
 Security headers come from `helmet`, with a custom Content-Security-Policy because the default one would break the frontend (inline theme `<script>` in every `<head>`, Font Awesome from `cdnjs.cloudflare.com`, Google Fonts from `fonts.googleapis.com` / `fonts.gstatic.com`). It allows `'unsafe-inline'` scripts/styles, those three hosts, `https:` images, and same-origin frames (the PDF iframe). `X-Frame-Options: SAMEORIGIN` and `frame-ancestors 'self'` let the iframe load `/content`. Tightening this means moving the inline scripts into files first.
 
+For Firebase sign-in the CSP also allows `www.gstatic.com` and `apis.google.com` (scripts), `*.firebaseapp.com` (frame) and `identitytoolkit`/`securetoken`/`www` `.googleapis.com` (connect). `Cross-Origin-Opener-Policy` is `same-origin-allow-popups` instead of helmet's `same-origin`, which would break the Google sign-in popup.
+
 CORS: in development any origin is reflected (with credentials); otherwise only `CORS_ORIGIN`.
+
+## Authentication (Firebase)
+
+Sign-in is Firebase Authentication (email/password and Google). Firebase only proves identity; all data stays in SQL Server (`USERS`, `SAVED_DOCUMENT`) and Firestore is not used. The browser signs in with the Firebase JS SDK, then sends its ID token as `Authorization: Bearer <token>`.
+
+**Setup**
+1. Firebase Console: create a project, add a Web app, enable *Authentication → Sign-in method → Email/Password* and *Google*. `localhost` is an authorized domain by default (use `http://localhost:3000`, not `127.0.0.1`).
+2. *Project settings → Service accounts → Generate new private key*. Save the JSON outside git (e.g. `Backend/secrets/firebase-service-account.json`) and set `FIREBASE_SERVICE_ACCOUNT_PATH` in `.env` (relative paths resolve from `Backend/`). `.gitignore` blocks `*service-account*.json`, `*firebase-adminsdk*.json` and `Backend/secrets/`. **Never commit or share this file.**
+3. Optional `ALLOWED_EMAIL_DOMAINS=gm.uit.edu.vn,hcmut.edu.vn` (exact domains, case-insensitive). Empty allows any email.
+4. `npm run migrate` (applies `002_auth_users.sql`).
+
+Without a service account the server still starts: public endpoints work and 🔒 endpoints answer 503 `auth_not_configured`.
+
+**What the middleware enforces** on every 🔒 request, in this order:
+
+| Status | `code` | When |
+| --- | --- | --- |
+| 401 | `missing_token` / `invalid_token` | no Bearer header / token invalid or expired |
+| 503 | `auth_not_configured` | no usable service account |
+| 403 | `email_required` | the token has no email (e.g. phone sign-in) |
+| 403 | `email_domain_not_allowed` | email domain not in `ALLOWED_EMAIL_DOMAINS` |
+| 403 | `email_not_verified` | `email_verified` is not true (required for **every** provider; Google accounts are always verified) |
+| 409 | `email_in_use` | the email already belongs to a different Firebase account |
+
+Then the `USERS` row is found or created by `FIREBASE_UID`. A legacy row with the same email and no uid is adopted. `LAST_LOGIN_AT` is refreshed at most every 5 minutes. The domain check lives in the backend; the frontend only mirrors the messages, since Firebase cannot block sign-up by domain without Cloud Functions (so such people can create a Firebase account but get 403 here).
+
+**Roles.** `USERS.ROLE` is `student` (default), `moderator` or `admin`. No endpoint changes it; promote someone with SQL, e.g. `UPDATE dbo.USERS SET [ROLE] = 'admin' WHERE EMAIL = 'you@example.com'`. `PASSWORD_HASH` is kept but unused.
+
+**Tests** use a fake verifier (`tests/helpers.js`); Firebase is never contacted.
 
 ## Tests
 
 ```sh
-npm test                       # 19 tests, no database needed (fake repository)
-RUN_DB_TESTS=1 npm test        # + integration test against the migrated and seeded database
+npm test                       # 35 tests, no database needed (fake repository)
+RUN_DB_TESTS=1 npm test        # + 2 integration tests (37 total) against the migrated and seeded database
 ```
 
-Covered: the documents contract, inline PDF vs. attachment, preview, 404s and path traversal, catalog nesting, course documents, error handling, CORS, static allowlist, CSP and the `api-config.js` override. The frontend suite is separate: `node Frontend/tests/frontend.test.cjs` from the repository root.
+Covered: the documents contract, inline PDF vs. attachment, preview, 404s and path traversal, catalog nesting, course documents, error handling, CORS, static allowlist, CSP/COOP, the `api-config.js` override, auth (fake Firebase tokens), saved documents. The frontend suite is separate: `node Frontend/tests/frontend.test.cjs` from the repository root.
 
 ## Enabling the frontend
 
@@ -91,7 +128,7 @@ Covered: the documents contract, inline PDF vs. attachment, preview, 404s and pa
 
 ## TODO
 
-- **View, don't download.** The project proposal asks for viewing without downloading. Today `/content` serves non-PDF files as downloadable attachments and any visitor can fetch the PDF. Later: require login for `/content` of non-PDF files or serve only the PDF preview, and decide what the frontend's "Mở tệp gốc" link should do. Needs the (not yet built) auth that uses `USERS`.
-- Authentication, saved documents API (`SAVED_DOCUMENT`), upload and a PDF conversion pipeline for Office files.
+- **View, don't download.** The project proposal asks for viewing without downloading. Today `/content` serves non-PDF files as downloadable attachments and any visitor can fetch the PDF. Later: require login for `/content` of non-PDF files or serve only the PDF preview, and decide what the frontend's "Mở tệp gốc" link should do. Authentication now exists (see above), so `/content` can use `req.user`/`ROLE` once the policy is decided.
+- Upload and a PDF conversion pipeline for Office files; wire saved documents into the UI (replacing the `localStorage` saved subjects).
 - `Frontend/js/data/*.js` still holds the sample catalog; the pages do not call `/api/catalog` or `/api/courses/:id/documents` yet.
 - View counting happens on every metadata read (no de-duplication per user).
