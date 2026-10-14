@@ -6,7 +6,7 @@ Scope: read-only catalog and documents. Planner, chatbot, login and upload are n
 
 ## Quick start
 
-Requirements: Node.js 18+, and either Docker or a SQL Server you can reach.
+Requirements: Node.js 22+ (see `.nvmrc`; `nvm use`), and either Docker or a SQL Server you can reach.
 
 ```sh
 cd Backend
