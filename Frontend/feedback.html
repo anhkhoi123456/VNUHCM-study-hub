@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <script>try{document.documentElement.dataset.theme=localStorage.getItem('studyhub-theme')==='dark'?'dark':'light';}catch(e){document.documentElement.dataset.theme='light';}</script>
+  <style>html[data-theme="dark"]{background:#0b0913;color-scheme:dark}</style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VNU - StudyHub | Feedback</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="css/style.css" /><link rel="stylesheet" href="css/dev-banner.css" /><link rel="stylesheet" href="css/background.css" /><link rel="stylesheet" href="css/profile.css" /><link rel="stylesheet" href="css/feedback.css" /><link rel="stylesheet" href="css/study-bot.css" />
+  <script src="js/background.js" defer></script><script src="js/study-bot.js" defer></script><script src="js/profile.js" defer></script>
+  <link rel="stylesheet" href="css/theme.css" />
+</head>
+<body data-active-nav="space.html">
+<div class="app-shell"><aside class="sidebar" data-app-sidebar></aside><div class="main-content">
+  <header class="topbar"><h2>Feedback</h2><div class="topbar-actions" data-app-actions></div></header>
+  <main class="page-body feedback-page"><a href="dashboard.html" class="profile-back">← Trang chủ</a><div class="feedback-intro"><span class="feedback-icon"><i class="fa-regular fa-comment-dots" aria-hidden="true"></i></span><div><h1>Giúp StudyHub tốt hơn</h1><p>Báo lỗi, góp ý tài liệu hoặc chia sẻ ý tưởng của bạn.</p></div></div>
+    <section class="profile-card"><form id="feedbackForm">
+      <fieldset class="feedback-categories"><legend>Bạn muốn phản hồi về điều gì?</legend>
+        <label><input type="radio" name="category" value="technical" checked /><span><i class="fa-solid fa-screwdriver-wrench"></i><strong>Lỗi kỹ thuật</strong><small>Giao diện, chức năng, tải trang</small></span></label>
+        <label><input type="radio" name="category" value="accuracy" /><span><i class="fa-solid fa-file-circle-check"></i><strong>Độ chính xác tài liệu</strong><small>Nội dung sai, thiếu hoặc lỗi thời</small></span></label>
+        <label><input type="radio" name="category" value="suggestion" /><span><i class="fa-regular fa-lightbulb"></i><strong>Đề xuất cải tiến</strong><small>Tính năng mới, trải nghiệm học tập</small></span></label>
+        <label><input type="radio" name="category" value="other" /><span><i class="fa-regular fa-message"></i><strong>Phản hồi khác</strong><small>Chia sẻ thêm ý kiến của bạn</small></span></label>
+      </fieldset>
+      <label for="feedbackTitle">Tiêu đề <span aria-hidden="true">*</span></label><input id="feedbackTitle" maxlength="150" required placeholder="Tóm tắt vấn đề hoặc ý tưởng của bạn" />
+      <label for="feedbackPage">Trang / Tài liệu liên quan (tùy chọn)</label><input id="feedbackPage" maxlength="300" placeholder="Ví dụ: AI Planner hoặc tên tài liệu / đường dẫn" />
+      <label for="feedbackDetails">Mô tả chi tiết <span aria-hidden="true">*</span></label><textarea id="feedbackDetails" rows="7" maxlength="5000" required aria-describedby="feedbackHint" placeholder="Bạn gặp vấn đề gì? Cách tái hiện và kết quả mong muốn..."></textarea><div class="feedback-details-footer"><small id="feedbackHint">Mô tả các bước thực hiện, kết quả thực tế và kết quả mong muốn.</small><small id="feedbackCount">0/5000</small></div>
+      <div class="feedback-actions"><button type="submit" class="profile-save"><i class="fa-regular fa-floppy-disk" aria-hidden="true"></i> Lưu phản hồi</button><button type="button" class="feedback-download" id="downloadFeedback"><i class="fa-solid fa-download" aria-hidden="true"></i> Tải bản phản hồi</button></div>
+      <p class="feedback-local-note">Phản hồi được lưu trên trình duyệt này. Chưa kết nối máy chủ gửi phản hồi; bạn có thể tải bản phản hồi để chia sẻ.</p><p id="feedbackStatus" role="status"></p>
+    </form></section>
+  </main>
+</div></div>
+<script src="js/main.js"></script><script src="js/templates.js"></script><script src="js/app-shell.js"></script><script src="js/dev-banner.js"></script><script src="js/feedback.js"></script>
+</body></html>

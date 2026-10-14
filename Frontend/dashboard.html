@@ -2,6 +2,9 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
+  <script>try{document.documentElement.dataset.theme=localStorage.getItem('studyhub-theme')==='dark'?'dark':'light';}catch(e){document.documentElement.dataset.theme='light';}</script>
+  <style>html[data-theme="dark"]{background:#0b0913;color-scheme:dark}</style>
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>VNU - StudyHub | Trang chủ</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -16,6 +19,7 @@
   <script src="js/study-bot.js" defer></script>
   <link rel="stylesheet" href="css/profile.css" />
   <script src="js/profile.js" defer></script>
+  <link rel="stylesheet" href="css/theme.css" />
 </head>
 <body data-active-nav="dashboard.html" class="dashboard-page">
 
@@ -34,7 +38,19 @@
 
     <main class="page-body dashboard-body">
       <section class="dashboard-hero" aria-labelledby="welcomeHeading">
-        <img class="hero-image" src="../resources/Tim.webp" alt="" aria-hidden="true" />
+        <div class="hero-scene" aria-hidden="true">
+          <img class="hero-image" src="../resources/Tim.webp" alt="" />
+          <svg class="hero-animation" viewBox="0 0 1640 290" preserveAspectRatio="xMidYMid slice" fill="none">
+            <defs><linearGradient id="heroPageLight" x1="1285" y1="130" x2="1380" y2="65" gradientUnits="userSpaceOnUse"><stop stop-color="#e0ddfa"/><stop offset=".65" stop-color="#fbfaff"/><stop offset="1" stop-color="#d4d1ee"/></linearGradient><linearGradient id="heroCloudLight"><stop stop-color="#d2f4ff" stop-opacity=".06"/><stop offset=".5" stop-color="#e6faff" stop-opacity=".5"/><stop offset="1" stop-color="#d2f4ff" stop-opacity=".02"/></linearGradient></defs>
+            <g class="hero-book-page"><path d="M1286 146 Q1322 55 1360 52 L1405 50 Q1362 72 1365 155 Q1325 139 1286 146Z" fill="url(#heroPageLight)" stroke="#c9c7e8" stroke-width="1"/><path d="M1318 99q24-9 48-7M1312 113q22-8 42-6M1305 127q20-7 38-5" stroke="#bcbadd" stroke-width="3" opacity=".45"/></g>
+            <g class="hero-book-page page-follow"><path d="M1286 146 Q1322 55 1360 52 L1405 50 Q1362 72 1365 155 Q1325 139 1286 146Z" fill="url(#heroPageLight)"/></g>
+            <g class="hero-robot-eyes"><ellipse cx="1519" cy="9" rx="12" ry="19" fill="#07164d"/><ellipse cx="1559" cy="9" rx="12" ry="19" fill="#07164d"/><ellipse class="hero-robot-eye" cx="1519" cy="9" rx="9" ry="17" fill="#c8f2ff"/><ellipse class="hero-robot-eye eye-wink" cx="1559" cy="9" rx="9" ry="17" fill="#c8f2ff"/></g>
+            <path class="hero-atmosphere" d="M398 282 Q782-126 1220 280" stroke="#7deaff" stroke-width="5" stroke-linecap="round" opacity=".3"/>
+            <g class="hero-cloud-drift"><path d="M441 251q25-35 63-17 0-44 40-45 35-2 45 30 42-10 63 16 19 25-6 30H465q-36 0-24-14Z" fill="url(#heroCloudLight)"/></g>
+            <g class="hero-cloud-drift cloud-high"><path d="M996 123q-8-40 30-39 26-4 36 19 30-4 45 17 22 29 1 40l-91-10q-30-6-21-27Z" fill="url(#heroCloudLight)"/></g>
+            <g class="hero-star-twinkle" fill="#b8eaff"><circle cx="1104" cy="43" r="2"/><circle cx="731" cy="33" r="2.5"/><circle cx="471" cy="144" r="2"/><circle cx="1451" cy="164" r="2"/></g>
+          </svg>
+        </div>
         <div class="hero-content">
           <h1 id="welcomeHeading">Welcome back, Anh Khoa</h1>
           <form class="dashboard-search" role="search" id="dashboardSearch">

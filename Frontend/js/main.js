@@ -8,6 +8,7 @@
   let theme = 'light';
   try { if (localStorage.getItem('studyhub-theme') === 'dark') theme = 'dark'; } catch { /* Use light mode. */ }
   document.documentElement.dataset.theme = theme;
+  if (document.querySelector('link[href="css/theme.css"]')) return;
   const stylesheet = document.createElement('link');
   stylesheet.rel = 'stylesheet';
   stylesheet.href = 'css/theme.css';
@@ -218,11 +219,57 @@ function initCustomCursor() {
   document.querySelectorAll('dialog').forEach(dialog => dialog.addEventListener('close', hide));
 }
 
+function initLiquidNavigation() {
+  const nav = document.querySelector('.sidebar-nav');
+  const active = nav?.querySelector('.nav-item.active');
+  if (!nav || !active) return;
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const highlight = document.createElement('span');
+  highlight.className = 'nav-liquid-highlight';
+  highlight.setAttribute('aria-hidden', 'true');
+  nav.prepend(highlight);
+  nav.classList.add('has-liquid-highlight');
+  let current = active, navigating = false;
+  function bounds(item) {
+    const rect = item.getBoundingClientRect(), parent = nav.getBoundingClientRect();
+    return { x: rect.left - parent.left, y: rect.top - parent.top + nav.scrollTop, width: rect.width, height: rect.height };
+  }
+  function place(item) {
+    const box = bounds(item);
+    highlight.style.left = `${box.x}px`; highlight.style.top = `${box.y}px`;
+    highlight.style.width = `${box.width}px`; highlight.style.height = `${box.height}px`;
+  }
+  place(current);
+  if (window.ResizeObserver) new ResizeObserver(() => { if (!navigating) place(current); }).observe(nav);
+  nav.addEventListener('click', async event => {
+    const link = event.target.closest('a.nav-item[data-page]');
+    if (!link || event.defaultPrevented || event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey || link.target === '_blank' || link.hasAttribute('download')) return;
+    if (link === current || reduced.matches || !highlight.animate) return;
+    event.preventDefault();
+    if (navigating) return;
+    navigating = true;
+    const from = bounds(current), to = bounds(link);
+    current.classList.remove('active'); link.classList.add('active');
+    const distance = to.y - from.y;
+    const middleTop = Math.min(from.y, to.y) + Math.abs(distance) * .25;
+    const middleHeight = from.height + Math.min(Math.abs(distance) * .45, 70);
+    const animation = highlight.animate([
+      { top: `${from.y}px`, left: `${from.x}px`, width: `${from.width}px`, height: `${from.height}px`, borderRadius: '10px', offset: 0 },
+      { top: `${middleTop}px`, left: `${to.x + 2}px`, width: `${Math.max(1, to.width - 4)}px`, height: `${middleHeight}px`, borderRadius: '18px', offset: .45 },
+      { top: `${to.y}px`, left: `${to.x}px`, width: `${to.width}px`, height: `${to.height}px`, borderRadius: '10px', offset: 1 }
+    ], { duration: 420, easing: 'cubic-bezier(.22, 1, .36, 1)', fill: 'forwards' });
+    try { await animation.finished; } catch { /* Continue navigation if interrupted. */ }
+    window.location.assign(link.href);
+  });
+  window.addEventListener('pageshow', event => { if (event.persisted) { navigating = false; highlight.getAnimations().forEach(animation => animation.cancel()); setActiveNav(); current = nav.querySelector('.nav-item.active') || active; place(current); } });
+}
+
 // ── DOMContentLoaded bootstrap ────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
   setActiveNav();
   initPasswordToggles();
   initSidebarToggle();
+  initLiquidNavigation();
   initThemeToggle();
   initCustomCursor();
 });

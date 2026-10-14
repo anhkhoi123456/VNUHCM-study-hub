@@ -1,0 +1,26 @@
+.feedback-page { width: 100%; max-width: 1000px; margin: 0 auto; padding-bottom: 90px; }
+.feedback-intro { display: flex; align-items: center; gap: 16px; margin: 24px 0; }
+.feedback-intro h1 { font-size: 26px; margin-bottom: 6px; }
+.feedback-intro p { color: var(--gray-500); line-height: 1.6; }
+.feedback-icon { display: grid; place-items: center; width: 58px; height: 58px; border-radius: 16px; background: var(--blue-50); color: var(--blue-600); font-size: 27px; flex-shrink: 0; }
+.feedback-categories { border: 0; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.feedback-categories legend { font-weight: 650; font-size: 14px; margin-bottom: 15px; }
+.feedback-categories label { display: flex; align-items: center; gap: 12px; margin: 0; padding: 15px; border: 1px solid var(--gray-200); border-radius: 11px; cursor: pointer; transition: border-color .2s, background-color .2s, transform .2s; }
+.feedback-categories input { width: 17px; height: 17px; flex-shrink: 0; accent-color: #9253e8; }
+.feedback-categories label:has(input:checked) { border-color: #ad7feb; background: var(--blue-50); }
+.feedback-categories label:hover { transform: translateY(-2px); border-color: #ad7feb; }
+.feedback-categories i { color: var(--blue-600); margin-right: 7px; }
+.feedback-categories strong { font-size: 13px; }
+.feedback-categories small { color: var(--gray-500); }
+.feedback-details-footer { display: flex; justify-content: space-between; gap: 15px; }
+.feedback-details-footer small { line-height: 1.6; }
+#feedbackCount { white-space: nowrap; }
+.feedback-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 24px; }
+.feedback-actions .profile-save { margin: 0; }
+.feedback-download { padding: 12px 16px; background: var(--blue-50); border: 1px solid var(--blue-200); border-radius: 9px; color: var(--blue-700); font-weight: 600; cursor: pointer; }
+.feedback-actions button { transition: transform .2s, box-shadow .2s; }
+.feedback-actions button:hover { transform: translateY(-2px); box-shadow: 0 5px 14px #9253e820; }
+.feedback-local-note, #feedbackStatus { margin-top: 16px; font-size: 12px; line-height: 1.7; color: var(--gray-500); }
+#feedbackStatus { color: var(--blue-700); }
+@media (max-width: 650px) { .feedback-categories { grid-template-columns: 1fr; } .feedback-intro h1 { font-size: 22px; } }
+@media (prefers-reduced-motion: reduce) { .feedback-categories label, .feedback-actions button { transition: none; } .feedback-categories label:hover, .feedback-actions button:hover { transform: none; } }

@@ -70,9 +70,15 @@
   $('chatForm').addEventListener('submit', event => { event.preventDefault(); sendMessage(); });
   $('chatInput').addEventListener('keydown', event => { if (event.key === 'Enter' && !event.shiftKey && !event.isComposing) { event.preventDefault(); sendMessage(); } });
   $('suggestions').addEventListener('click', event => { const button = event.target.closest('button'); if (button) { $('chatInput').value = button.textContent; sendMessage(); } });
-  $('resetChat').addEventListener('click', () => { $('aiMessages').replaceChildren(); $('welcomeCard').hidden = false; $('chatInput').value = ''; showToast('Đã làm mới cuộc trò chuyện.', 'success'); });
-  $('chatSettings').addEventListener('click', () => showToast('Đổi nguồn kiến thức ở cột bên phải. Mô hình AI hiện chỉ là lựa chọn demo.', 'info'));
-  $('modelSelect').addEventListener('change', () => showToast('Lựa chọn mô hình chỉ dùng để xem trước; chưa kết nối AI.', 'info'));
+  $('resetChat').addEventListener('click', () => {
+    if (!window.confirm('Bạn có muốn làm mới cuộc trò chuyện không?')) return;
+    if (!window.confirm('Xác nhận lần cuối: tất cả tin nhắn và câu hỏi đang nhập sẽ bị xóa. Tiếp tục?')) return;
+    $('aiMessages').replaceChildren();
+    $('welcomeCard').hidden = false;
+    $('chatInput').value = '';
+    $('chatInput').focus();
+    showToast('Đã làm mới cuộc trò chuyện.', 'success');
+  });
   const questions = [
     ['Trong C, cấu trúc dữ liệu nào thường được sử dụng để lưu trữ danh sách các phần tử theo thứ tự?', ['Stack', 'Queue', 'Array', 'Tree'], 2],
     ['Chỉ số đầu tiên của mảng trong C++ là bao nhiêu?', ['0', '1', '-1', 'Tùy kích thước mảng'], 0],

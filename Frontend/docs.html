@@ -2,6 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <script>try{document.documentElement.dataset.theme=localStorage.getItem('studyhub-theme')==='dark'?'dark':'light';}catch(e){document.documentElement.dataset.theme='light';}</script>
+  <style>html[data-theme="dark"]{background:#0b0913;color-scheme:dark}</style>
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>VNU - StudyHub | Frontend Documentation</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -325,6 +328,7 @@
   <script src="js/study-bot.js" defer></script>
   <link rel="stylesheet" href="css/profile.css" />
   <script src="js/profile.js" defer></script>
+  <link rel="stylesheet" href="css/theme.css" />
 </head>
 <body>
 

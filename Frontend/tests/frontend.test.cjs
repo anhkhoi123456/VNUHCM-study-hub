@@ -122,7 +122,7 @@ test('folder renderer uses configuration and preserves accent-insensitive search
 test('home hierarchy stays active and legacy pages still use filename navigation', () => {
   for (const [file, activeNav, expected] of [['dsa.html', 'dashboard.html', 'dashboard.html'], ['uit-is-majors.html', 'dashboard.html', 'dashboard.html'], ['library.html', 'library.html', 'library.html'], ['planner.html', undefined, 'planner.html']]) {
     const items = ['dashboard.html','library.html','planner.html'].map(page => ({ ...element(), dataset: { page }, removeAttribute(key) { delete this.attrs[key]; } }));
-    const ctx = vm.createContext({ window: { location: { pathname: '/' + file } }, document: { documentElement: { dataset: {} }, head: { appendChild() {} }, createElement: () => element(), body: { dataset: { activeNav } }, querySelectorAll: () => items, addEventListener() {} } });
+    const ctx = vm.createContext({ window: { location: { pathname: '/' + file } }, document: { documentElement: { dataset: {} }, head: { appendChild() {} }, createElement: () => element(), body: { dataset: { activeNav } }, querySelector: () => null, querySelectorAll: () => items, addEventListener() {} } });
     vm.runInContext(read('js/main.js'), ctx); ctx.setActiveNav();
     assert.equal(items.filter(item => item.attrs['aria-current'] === 'page').length, 1);
     assert.equal(items.find(item => item.attrs['aria-current'] === 'page').dataset.page, expected);
@@ -136,7 +136,7 @@ test('theme toggle restores preference, persists clicks and syncs across tabs', 
   const ctx = vm.createContext({
     localStorage: { getItem: () => saved, setItem(key, value) { assert.equal(key, 'studyhub-theme'); saved = value; } },
     window: { addEventListener(type, callback) { listeners[type] = callback; } },
-    document: { documentElement: root, head: { appendChild(value) { styles.push(value); } }, createElement: tag => tag === 'button' ? button : {}, querySelector: () => ({ querySelector: () => control }), addEventListener() {} }
+    document: { documentElement: root, head: { appendChild(value) { styles.push(value); } }, createElement: tag => tag === 'button' ? button : {}, querySelector: selector => selector.startsWith('link') ? null : ({ querySelector: () => control }), addEventListener() {} }
   });
   vm.runInContext(read('js/main.js'), ctx);
   assert.equal(root.dataset.theme, 'dark');

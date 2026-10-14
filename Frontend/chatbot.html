@@ -2,6 +2,9 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
+  <script>try{document.documentElement.dataset.theme=localStorage.getItem('studyhub-theme')==='dark'?'dark':'light';}catch(e){document.documentElement.dataset.theme='light';}</script>
+  <style>html[data-theme="dark"]{background:#0b0913;color-scheme:dark}</style>
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>VNU - StudyHub | AI Chatbot</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -16,6 +19,7 @@
   <script src="js/study-bot.js" defer></script>
   <link rel="stylesheet" href="css/profile.css" />
   <script src="js/profile.js" defer></script>
+  <link rel="stylesheet" href="css/theme.css" />
 </head>
 <body>
 
@@ -69,19 +73,8 @@
         <p style="font-size:12px;color:var(--gray-400);margin-top:1px;">Đọc tài liệu, hỏi đáp và tạo file ôn thi cá nhân hóa</p>
       </div>
       <div class="topbar-actions">
-        <div class="model-select">
-          <i class="fa-solid fa-microchip" style="color:var(--blue-500);font-size:12px;"></i>
-          <select id="modelSelect" aria-label="Mô hình AI">
-            <option>GPT-4o</option>
-            <option>Gemini 1.5 Pro</option>
-            <option>Claude 3.5</option>
-          </select>
-        </div>
         <button class="topbar-icon-btn" title="Làm mới" id="resetChat">
           <i class="fa-solid fa-rotate"></i>
-        </button>
-        <button class="topbar-icon-btn" title="Cài đặt" id="chatSettings">
-          <i class="fa-solid fa-gear"></i>
         </button>
         <div class="avatar-btn">NA</div>
       </div>

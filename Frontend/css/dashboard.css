@@ -34,6 +34,30 @@
   height: 100%;
   object-fit: cover;
 }
+.hero-scene { position: absolute; inset: -3px; animation: hero-world-float 14s ease-in-out infinite; transform-origin: 50% 70%; }
+.hero-animation { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.hero-book-page { transform-box: view-box; transform-origin: 1286px 146px; opacity: 0; animation: hero-page-turn 7s ease-in-out infinite; }
+.hero-book-page.page-follow { animation-delay: .6s; }
+.hero-robot-eye { transform-box: fill-box; transform-origin: center; animation: hero-eye-blink 5s ease-in-out infinite; }
+.hero-robot-eye.eye-wink { animation: hero-eye-wink 5s ease-in-out infinite; }
+.hero-cloud-drift { animation: hero-cloud-wave 12s ease-in-out infinite alternate; }
+.hero-cloud-drift.cloud-high { animation-duration: 16s; animation-delay: -5s; }
+.hero-atmosphere { animation: hero-atmosphere-breathe 8s ease-in-out infinite; }
+.hero-star-twinkle { animation: hero-stars 4s ease-in-out infinite; }
+@keyframes hero-world-float { 0%, 100% { transform: scale(1.02) translateY(0); } 50% { transform: scale(1.045) translateY(-3px) rotate(.25deg); } }
+@keyframes hero-page-turn {
+  0%, 20%, 78%, 100% { opacity: 0; transform: skewY(0) scaleX(1); }
+  26% { opacity: .95; transform: skewY(-3deg) scaleX(1); }
+  47% { opacity: 1; transform: skewY(-12deg) scaleX(.05); }
+  65% { opacity: .8; transform: skewY(8deg) scaleX(-.8); }
+  76% { opacity: 0; transform: skewY(0) scaleX(-1); }
+}
+@keyframes hero-eye-blink { 0%, 34%, 40%, 100% { transform: scaleY(1); } 37% { transform: scaleY(.08); } }
+@keyframes hero-eye-wink { 0%, 34%, 40%, 69%, 79%, 100% { transform: scaleY(1); } 37%, 73%, 76% { transform: scaleY(.08); } }
+@keyframes hero-cloud-wave { from { transform: translate(-18px, -4px); opacity: .3; } to { transform: translate(25px, 6px); opacity: .75; } }
+@keyframes hero-atmosphere-breathe { 0%, 100% { opacity: .12; stroke-width: 3; } 50% { opacity: .45; stroke-width: 7; } }
+@keyframes hero-stars { 0%, 100% { opacity: .2; } 50% { opacity: .8; } }
+@media (prefers-reduced-motion: reduce) { .hero-scene, .hero-animation * { animation: none; } .hero-book-page { opacity: 0; } }
 
 .hero-content { position: relative; z-index: 1; width: 100%; padding: 40px 24px; text-align: center; }
 .hero-content h1 {

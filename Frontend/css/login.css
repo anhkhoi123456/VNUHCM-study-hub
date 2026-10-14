@@ -4,7 +4,35 @@
 @media(min-width:1200px){.auth-card,.visual-panel{min-height:690px}.form-content{margin-top:60px}.study-art{top:155px}}@media(max-width:700px){body{padding:24px 18px}.auth-card{grid-template-columns:1fr;max-width:460px;min-height:auto;border-radius:14px;overflow:hidden}.visual-panel{min-height:85px}.brand{margin:28px}.study-art{display:none}.form-panel{padding:24px 28px 34px}.form-content{margin-top:32px}h1{font-size:25px}.subtitle{margin-bottom:30px}.submit-button{width:100%}.social-login{justify-content:center}}@media(prefers-reduced-motion:reduce){*{transition:none!important}}
 .skip-link { display: inline-flex; align-items: center; gap: 8px; margin-top: 25px; padding: 10px 16px; border: 1px solid #e7defa; border-radius: 24px; color: #8270c4; text-decoration: none; font-size: 12px; font-weight: 500; transition: background .18s, color .18s; }
 .skip-link:hover { background: #f5f0ff; color: #7d2efa; }
+.password-toggle[aria-pressed="true"] { color: #8034ef; background: #f0e8ff; }
+.password-inspection, .password-inspection * { cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Ccircle cx='12' cy='12' r='8' fill='%23f4edff' fill-opacity='.6' stroke='white' stroke-width='5'/%3E%3Cpath d='m18 18 10 10' stroke='white' stroke-width='7' stroke-linecap='round'/%3E%3Ccircle cx='12' cy='12' r='8' fill='none' stroke='%238034ef' stroke-width='2.5'/%3E%3Cpath d='m18 18 10 10' stroke='%238034ef' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E") 12 12, zoom-in !important; }
+.password-inspection #password { border-color: #a371f6; box-shadow: 0 0 0 3px #8750ed12; }
+.password-wrap.is-inspecting #password { color: transparent; caret-color: #8034ef; }
+.password-dot-mirror, .password-reveal-lens { display: none; position: absolute; inset: 1.5px; align-items: center; padding: 0 10.5px; border-radius: 5px; pointer-events: none; font: 15px/1 ui-monospace, Consolas, monospace; color: #3f3853; overflow: hidden; }
+.password-dot-mirror span, .password-reveal-lens span { display: block; white-space: pre; flex-shrink: 0; }
+.password-wrap.is-inspecting .password-dot-mirror { display: flex; right: 46px; }
+.password-wrap.lens-visible .password-reveal-lens { display: flex; background: #f5eeff; }
+.password-lens-ring { display: none; position: absolute; width: 54px; height: 54px; transform: translate(-50%, -50%); border: 2px solid #aa83ed; border-radius: 50%; box-shadow: 0 3px 12px #8034ef25, inset 0 0 7px #ffffffb3; pointer-events: none; }
+.password-wrap.lens-visible .password-lens-ring { display: block; }
+.password-wrap.lens-visible #password { cursor: none !important; }
 @media (max-width: 700px) { .skip-link { display: flex; justify-content: center; } }
+
+/* Slow waves behind the card, independent of the form and illustration. */
+body::before { animation: purple-wave-small 18s ease-in-out infinite alternate; }
+body::after { animation: purple-wave-large 24s ease-in-out infinite; }
+@keyframes purple-wave-small {
+  0% { transform: translate(0, 0) rotate(-10deg) scale(1); border-radius: 45% 55% 65% 35%; }
+  50% { transform: translate(80px, 70px) rotate(12deg) scale(1.12); border-radius: 60% 40% 35% 65%; }
+  100% { transform: translate(30px, 115px) rotate(25deg) scale(1.05); border-radius: 35% 65% 55% 45%; }
+}
+@keyframes purple-wave-large {
+  0%, 100% { transform: translate(0, 0) rotate(-28deg) scale(1); border-radius: 48% 52% 45% 55%; }
+  33% { transform: translate(55px, -35px) rotate(-18deg) scale(1.06, .96); border-radius: 60% 40% 58% 42%; }
+  66% { transform: translate(-45px, 30px) rotate(-35deg) scale(.97, 1.06); border-radius: 38% 62% 42% 58%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  body::before, body::after { animation: none; }
+}
 
 /* Illustration choreography: each sequence returns to its starting pose. */
 .study-art { overflow: visible; }
