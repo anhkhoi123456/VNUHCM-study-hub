@@ -79,15 +79,15 @@ CORS: in development any origin is reflected (with credentials); otherwise only 
 ## Tests
 
 ```sh
-npm test                       # 18 tests, no database needed (fake repository)
+npm test                       # 19 tests, no database needed (fake repository)
 RUN_DB_TESTS=1 npm test        # + integration test against the migrated and seeded database
 ```
 
-Covered: the documents contract, inline PDF vs. attachment, preview, 404s and path traversal, catalog nesting, course documents, error handling, CORS, static allowlist and CSP. The frontend suite is separate: `node Frontend/tests/frontend.test.cjs` from the repository root.
+Covered: the documents contract, inline PDF vs. attachment, preview, 404s and path traversal, catalog nesting, course documents, error handling, CORS, static allowlist, CSP and the `api-config.js` override. The frontend suite is separate: `node Frontend/tests/frontend.test.cjs` from the repository root.
 
 ## Enabling the frontend
 
-The frontend ignores the backend until `enabled: true` is set in `Frontend/js/api-config.js` (the default `baseUrl: '/api'` already matches this server). Open the site through `http://localhost:3000`, not `file://`.
+`Frontend/js/api-config.js` stays at `enabled: false` in the repository, so opening the site via `file://` or another static server works as before. This server answers `GET /Frontend/js/api-config.js` itself (the route is registered before the static middleware) with the same file content, only `enabled: false` replaced by `enabled: true`, `Content-Type: application/javascript` and `Cache-Control: no-store`. So any page opened through `http://localhost:3000` talks to the API with no frontend change; the default `baseUrl: '/api'` matches. If the file no longer contains `enabled: false` it is served unchanged.
 
 ## TODO
 

@@ -1,3 +1,4 @@
+const fs = require('fs');
 const path = require('path');
 const express = require('express');
 const cors = require('cors');
@@ -44,6 +45,13 @@ function createApp({
   // Same origin as the API. Only the site itself is public: an allowlist (not "serve the repo root")
   // keeps Backend/ (.env, source, storage), .git and node_modules unreachable, whatever the URL casing.
   app.get('/', (req, res) => res.sendFile(path.join(repoRoot, 'index.html')));
+  // The repo file keeps `enabled: false` so file:// and other static servers behave as before;
+  // this server turns the documents API on. Must be registered before the static middleware.
+  app.get('/Frontend/js/api-config.js', async (req, res) => {
+    const source = await fs.promises.readFile(path.join(repoRoot, 'Frontend', 'js', 'api-config.js'), 'utf8');
+    res.set({ 'Content-Type': 'application/javascript; charset=utf-8', 'Cache-Control': 'no-store' });
+    res.send(source.replace(/\benabled:\s*false\b/, 'enabled: true'));
+  });
   for (const dir of ['Frontend', 'resources']) {
     app.use(`/${dir}`, express.static(path.join(repoRoot, dir), { dotfiles: 'ignore', index: false }));
   }

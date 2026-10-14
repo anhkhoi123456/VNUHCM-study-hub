@@ -33,3 +33,16 @@ test('CSP lets the frontend run: inline theme script, Font Awesome and Google Fo
   assert.match(directive('frame-src'), /'self'/); // the PDF iframe is same-origin
   assert.doesNotMatch(csp, /upgrade-insecure-requests/); // would break plain-http localhost
 });
+
+test('api-config.js is served with the API enabled, while the repo file stays disabled', async () => {
+  const repoFile = require('fs').readFileSync(require('path').join(__dirname, '..', '..', 'Frontend', 'js', 'api-config.js'), 'utf8');
+  assert.match(repoFile, /enabled:\s*false/);
+  for (const url of ['/Frontend/js/api-config.js', '/frontend/js/api-config.js', '/Frontend/js/api-config.js?v=1']) {
+    const res = await request(app).get(url).expect(200);
+    assert.match(res.headers['content-type'], /^application\/javascript/);
+    assert.equal(res.headers['cache-control'], 'no-store');
+    assert.match(res.text, /enabled: true/);
+    assert.doesNotMatch(res.text, /enabled:\s*false/);
+    assert.equal(res.text, repoFile.replace('enabled: false', 'enabled: true')); // nothing else changed
+  }
+});
