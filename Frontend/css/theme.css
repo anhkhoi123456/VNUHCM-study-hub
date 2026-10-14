@@ -14,7 +14,7 @@
 body, .sidebar, .topbar, .page-body, .setup-card, .plan-card, .saved-plan, .document-card, .subject-card, .conversation-panel, .learning-panel, dialog { transition: background-color .3s ease, border-color .3s ease, color .3s ease; }
 html[data-theme="dark"] {
   color-scheme: dark;
-  --theme-bg: #0b0913; --theme-panel: #141020; --theme-border: #30213f;
+  --theme-bg: #0b0913; --theme-panel: #141020; --theme-border: #68428c;
   --blue-50: #211535; --blue-100: #30204b; --blue-200: #5d3982; --blue-400: #b284f3; --blue-500: #a76bef; --blue-600: #9253e8; --blue-700: #c19aff; --blue-900: #e0cbff;
   --gray-50: #0b0913; --gray-100: #1b1528; --gray-200: #30213f; --gray-300: #554464; --gray-400: #9585a9; --gray-500: #b0a2c1; --gray-600: #c4b7d5; --gray-700: #dacfe8; --gray-800: #eee7f7; --gray-900: #f6f1ff;
   --shadow: 0 4px 15px #0005;
@@ -28,11 +28,28 @@ html[data-theme="dark"] {
 [data-theme="dark"] :is(.panel-description, .plan-note, .plan-metadata, .storage-note, .sprint-info p, .sprint-tasks label, .sprint-end, .document-size, .subject-detail p, .section-heading p, .daily-heading, .source-option small, .quiz-answers label, .welcome-intro p, .space-topbar p, .file-metadata, .file-status, .subject-meta p) { color: #b2a4c4; }
 [data-theme="dark"] :is(.time-card, .request-card, .welcome-card) { background: linear-gradient(130deg, #1c122e, #141323); border-color: #402951; }
 [data-theme="dark"] :is(.duration-card, .daily-card, .planner-sprint, .planner-subject-row, .planner-subject, .source-option, .picker-document, .sprint-status, .chat-composer, .subject-search, .library-search, .share-input, .plan-search, .week-filter, .model-select, .file-toolbar, .file-controls, .file-status) { background: #181323; color: #d7c9e8; border-color: #352747; }
-[data-theme="dark"] :where(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea, select) { background-color: #181323; color: #e6dcf2; border-color: #402c55; }
-[data-theme="dark"] :is(input, textarea)::placeholder { color: #9787ab; }
-[data-theme="dark"] :is(.subject-search input, .library-search input, .share-input input, .plan-search input, .chat-composer textarea, .model-select select, .week-filter select) { background: transparent; }
-[data-theme="dark"] .dashboard-search input { background: transparent; color: #334155; }
-[data-theme="dark"] .dashboard-search input::placeholder { color: #7d8ba3; }
+html[data-theme="dark"] :is(input, textarea, select):where(:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="submit"]):not([type="button"])) { background-color: #1b1429; color: #f3ecff; border-color: #8054aa; caret-color: #cf9bff; }
+html[data-theme="dark"] :is(input, textarea)::placeholder { color: #bcaace; opacity: 1; }
+html[data-theme="dark"] :is(.subject-search input, .library-search input, .share-input input, .plan-search input, .chat-composer textarea, .model-select select, .week-filter select, .dashboard-search input) { background: transparent; color: #f3ecff; box-shadow: none; }
+html[data-theme="dark"] :is(.dashboard-search, .subject-search, .library-search, .share-input, .plan-search, .chat-composer, .topbar-search, .input-wrap) { background: #1b1429; border: 1px solid #8054aa; box-shadow: inset 0 1px 0 #b181dc12, 0 0 12px #9c54d512; }
+html[data-theme="dark"] :is(.dashboard-search, .subject-search, .library-search, .share-input, .plan-search, .chat-composer, .topbar-search, .input-wrap):focus-within { border-color: #c493f3; box-shadow: 0 0 0 3px #a25cdd24, 0 0 18px #9c54d520; }
+html[data-theme="dark"] input::file-selector-button { background: #39214f; color: #f1e7ff; border: 1px solid #9564bd; border-radius: 6px; padding: 7px 10px; margin-right: 10px; }
+html[data-theme="dark"] :is(input, textarea, select):focus-visible { outline: 2px solid #c493f3; outline-offset: 2px; }
+html[data-theme="dark"] :is(.profile-card, .login-card, .setup-card, .plan-card, .saved-plan, .document-card, .subject-card, .faculty-card, .file-workspace, .quiz-card, .knowledge-panel, .document-toolbar, .space-dialog, .library-picker, .account-menu) { border-color: #68428c; box-shadow: 0 0 14px #9d52d410; }
+html[data-theme="dark"] :is(.profile-card, .login-card) { background: #141020; color: #f3ecff; }
+html[data-theme="dark"] :is(.duration-card, .daily-card, .planner-sprint, .source-option, .picker-document, .week-filter, .model-select) { border-color: #68428c; }
+html[data-theme="dark"] :is(.profile-card label, .form-group label, .filter-group h2, .filter-select span, .sort-filter > span) { color: #e5d8f2; }
+html[data-theme="dark"] :is(.profile-card small, #profileStatus, #passwordStatus, .login-card .tagline, .signup-row, .login-card .divider span, .library-topbar-title p, .subject-meta, .file-empty p) { color: #bcaace; }
+html[data-theme="dark"] :is(.dashboard-search button, .social-btn) { background: #30203f; color: #dcc5f5; border-color: #68428c; }
+html[data-theme="dark"] :is(.dashboard-search button:hover, .social-btn:hover) { background: #422957; }
+/* The chatbot search form includes an action button; frame only its input label. */
+[data-theme="dark"] .subject-actions { border-top-color: #4d315e; }
+[data-theme="dark"] :is(.subject-arrow, .subject-save) { background: #271a3c; color: #d5b5ff; border-color: #745099; }
+[data-theme="dark"] :is(.subject-arrow, .subject-save):is(:hover, :focus-visible) { background: #39224f; border-color: #b17dea; box-shadow: 0 5px 16px #a256de26; }
+[data-theme="dark"] .subject-save[aria-pressed="true"] { background: #44245e; border-color: #b17dea; color: #f0dfff; }
+html[data-theme="dark"] .subject-search:has(> label) { background: transparent; border: 0; box-shadow: none; }
+html[data-theme="dark"] .subject-search > label { background: #1b1429; border: 1px solid #8054aa; box-shadow: inset 0 1px 0 #b181dc12, 0 0 12px #9c54d512; }
+html[data-theme="dark"] .subject-search > label:focus-within { border-color: #c493f3; box-shadow: 0 0 0 3px #a25cdd24, 0 0 18px #9c54d520; }
 [data-theme="dark"] :is(.planner-subject.selected, .planner-subject-row.selected, .source-option.selected, .picker-document:has(input:checked), .message-content) { background: #27183d; border-color: #8850c1; color: #e5d5f7; }
 [data-theme="dark"] :is(.suggestion-grid button, .soft-button, .hour-options button, .plan-card-actions button, .outline-button, .plan-actions button, .filter-chip, .subject-filter-button, .file-action) { background: #251837; color: #cda7ff; border-color: #46305c; }
 [data-theme="dark"] :is(.suggestion-grid button:hover, .document-options button:hover, .picker-document:hover) { background: #352047; }
@@ -58,9 +75,15 @@ html[data-theme="dark"] {
 [data-theme="dark"] :is(.document-breadcrumb strong, .library-breadcrumb strong, .file-empty h2) { color: #e0d3ef; }
 [data-theme="dark"] :is(.subject-placeholder, .plan-cover, .document-preview) { box-shadow: inset 0 0 0 1px #a577e622; }
 [data-theme="dark"] .dev-banner { background: #100a1c; border-color: #352047; }
-[data-theme="dark"] .school-image-frame { background: #08060d; border-color: #9b51e8; box-shadow: 0 0 12px #994bea40, inset 0 0 10px #994bea16; }
-[data-theme="dark"] .school-button:is(:hover, :focus-visible) .school-image-frame { border-color: #c28aff; box-shadow: 0 0 24px #a55af077, inset 0 0 14px #a55af025; }
+[data-theme="dark"] .school-image-frame { background: linear-gradient(145deg, #c3b5e34d, #6e568933 48%, #271a4159); border-color: #b190da73; box-shadow: inset 0 1px 0 #e9d8ff7a, inset 1px 0 0 #d5bded33, inset 0 -1px 0 #9973bc33, 0 10px 30px #0004, 0 0 14px #994bea20; }
+[data-theme="dark"] .school-image-frame::before { background: radial-gradient(ellipse at 0 0, #ede0ff40, transparent 55%), linear-gradient(125deg, transparent 35%, #dbc5ff12 49%, transparent 65%); }
+[data-theme="dark"] .school-image-frame::after { border-color: #d0b0f329; }
+[data-theme="dark"] .school-button:is(:hover, :focus-visible) .school-image-frame { border-color: #cfacffb3; box-shadow: inset 0 1px 0 #f0e2ffa6, inset 1px 0 0 #dcc2f54d, 0 14px 34px #0005, 0 0 24px #a55af04d; }
 [data-theme="dark"] .school-logo { filter: none; }
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .school-image-frame { background: #eef4fc; }
+  [data-theme="dark"] .school-image-frame { background: #8d80a6; }
+}
 @media (prefers-reduced-motion: reduce) {
   .theme-toggle svg, .theme-toggle .sun-disc, .theme-toggle .sun-rays, .theme-toggle .moon-cutout,
   body, .sidebar, .topbar, .page-body, .setup-card, .plan-card, .saved-plan, .document-card, .subject-card, .conversation-panel, .learning-panel, dialog { transition: none; }

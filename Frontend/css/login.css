@@ -6,6 +6,7 @@ html, body {
   height: 100%;
   margin: 0;
 }
+.demo-entry { display: flex; align-items: center; justify-content: center; gap: 10px; text-decoration: none; margin-top: 26px; }
 
 .login-page {
   display: flex;

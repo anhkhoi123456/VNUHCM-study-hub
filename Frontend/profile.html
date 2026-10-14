@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VNU - StudyHub | Hồ sơ cá nhân</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="css/style.css" /><link rel="stylesheet" href="css/dev-banner.css" /><link rel="stylesheet" href="css/background.css" /><link rel="stylesheet" href="css/profile.css" /><link rel="stylesheet" href="css/study-bot.css" />
+  <script src="js/background.js" defer></script><script src="js/study-bot.js" defer></script><script src="js/profile.js" defer></script>
+</head>
+<body data-active-nav="space.html">
+  <div class="app-shell"><aside class="sidebar" data-app-sidebar></aside><div class="main-content">
+    <header class="topbar"><h2>Hồ sơ cá nhân</h2><div class="topbar-actions" data-app-actions></div></header>
+    <main class="page-body profile-page"><a href="space.html" class="profile-back">← Space cá nhân</a><h1>Tài khoản của bạn</h1><p>Cập nhật thông tin cá nhân và mật khẩu.</p>
+      <div class="profile-grid"><section class="profile-card"><h2>Thông tin cá nhân</h2><form id="profileForm"><div class="profile-photo-row"><div id="profilePreview" class="profile-preview"></div><div><label for="profilePhoto">Ảnh đại diện</label><input id="profilePhoto" type="file" accept="image/png,image/jpeg,image/webp" /><small>PNG, JPG, WEBP · Tối đa 1 MB</small><button type="button" id="removePhoto">Xóa ảnh</button></div></div><label for="profileName">Tên hiển thị</label><input id="profileName" maxlength="80" required autocomplete="name" /><label for="profileBio">Bio / Trường đại học</label><textarea id="profileBio" maxlength="200" rows="3" placeholder="Ví dụ: Sinh viên UIT · Công nghệ thông tin"></textarea><button type="submit" class="profile-save">Lưu hồ sơ</button><p id="profileStatus" role="status">Thông tin được lưu cục bộ trên trình duyệt này.</p></form></section>
+      <section class="profile-card"><h2>Change password</h2><p>Nhập mật khẩu hiện tại và xác nhận mật khẩu mới.</p><form id="passwordForm"><label for="currentPassword">Mật khẩu hiện tại</label><input id="currentPassword" type="password" required autocomplete="current-password" /><label for="newPassword">Mật khẩu mới</label><input id="newPassword" type="password" required minlength="8" autocomplete="new-password" /><small>Ít nhất 8 ký tự.</small><label for="confirmPassword">Xác nhận mật khẩu mới</label><input id="confirmPassword" type="password" required minlength="8" autocomplete="new-password" /><button type="submit" class="profile-save">Đổi mật khẩu</button><p id="passwordStatus" role="status">Mật khẩu được thay đổi qua máy chủ tài khoản.</p></form></section></div>
+    </main></div></div>
+  <script src="js/main.js"></script><script src="js/templates.js"></script><script src="js/app-shell.js"></script><script src="js/dev-banner.js"></script><script src="js/account-config.js"></script>
+</body></html>
