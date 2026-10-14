@@ -1,6 +1,7 @@
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
+const { EmailConflictError, AuthConfigError } = require('../src/auth');
 
 const pdf = Buffer.from('%PDF-1.4\n% test\n');
 const documents = {
@@ -21,8 +22,29 @@ const documents = {
 /** In-memory stand-in for the SQL repository. */
 function fakeRepo() {
   const docs = structuredClone(documents);
+  const users = [];
+  const saved = []; // { userId, documentId }
   return {
-    docs,
+    docs, users, saved,
+    upsertUser: async ({ uid, email, name }) => {
+      let user = users.find(u => u.firebaseUid === uid);
+      if (!user) {
+        if (users.some(u => u.email === email)) throw new EmailConflictError();
+        user = { id: users.length + 1, email, displayName: name, role: 'student', firebaseUid: uid };
+        users.push(user);
+      } else if (name) user.displayName = name;
+      return { ...user };
+    },
+    listSavedDocuments: async userId => saved.filter(s => s.userId === userId).reverse().map(s => docs[s.documentId]),
+    saveDocument: async (userId, documentId) => {
+      if (saved.some(s => s.userId === userId && s.documentId === documentId)) return false;
+      saved.push({ userId, documentId });
+      return true;
+    },
+    removeSavedDocument: async (userId, documentId) => {
+      const i = saved.findIndex(s => s.userId === userId && s.documentId === documentId);
+      if (i >= 0) saved.splice(i, 1);
+    },
     getDocument: async id => docs[id] || null,
     recordView: async id => (docs[id] ? ++docs[id].views : null),
     getCourse: async id => (id === 'ctdl' ? { id: 'ctdl', title: 'CTDL', lecturer: 'L', updated: '2024-06-20' } : null),
@@ -49,4 +71,27 @@ function makeStorage() {
   return storage;
 }
 
-module.exports = { fakeRepo, makeStorage };
+/**
+ * Fake Firebase verifier. A token is the key of `identities`; unknown tokens are rejected like an
+ * invalid/expired JWT. Never contacts Firebase.
+ */
+function fakeVerifier(extra = {}) {
+  const identities = {
+    alice: { uid: 'uid-alice', email: 'Alice@gm.uit.edu.vn', email_verified: true, name: 'Alice', firebase: { sign_in_provider: 'password' } },
+    bob: { uid: 'uid-bob', email: 'bob@hcmut.edu.vn', email_verified: true, firebase: { sign_in_provider: 'google.com' } },
+    unverified: { uid: 'uid-u', email: 'u@gm.uit.edu.vn', email_verified: false, firebase: { sign_in_provider: 'password' } },
+    'unverified-google': { uid: 'uid-ug', email: 'ug@gm.uit.edu.vn', email_verified: false, firebase: { sign_in_provider: 'google.com' } },
+    outsider: { uid: 'uid-o', email: 'o@gmail.com', email_verified: true, firebase: { sign_in_provider: 'google.com' } },
+    'no-email': { uid: 'uid-n', email_verified: true, firebase: { sign_in_provider: 'phone' } },
+    'alice-clone': { uid: 'uid-clone', email: 'alice@gm.uit.edu.vn', email_verified: true, firebase: { sign_in_provider: 'google.com' } },
+    ...extra
+  };
+  return { calls: [], async verify(token) {
+    this.calls.push(token);
+    if (token === 'unconfigured') throw new AuthConfigError('no service account');
+    if (!identities[token]) throw new Error('Firebase ID token has expired');
+    return structuredClone(identities[token]);
+  } };
+}
+
+module.exports = { fakeRepo, fakeVerifier, makeStorage };

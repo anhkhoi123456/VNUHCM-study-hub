@@ -1,6 +1,7 @@
 const path = require('path');
 const express = require('express');
 const { toDocument, toCatalog } = require('../serializers');
+const { createMeRouter } = require('./me');
 
 const ID_PATTERN = /^[A-Za-z0-9_-]{1,50}$/;
 const notFound = res => res.status(404).json({ error: 'Not found' });
@@ -13,7 +14,7 @@ function resolveStoragePath(storageDir, relative) {
   return full.startsWith(root + path.sep) ? full : null;
 }
 
-function createApiRouter({ repo, storageDir }) {
+function createApiRouter({ repo, storageDir, requireAuth }) {
   const router = express.Router();
 
   router.get('/health', (req, res) => res.json({ ok: true }));
@@ -61,6 +62,8 @@ function createApiRouter({ repo, storageDir }) {
 
   router.get('/documents/:id/content', sendDocumentFile('filePath', { pdfOnly: false }));
   router.get('/documents/:id/preview', sendDocumentFile('previewPath', { pdfOnly: true }));
+
+  router.use('/me', createMeRouter({ repo, requireAuth }));
 
   router.use((req, res) => notFound(res));
   return router;

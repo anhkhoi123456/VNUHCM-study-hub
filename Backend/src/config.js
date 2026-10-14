@@ -2,7 +2,14 @@ require('dotenv').config({ path: require('path').join(__dirname, '..', '.env'), 
 
 const bool = (value, fallback) => (value === undefined || value === '' ? fallback : value === 'true');
 
+const list = value => (value || '').split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
+const serviceAccountPath = process.env.FIREBASE_SERVICE_ACCOUNT_PATH
+  ? require('path').resolve(__dirname, '..', process.env.FIREBASE_SERVICE_ACCOUNT_PATH)
+  : '';
+
 module.exports = {
+  firebase: { serviceAccountPath },
+  allowedEmailDomains: list(process.env.ALLOWED_EMAIL_DOMAINS),
   port: Number(process.env.PORT) || 3000,
   env: process.env.NODE_ENV || 'development',
   corsOrigins: (process.env.CORS_ORIGIN || '').split(',').map(s => s.trim()).filter(Boolean),

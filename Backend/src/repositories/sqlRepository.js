@@ -1,4 +1,5 @@
 const { sql, getPool } = require('../db');
+const { EmailConflictError } = require('../auth');
 
 const DOCUMENT_COLUMNS = `d.DOCUMENT_ID AS id, d.COURSE_ID AS courseId, c.NAME AS courseTitle, d.TITLE AS title,
   d.[DESCRIPTION] AS description, d.[TYPE] AS type, d.MIME_TYPE AS mimeType, d.LECTURER AS lecturer,
@@ -7,10 +8,11 @@ const DOCUMENT_COLUMNS = `d.DOCUMENT_ID AS id, d.COURSE_ID AS courseId, c.NAME A
 
 /** SQL Server data access. Every query is parameterized. */
 function createSqlRepository(getDb = getPool) {
-  const query = async (text, params = {}) => {
+  // Parameters default to VarChar; pass `types` ({ name: sql.Int }) to override per name.
+  const query = async (text, params = {}, types = {}) => {
     const request = (await getDb()).request();
-    for (const [name, value] of Object.entries(params)) request.input(name, sql.VarChar, value);
-    return (await request.query(text)).recordset;
+    for (const [name, value] of Object.entries(params)) request.input(name, types[name] || sql.VarChar, value);
+    return (await request.query(text)).recordset || [];
   };
 
   return {
@@ -39,6 +41,85 @@ function createSqlRepository(getDb = getPool) {
       return query(
         `SELECT ${DOCUMENT_COLUMNS} FROM dbo.DOCUMENT d JOIN dbo.COURSE c ON c.COURSE_ID = d.COURSE_ID
          WHERE d.COURSE_ID = @courseId ORDER BY d.IS_MASTER DESC, d.UPDATED DESC, d.TITLE`, { courseId });
+    },
+
+    /**
+     * Finds or creates the USERS row for a Firebase identity. A legacy row with the same email and
+     * no uid is adopted; an email owned by another uid is a conflict. Writes only when something
+     * changed (LAST_LOGIN_AT is refreshed at most every 5 minutes).
+     */
+    async upsertUser({ uid, email, name }) {
+      const tx = new sql.Transaction(await getDb());
+      await tx.begin();
+      // Types match the column types so the unique index on FIREBASE_UID stays usable.
+      const types = { uid: sql.VarChar(128), email: sql.NVarChar(254), name: sql.NVarChar(100), id: sql.Int };
+      const run = async (text, params) => {
+        const request = tx.request();
+        for (const [key, value] of Object.entries(params)) request.input(key, types[key], value);
+        return (await request.query(text)).recordset || [];
+      };
+      const columns = 'USER_ID AS id, EMAIL AS email, DISPLAY_NAME AS displayName, [ROLE] AS role, FIREBASE_UID AS firebaseUid';
+      const touch = `LAST_LOGIN_AT = CASE WHEN LAST_LOGIN_AT IS NULL OR LAST_LOGIN_AT < DATEADD(minute, -5, SYSUTCDATETIME())
+                                          THEN SYSUTCDATETIME() ELSE LAST_LOGIN_AT END`;
+      try {
+        let [user] = await run(`SELECT ${columns} FROM dbo.USERS WITH (UPDLOCK, HOLDLOCK) WHERE FIREBASE_UID = @uid`, { uid });
+        if (!user) {
+          const [legacy] = await run(`SELECT ${columns} FROM dbo.USERS WITH (UPDLOCK, HOLDLOCK) WHERE EMAIL = @email`, { email });
+          if (legacy && legacy.firebaseUid) throw new EmailConflictError();
+          if (legacy) {
+            [user] = await run(`UPDATE dbo.USERS SET FIREBASE_UID = @uid, DISPLAY_NAME = COALESCE(@name, DISPLAY_NAME), ${touch}
+                                OUTPUT inserted.USER_ID AS id, inserted.EMAIL AS email, inserted.DISPLAY_NAME AS displayName,
+                                       inserted.[ROLE] AS role, inserted.FIREBASE_UID AS firebaseUid WHERE USER_ID = @id`,
+              { uid, name, id: legacy.id });
+          } else {
+            [user] = await run(`INSERT dbo.USERS (EMAIL, DISPLAY_NAME, FIREBASE_UID, LAST_LOGIN_AT)
+                                OUTPUT inserted.USER_ID AS id, inserted.EMAIL AS email, inserted.DISPLAY_NAME AS displayName,
+                                       inserted.[ROLE] AS role, inserted.FIREBASE_UID AS firebaseUid
+                                VALUES (@email, @name, @uid, SYSUTCDATETIME())`, { uid, email, name });
+          }
+        } else {
+          const [fresh] = await run(
+            'SELECT CASE WHEN LAST_LOGIN_AT IS NULL OR LAST_LOGIN_AT < DATEADD(minute, -5, SYSUTCDATETIME()) THEN 1 ELSE 0 END AS stale FROM dbo.USERS WHERE USER_ID = @id',
+            { id: user.id });
+          const changed = user.email.toLowerCase() !== email || (name && name !== user.displayName) || fresh.stale === 1;
+          if (changed) {
+            [user] = await run(`UPDATE dbo.USERS SET EMAIL = @email, DISPLAY_NAME = COALESCE(@name, DISPLAY_NAME), ${touch}
+                                OUTPUT inserted.USER_ID AS id, inserted.EMAIL AS email, inserted.DISPLAY_NAME AS displayName,
+                                       inserted.[ROLE] AS role, inserted.FIREBASE_UID AS firebaseUid WHERE USER_ID = @id`,
+              { email, name, id: user.id });
+          }
+        }
+        await tx.commit();
+        return user;
+      } catch (error) {
+        await tx.rollback().catch(() => {});
+        if (error.number === 2601 || error.number === 2627) throw new EmailConflictError();
+        throw error;
+      }
+    },
+
+    listSavedDocuments(userId) {
+      return query(
+        `SELECT ${DOCUMENT_COLUMNS} FROM dbo.SAVED_DOCUMENT s
+         JOIN dbo.DOCUMENT d ON d.DOCUMENT_ID = s.DOCUMENT_ID JOIN dbo.COURSE c ON c.COURSE_ID = d.COURSE_ID
+         WHERE s.USER_ID = @userId ORDER BY s.SAVED_AT DESC`, { userId }, { userId: sql.Int });
+    },
+
+    /** Returns true if newly saved, false if it already was. */
+    async saveDocument(userId, documentId) {
+      const rows = await query(
+        `IF NOT EXISTS (SELECT 1 FROM dbo.SAVED_DOCUMENT WHERE USER_ID = @userId AND DOCUMENT_ID = @documentId)
+           INSERT dbo.SAVED_DOCUMENT (USER_ID, DOCUMENT_ID) OUTPUT inserted.DOCUMENT_ID AS id VALUES (@userId, @documentId)`,
+        { userId, documentId }, { userId: sql.Int }).catch(error => {
+        if (error.number === 2627) return []; // concurrent duplicate: already saved
+        throw error;
+      });
+      return rows.length > 0;
+    },
+
+    async removeSavedDocument(userId, documentId) {
+      await query('DELETE dbo.SAVED_DOCUMENT WHERE USER_ID = @userId AND DOCUMENT_ID = @documentId',
+        { userId, documentId }, { userId: sql.Int });
     },
 
     /** Flat rows for the university > faculty > major > course tree; nested by the route layer. */

@@ -6,6 +6,7 @@ const helmet = require('helmet');
 const config = require('./config');
 const { createSqlRepository } = require('./repositories/sqlRepository');
 const { createApiRouter } = require('./routes/api');
+const { createFirebaseVerifier, createRequireAuth } = require('./auth');
 
 /**
  * helmet's default CSP would break the buildless frontend: every page has an inline theme
@@ -33,14 +34,17 @@ function createApp({
   storageDir = path.join(__dirname, '..', 'storage'),
   repoRoot = path.join(__dirname, '..', '..'),
   corsOrigins = config.corsOrigins,
-  development = config.env !== 'production'
+  development = config.env !== 'production',
+  verifier = createFirebaseVerifier(config.firebase.serviceAccountPath),
+  allowedEmailDomains = config.allowedEmailDomains
 } = {}) {
   const app = express();
   app.disable('x-powered-by');
   app.use(helmet({ contentSecurityPolicy, crossOriginResourcePolicy: { policy: 'same-site' } }));
   // Development: reflect any origin. Elsewhere: only listed origins (same-origin needs no CORS).
   app.use('/api', cors({ origin: development ? true : corsOrigins, credentials: true }));
-  app.use('/api', createApiRouter({ repo, storageDir }));
+  const requireAuth = createRequireAuth({ verifier, repo, allowedDomains: allowedEmailDomains });
+  app.use('/api', createApiRouter({ repo, storageDir, requireAuth }));
 
   // Same origin as the API. Only the site itself is public: an allowlist (not "serve the repo root")
   // keeps Backend/ (.env, source, storage), .git and node_modules unreachable, whatever the URL casing.
@@ -58,8 +62,9 @@ function createApp({
 
   // eslint-disable-next-line no-unused-vars
   app.use((error, req, res, next) => {
-    console.error(error);
     if (res.headersSent) return;
+    if (error.status >= 400 && error.status < 500) return res.status(error.status).json({ error: 'Bad request' }); // e.g. malformed JSON
+    console.error(error);
     res.status(500).json({ error: 'Internal server error' });
   });
   return app;
