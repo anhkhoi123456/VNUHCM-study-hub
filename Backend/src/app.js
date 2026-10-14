@@ -30,6 +30,7 @@ const contentSecurityPolicy = {
 function createApp({
   repo = createSqlRepository(),
   storageDir = path.join(__dirname, '..', 'storage'),
+  repoRoot = path.join(__dirname, '..', '..'),
   corsOrigins = config.corsOrigins,
   development = config.env !== 'production'
 } = {}) {
@@ -39,6 +40,13 @@ function createApp({
   // Development: reflect any origin. Elsewhere: only listed origins (same-origin needs no CORS).
   app.use('/api', cors({ origin: development ? true : corsOrigins, credentials: true }));
   app.use('/api', createApiRouter({ repo, storageDir }));
+
+  // Same origin as the API. Only the site itself is public: an allowlist (not "serve the repo root")
+  // keeps Backend/ (.env, source, storage), .git and node_modules unreachable, whatever the URL casing.
+  app.get('/', (req, res) => res.sendFile(path.join(repoRoot, 'index.html')));
+  for (const dir of ['Frontend', 'resources']) {
+    app.use(`/${dir}`, express.static(path.join(repoRoot, dir), { dotfiles: 'ignore', index: false }));
+  }
 
   // eslint-disable-next-line no-unused-vars
   app.use((error, req, res, next) => {

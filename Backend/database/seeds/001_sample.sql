@@ -10,7 +10,7 @@ MERGE dbo.UNIVERSITIES AS t USING (VALUES
   ('IU',    N'Trường Đại học Quốc tế',                           'resources/Logo/IU.webp'),
   ('USSH',  N'Trường Đại học Khoa học Xã hội và Nhân văn',       'resources/Logo/USSH.webp'),
   ('UHS',   N'Trường Đại học Khoa học Sức khỏe',                 'resources/Logo/SK.webp'),
-  ('AGU',   N'Trường Đại học An Giang',                          NULL)
+  ('AGU',   N'Trường Đại học An Giang',                          'resources/Logo/logo-truong-dai-hoc-an-giang-inkythuatso.svg')
 ) AS s (id, name, logo) ON t.UNIVERSITY_ID = s.id
 WHEN MATCHED THEN UPDATE SET NAME = s.name, LOGO_PATH = s.logo
 WHEN NOT MATCHED THEN INSERT (UNIVERSITY_ID, NAME, LOGO_PATH) VALUES (s.id, s.name, s.logo);
