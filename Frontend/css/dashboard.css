@@ -121,18 +121,25 @@
 .school-image-frame {
   padding: 18px;
   overflow: visible;
-  background: #fff;
-  border: 1px solid #e1e8f3;
+  position: relative;
+  isolation: isolate;
+  background: linear-gradient(145deg, #ffffffb8, #ffffff55 48%, #dcecff66);
+  border: 1px solid #ffffffcc;
   border-radius: 22px;
-  box-shadow: 0 4px 16px #24395b0a;
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  box-shadow: inset 0 1px 0 #fffffff2, inset 1px 0 0 #ffffffa6, inset 0 -1px 0 #afc7e84d, 0 10px 30px #49658d12;
   transition: transform .32s cubic-bezier(.22, 1.4, .45, 1), border-color .25s ease, box-shadow .25s ease;
 }
+.school-image-frame::before { content: ''; position: absolute; inset: 0; z-index: -1; border-radius: inherit; background: radial-gradient(ellipse at 0 0, #ffffffc9, transparent 55%), linear-gradient(125deg, transparent 35%, #ffffff38 49%, transparent 65%); pointer-events: none; }
+.school-image-frame::after { content: ''; position: absolute; inset: 1px; border-radius: inherit; border: 1px solid #ffffff4d; pointer-events: none; }
 .school-button:is(:hover, :focus-visible) .school-image-frame {
   transform: translateY(-4px) scale(1.07);
-  border-color: #b5caff;
-  box-shadow: 0 8px 24px #4166b51c;
+  border-color: #ffffff;
+  box-shadow: inset 0 1px 0 #fff, inset 1px 0 0 #ffffffb3, inset 0 -1px 0 #b5cded80, 0 14px 34px #4166b526;
 }
 .school-logo {
+  position: relative;
   display: block;
   width: 100%;
   height: 100%;
