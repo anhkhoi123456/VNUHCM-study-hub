@@ -99,7 +99,7 @@
       </section>
       <section class="plan-card" aria-labelledby="planHeading">
         <div class="plan-header"><h3 id="planHeading"><i class="fa-regular fa-calendar-days"></i> Lộ trình ôn tập (AI đề xuất)</h3><div class="plan-actions"><button id="exportPlan"><i class="fa-solid fa-file-pdf"></i> Xuất kế hoạch PDF</button><label class="week-filter"><i class="fa-regular fa-calendar"></i><select id="weekFilter" aria-label="Khoảng thời gian"><option value="all">Tất cả sprint</option><option value="1">Tuần 1 - 2</option><option value="2">Tuần 3 - 4</option></select></label></div></div>
-        <div class="overall-progress"><strong>Tiến độ tổng quát</strong><progress id="overallProgress" max="8" value="2" aria-label="Tiến độ tổng quát"></progress><strong id="progressPercent">25%</strong><span id="progressText">2/8 sprint hoàn thành</span></div>
+        <div class="overall-progress"><strong>Tiến độ tổng quát</strong><div id="overallProgress" class="overall-progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="25" aria-label="Tiến độ tổng quát"><span id="overallProgressFill"></span></div><strong id="progressPercent">25%</strong><span id="progressText">2/8 sprint hoàn thành</span></div>
         <div id="sprintList" class="planner-sprints"></div>
         <p class="plan-note" id="planNote" role="status">Kế hoạch mẫu để xem trước. Kết nối dịch vụ AI để tạo lộ trình cá nhân hóa.</p>
       </section>

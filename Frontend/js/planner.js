@@ -63,12 +63,16 @@
     $('sprintList').innerHTML = sprints.map((sprint, index) => {
       if ((filter === '1' && sprint.startDay >= 14) || (filter === '2' && sprint.startDay < 14)) return '';
       const count = sprint.checked.filter(Boolean).length, done = count === sprint.tasks.length;
-      return `<article class="planner-sprint ${done ? 'done' : index === firstIncomplete ? 'current' : ''}"><div class="sprint-number">${index + 1}</div><div class="sprint-info"><h4>Sprint ${index + 1}: ${escape(sprint.title)}</h4><p>${escape(sprint.date)}</p></div><div class="sprint-tasks">${sprint.tasks.map((task, taskIndex) => `<label><input type="checkbox" data-sprint="${index}" data-task="${taskIndex}" ${sprint.checked[taskIndex] ? 'checked' : ''} /><span>${escape(task)}</span></label>`).join('')}</div><div class="sprint-status">${done ? '<i class="fa-solid fa-circle-check"></i> Hoàn thành' : `${count}/${sprint.tasks.length} hoàn thành<progress value="${count}" max="${sprint.tasks.length}" aria-label="Tiến độ sprint ${index + 1}"></progress>`}</div><div class="sprint-end"><input type="checkbox" data-complete="${index}" aria-label="Hoàn thành sprint ${index + 1}" ${done ? 'checked' : ''} /><p>${escape(sprint.duration)}</p></div></article>`;
+      return `<article data-sprint-index="${index}" class="planner-sprint ${done ? 'done' : index === firstIncomplete ? 'current' : ''}"><div class="sprint-number">${index + 1}</div><div class="sprint-info"><h4>Sprint ${index + 1}: ${escape(sprint.title)}</h4><p>${escape(sprint.date)}</p></div><div class="sprint-tasks">${sprint.tasks.map((task, taskIndex) => `<label><input type="checkbox" data-sprint="${index}" data-task="${taskIndex}" ${sprint.checked[taskIndex] ? 'checked' : ''} /><span>${escape(task)}</span></label>`).join('')}</div><div class="sprint-status">${done ? '<i class="fa-solid fa-circle-check"></i> Hoàn thành' : `${count}/${sprint.tasks.length} hoàn thành<progress value="${count}" max="${sprint.tasks.length}" aria-label="Tiến độ sprint ${index + 1}"></progress>`}</div><div class="sprint-end"><input type="checkbox" data-complete="${index}" aria-label="Hoàn thành sprint ${index + 1}" ${done ? 'checked' : ''} /><p>${escape(sprint.duration)}</p></div></article>`;
     }).join('');
     const completed = sprints.filter(sprint => sprint.checked.every(Boolean)).length;
-    $('overallProgress').max = sprints.length;
-    $('overallProgress').value = completed;
-    $('progressPercent').textContent = `${Math.round(completed / sprints.length * 100)}%`;
+    const percent = Math.round(completed / sprints.length * 100);
+    const color = `hsl(${percent * 1.2}, 80%, 45%)`;
+    $('overallProgress').setAttribute('aria-valuenow', String(percent));
+    $('overallProgressFill').style.width = `${percent}%`;
+    $('overallProgressFill').style.backgroundColor = color;
+    $('progressPercent').style.color = color;
+    $('progressPercent').textContent = `${percent}%`;
     $('progressText').textContent = `${completed}/${sprints.length} sprint hoàn thành`;
   }
   function setHours(value) {
@@ -136,10 +140,33 @@
   $('aiRequest').addEventListener('input', event => { $('requestCount').textContent = `${event.target.value.length}/1000`; });
   $('sprintList').addEventListener('change', event => {
     const input = event.target;
-    if (input.dataset.complete !== undefined) sprints[Number(input.dataset.complete)].checked.fill(input.checked);
-    else if (input.dataset.sprint !== undefined) sprints[Number(input.dataset.sprint)].checked[Number(input.dataset.task)] = input.checked;
+    const index = Number(input.dataset.complete ?? input.dataset.sprint);
+    if (!Number.isInteger(index) || !sprints[index]) return;
+    const wasComplete = sprints[index].checked.every(Boolean);
+    if (input.dataset.complete !== undefined) sprints[index].checked.fill(input.checked);
+    else if (input.dataset.sprint !== undefined) sprints[index].checked[Number(input.dataset.task)] = input.checked;
     else return;
     renderPlan();
+    const row = $('sprintList').querySelector(`[data-sprint-index="${index}"]`);
+    const replacement = input.dataset.complete !== undefined ? row?.querySelector('[data-complete]') : row?.querySelector(`[data-task="${input.dataset.task}"]`);
+    replacement?.focus({ preventScroll: true });
+    if (!wasComplete && sprints[index].checked.every(Boolean) && row && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      const badge = row.querySelector('.sprint-status');
+      badge.classList.add('sprint-celebrate');
+      for (let particleIndex = 0; particleIndex < 12; particleIndex++) {
+        const particle = document.createElement('span');
+        const angle = particleIndex * Math.PI / 6;
+        particle.className = 'sprint-confetti';
+        particle.setAttribute('aria-hidden', 'true');
+        particle.textContent = particleIndex % 3 === 0 ? '✦' : '•';
+        particle.style.setProperty('--burst-x', `${Math.cos(angle) * (40 + particleIndex % 3 * 10)}px`);
+        particle.style.setProperty('--burst-y', `${Math.sin(angle) * 40 - 15}px`);
+        particle.style.setProperty('--burst-delay', `${particleIndex % 4 * 35}ms`);
+        particle.style.setProperty('--burst-color', ['#2fc46c', '#a56cf5', '#24c7e3', '#ffc452'][particleIndex % 4]);
+        badge.appendChild(particle);
+      }
+      setTimeout(() => { badge.classList.remove('sprint-celebrate'); badge.querySelectorAll('.sprint-confetti').forEach(particle => particle.remove()); }, 1200);
+    }
   });
   $('weekFilter').addEventListener('change', renderPlan);
   $('generatePlan').addEventListener('click', () => {
