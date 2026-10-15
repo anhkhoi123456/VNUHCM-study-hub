@@ -1,0 +1,15 @@
+# SQL Server for local development: `docker compose up -d` (from Backend/).
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    # Required on Apple Silicon (runs under Rosetta); harmless elsewhere.
+    platform: linux/amd64
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: ${DB_PASSWORD:?set DB_PASSWORD in .env}
+    ports:
+      - "${DB_PORT:-1433}:1433"
+    volumes:
+      - sqlserver-data:/var/opt/mssql
+volumes:
+  sqlserver-data:
