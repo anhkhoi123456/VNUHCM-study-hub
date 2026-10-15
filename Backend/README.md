@@ -111,6 +111,8 @@ Then the `USERS` row is found or created by `FIREBASE_UID`. A legacy row with th
 
 **Roles.** `USERS.ROLE` is `student` (default), `moderator` or `admin`. No endpoint changes it; promote someone with SQL, e.g. `UPDATE dbo.USERS SET [ROLE] = 'admin' WHERE EMAIL = 'you@example.com'`. `PASSWORD_HASH` is kept but unused.
 
+**Frontend.** `Frontend/js/firebase-config.js` holds the web app config (public by design; restrict the API key by HTTP referrer in Google Cloud and keep *Authorized domains* tight). `js/auth.js` loads the Firebase SDK (compat build, classic scripts) from `www.gstatic.com`. `index.html` loads it immediately on page load, because `signInWithPopup` must be called synchronously inside the click; other pages load it only when **Logout** is clicked. After Firebase signs the user in, `login.js` calls `GET /api/me` with the ID token and signs out again if the backend refuses (domain, unverified email, server not configured). Without config values, or over `file://`, the login page keeps its original "Frontend preview" messages.
+
 **Tests** use a fake verifier (`tests/helpers.js`); Firebase is never contacted.
 
 ## Tests
