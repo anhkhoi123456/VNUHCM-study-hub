@@ -13,7 +13,11 @@
     <section class="course-hero" aria-labelledby="courseTitle">
       <div class="course-icon" aria-hidden="true">${icon('fa-solid fa-sitemap')}</div>
       <div class="course-heading"><h1 id="courseTitle">${escape(course.title)}</h1><p>${escape(course.department)}</p><div class="course-meta"><span>${icon('fa-regular fa-file-lines')}${course.documents.length} tài liệu</span><span>${icon('fa-regular fa-user')}GV: ${escape(course.lecturer)}</span><span>${icon('fa-regular fa-clock')}Cập nhật: ${date(course.updated)}</span></div></div>
-      <div class="course-image-placeholder" aria-hidden="true">${icon('fa-regular fa-image')}<span>IMAGE PLACEHOLDER</span></div>
+      <div class="course-header-art" aria-hidden="true"><svg class="course-tree-art" viewBox="0 0 260 180" fill="none"><path d="M130 28 76 84M130 28l54 56M76 84l-43 65M76 84l54 65M184 84l-54 65M184 84l43 65" stroke="currentColor" stroke-opacity=".35" stroke-width="3"/><g stroke="currentColor" stroke-width="2.5"><circle cx="130" cy="28" r="17" fill="var(--tree-node)"/><circle cx="76" cy="84" r="17" fill="var(--tree-node)"/><circle cx="184" cy="84" r="17" fill="var(--tree-node)"/><circle cx="33" cy="149" r="17" fill="var(--tree-leaf)"/><circle cx="130" cy="149" r="17" fill="var(--tree-leaf)"/><circle cx="227" cy="149" r="17" fill="var(--tree-leaf)"/></g></svg><pre class="course-node-code">struct Node {
+  int data;
+  Node* left;
+  Node* right;
+};</pre></div>
     </section>
     <div class="course-toolbar"><div class="course-type-filters" role="group" aria-label="Lọc loại tài liệu">
       <button type="button" class="course-type active" data-type="all" aria-pressed="true">Tất cả (${course.documents.length})</button>
