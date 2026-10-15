@@ -67,12 +67,103 @@
     password.autocomplete = registering ? 'new-password' : 'current-password';
     status.textContent = '';
   });
+  // --- Firebase sign-in. Without config or over file:// the original preview messages stay. ---
+  const auth = window.StudyHubAuth;
+  const live = Boolean(auth && auth.available);
+  const googleButton = document.getElementById('googleButton');
+  const submitButton = document.getElementById('submitButton');
+  if (live) auth.preload(); // SDK must be ready before the click: signInWithPopup runs synchronously in it.
+  const apiMessages = {
+    email_domain_not_allowed: 'This email domain is not allowed to use StudyHub.',
+    email_not_verified: 'Verify your email address first.',
+    email_required: 'Your account has no email address.',
+    email_in_use: 'This email already belongs to another account.',
+    auth_not_configured: 'The StudyHub server is not set up for sign-in yet.',
+    invalid_token: 'Your session could not be verified. Please try again.'
+  };
+  const firebaseMessages = {
+    'auth/invalid-credential': 'Wrong email or password.',
+    'auth/wrong-password': 'Wrong email or password.',
+    'auth/user-not-found': 'Wrong email or password.',
+    'auth/invalid-email': 'Enter a valid email address.',
+    'auth/email-already-in-use': 'An account with this email already exists. Try logging in.',
+    'auth/weak-password': 'Choose a stronger password.',
+    'auth/too-many-requests': 'Too many attempts. Wait a moment and try again.',
+    'auth/network-request-failed': 'Network error. Check your connection and try again.',
+    'auth/popup-blocked': 'The sign-in popup was blocked. Allow popups for this site and try again.',
+    'auth/operation-not-allowed': 'This sign-in method is not enabled for the project.',
+    'auth/unauthorized-domain': 'This address is not an authorized domain for sign-in. Use http://localhost:3000.'
+  };
+  const quiet = new Set(['auth/popup-closed-by-user', 'auth/cancelled-popup-request']);
+  class SignInError extends Error {}
+  function explain(error) {
+    if (error instanceof SignInError) return error.message;
+    if (error && quiet.has(error.code)) return '';
+    return (error && firebaseMessages[error.code]) || 'Something went wrong. Please try again.';
+  }
+  async function run(task) {
+    submitButton.disabled = googleButton.disabled = true;
+    status.textContent = '';
+    try { await task(); } catch (error) { status.textContent = explain(error); }
+    finally { submitButton.disabled = googleButton.disabled = false; }
+  }
+  /** The backend is the gate: it checks the token, verified email and allowed domains. */
+  async function finishSignIn(fbAuth) {
+    const user = fbAuth.currentUser;
+    if (!user.emailVerified) {
+      await user.sendEmailVerification().catch(() => {});
+      await fbAuth.signOut();
+      throw new SignInError(`Your email is not verified yet. We sent a new verification link to ${user.email}.`);
+    }
+    let response;
+    try {
+      response = await fetch('/api/me', { headers: { Authorization: `Bearer ${await user.getIdToken()}`, Accept: 'application/json' } });
+    } catch {
+      await fbAuth.signOut();
+      throw new SignInError('Cannot reach the StudyHub server.');
+    }
+    if (!response.ok) {
+      const body = await response.json().catch(() => ({}));
+      await fbAuth.signOut();
+      throw new SignInError(apiMessages[body.code] || `Sign-in failed (${response.status}).`);
+    }
+    window.location.replace('dashboard.html');
+  }
   form.addEventListener('submit', (event) => {
     event.preventDefault();
     setInspecting(false);
-    status.textContent = registering ? 'Frontend preview: account creation is not connected yet.' : 'Frontend preview: login is not connected yet.';
+    if (!live) {
+      status.textContent = registering ? 'Frontend preview: account creation is not connected yet.' : 'Frontend preview: login is not connected yet.';
+      return;
+    }
+    const email = document.getElementById('email').value.trim();
+    const name = document.getElementById('name').value.trim();
+    run(async () => {
+      const fbAuth = await auth.load();
+      if (registering) {
+        const { user } = await fbAuth.createUserWithEmailAndPassword(email, password.value);
+        await user.updateProfile({ displayName: name }).catch(() => {});
+        await user.sendEmailVerification();
+        await fbAuth.signOut();
+        password.value = '';
+        document.getElementById('switchMode').click();
+        status.textContent = `Account created. We sent a verification link to ${email}. Verify it, then log in.`;
+      } else {
+        await fbAuth.signInWithEmailAndPassword(email, password.value);
+        await finishSignIn(fbAuth);
+      }
+    });
   });
-  document.getElementById('googleButton').addEventListener('click', () => {
-    status.textContent = 'Google sign-in is not connected in this frontend preview.';
+  googleButton.addEventListener('click', () => {
+    if (!live) {
+      status.textContent = 'Google sign-in is not connected in this frontend preview.';
+      return;
+    }
+    const fbAuth = auth.current();
+    if (!fbAuth) { status.textContent = 'Sign-in is still loading. Try again in a moment.'; return; }
+    const provider = new window.firebase.auth.GoogleAuthProvider();
+    provider.setCustomParameters({ prompt: 'select_account' });
+    // Called synchronously inside the click so the browser does not block the popup.
+    run(() => fbAuth.signInWithPopup(provider).then(() => finishSignIn(fbAuth)));
   });
 })();

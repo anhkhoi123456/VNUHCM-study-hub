@@ -1,5 +1,14 @@
 (() => {
   const key = 'studyhub-profile-v1';
+  // Firebase is loaded lazily here (only index.html loads it eagerly); a slow or failed sign-out must not trap the user.
+  function loadScript(src) { return new Promise((resolve, reject) => { const element = document.createElement('script'); element.src = src; element.onload = resolve; element.onerror = reject; document.head.append(element); }); }
+  async function firebaseSignOut() {
+    const signOut = (async () => {
+      if (!window.StudyHubAuth) { await loadScript('js/firebase-config.js'); await loadScript('js/auth.js'); }
+      await window.StudyHubAuth.signOut();
+    })().catch(() => { /* Not configured or offline: just leave the page. */ });
+    await Promise.race([signOut, new Promise(resolve => setTimeout(resolve, 4000))]);
+  }
   function read() {
     try { const saved = JSON.parse(localStorage.getItem(key)); if (saved && typeof saved.name === 'string') return { name: saved.name.slice(0, 80), bio: typeof saved.bio === 'string' ? saved.bio.slice(0, 200) : '', photo: typeof saved.photo === 'string' && /^data:image\/(png|jpeg|webp);base64,/.test(saved.photo) ? saved.photo : '' }; } catch { /* Use default profile. */ }
     return { name: 'Nguyễn Văn A', bio: 'Sinh viên', photo: '' };
@@ -30,7 +39,11 @@
       document.addEventListener('click', event => { if (!user.contains(event.target) && !menu.contains(event.target)) close(); });
       document.addEventListener('keydown', event => { if (event.key === 'Escape' && !menu.hidden) { close(); user.focus(); } });
       window.addEventListener('resize', close);
-      menu.querySelector('#logoutButton').addEventListener('click', () => { try { sessionStorage.removeItem('studyhub-session'); } catch { /* Storage may be unavailable. */ } location.replace('index.html'); });
+      menu.querySelector('#logoutButton').addEventListener('click', async () => {
+        try { sessionStorage.removeItem('studyhub-session'); } catch { /* Storage may be unavailable. */ }
+        await firebaseSignOut();
+        location.replace('index.html');
+      });
 
     }
     const form = document.getElementById('profileForm'); if (!form) return;
