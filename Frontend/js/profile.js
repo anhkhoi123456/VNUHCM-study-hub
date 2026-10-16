@@ -11,6 +11,9 @@
   }
   function update() {
     const profile = read();
+    let admin = false;
+    try { admin = JSON.parse(sessionStorage.getItem('studyhub-session'))?.role === 'admin'; } catch {}
+    if (admin) profile.bio = 'Admin';
     document.querySelectorAll('.sidebar-user .user-info h4').forEach(element => element.textContent = profile.name);
     document.querySelectorAll('.sidebar-user .user-info p').forEach(element => element.textContent = profile.bio || 'Sinh viên');
     document.querySelectorAll('.user-avatar, .avatar-btn').forEach(element => avatar(element, profile));

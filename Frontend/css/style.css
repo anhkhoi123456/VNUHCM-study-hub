@@ -168,6 +168,16 @@ html:not([data-theme="dark"]) .cursor-ring.is-interactive { border-color: #009bb
 .nav-item:is(:hover, :focus-visible) i { transform: scale(1.15); }
 .sidebar .logo-icon i { transition: transform .32s cubic-bezier(.22, 1.4, .45, 1); }
 .sidebar .sidebar-logo:hover .logo-icon i { transform: scale(1.15); }
+.brand-book { width: 28px; height: 28px; flex-shrink: 0; transition: transform .32s cubic-bezier(.22, 1.4, .45, 1); }
+.sidebar-logo:hover .brand-book { transform: scale(1.1); }
+.brand-book .book-line { stroke-dasharray: 1; stroke-dashoffset: 1; animation: brand-page-write 6s ease-in-out infinite; }
+.brand-book .line-2 { animation-delay: .3s; }
+.brand-book .line-3 { animation-delay: .6s; }
+.brand-book .line-4 { animation-delay: .9s; }
+.brand-book .line-5 { animation-delay: 1.2s; }
+.brand-book .line-6 { animation-delay: 1.5s; }
+@keyframes brand-page-write { 0%, 8% { stroke-dashoffset: 1; opacity: 0; } 10% { opacity: 1; } 25%, 65% { stroke-dashoffset: 0; opacity: 1; } 82%, 100% { stroke-dashoffset: 0; opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .brand-book { transition: none; } .brand-book .book-line { animation: none; stroke-dashoffset: 0; } .sidebar-logo:hover .brand-book { transform: none; } }
 @media (prefers-reduced-motion: reduce) {
   .nav-item i, .sidebar .logo-icon i { transition: none; }
   .nav-item:is(:hover, :focus-visible) i,

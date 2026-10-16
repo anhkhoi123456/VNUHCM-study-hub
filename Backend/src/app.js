@@ -20,8 +20,8 @@ const contentSecurityPolicy = {
     fontSrc: ["'self'", 'data:', 'https://cdnjs.cloudflare.com', 'https://fonts.gstatic.com'],
     imgSrc: ["'self'", 'data:', 'https:'],
     connectSrc: ["'self'"],
-    frameSrc: ["'self'"],
-    objectSrc: ["'self'"], // the native PDF viewer may embed via <object>/<embed>
+    frameSrc: ["'self'", 'blob:'],
+    objectSrc: ["'self'", 'blob:'], // the native PDF viewer may embed via <object>/<embed>
     frameAncestors: ["'self'"],
     baseUri: ["'self'"],
     formAction: ["'self'"]

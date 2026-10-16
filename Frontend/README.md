@@ -76,3 +76,10 @@ The DSA list currently uses sample IDs (`ctdl-master`, `ctdl-slides`); map those
 The iframe loads the backend PDF URL directly. The browser's native PDF viewer supplies thumbnails, search, page navigation, zoom and print where supported; appearance depends on the browser. Office files require a PDF preview for inline viewing; otherwise users can open the original backend file.
 
 Serve PDFs inline with `Content-Type: application/pdf` and permit embedding in the file server's frame policy. Cookie/signed URL authentication works for embedded content; an iframe cannot add custom bearer headers. Cross-origin APIs need CORS and appropriate credential configuration. Missing records, unavailable files and connection errors have explicit states and retry behavior. No file content is fabricated or stored locally.
+
+
+### Local admin preview
+
+On the login page, choose **Sign in as Admin**, enter an email and a password of at least eight characters, then submit. These fields are validated for format only; this is a demo, not authentication. Admin sign-in opens `dsa.html` with Upload documents and Delete controls. Student sign-in opens the dashboard without those controls. Logout clears the role from session storage.
+
+Uploads (PDF, PPTX, DOCX and XLSX, up to 20 MB) and deletion markers persist in IndexedDB in the current browser/origin. Uploaded PDFs can be viewed on the file page; Office files can be opened through the original-file link. Deleted sample documents are hidden locally; no server records or files are changed. Use HTTP localhost for reliable storage. Production admin access requires authenticated server sessions and authorization on write endpoints; the current backend remains read-only.

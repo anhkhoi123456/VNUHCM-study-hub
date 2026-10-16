@@ -21,6 +21,45 @@
       <div class="file-preview" id="filePreview"><div class="file-empty" id="fileEmpty">${icon('fa-regular fa-file')}<h2 id="fileEmptyTitle">Chưa có tệp để hiển thị</h2><p id="fileEmptyMessage">Tài liệu sẽ được hiển thị khi nguồn đã kết nối cung cấp đường dẫn tệp.</p></div><iframe id="pdfViewer" title="Nội dung tài liệu PDF" hidden></iframe></div>
     </section>`;
   const el = id => document.getElementById(id);
+  if (StudyHubAdmin.isAdmin()) {
+    const actions = main.querySelector('.file-control-actions');
+    actions.insertAdjacentHTML('afterbegin', `<span class="file-admin-badge">${icon('fa-solid fa-shield-halved')}Admin</span>
+      <button class="file-action file-upload" type="button" id="adminUpload">${icon('fa-solid fa-arrow-up-from-bracket')}Upload document</button>
+      <button class="file-action file-delete" type="button" id="adminDelete" ${!documentId || !course ? 'disabled' : ''}>${icon('fa-regular fa-trash-can')}Delete document</button>`);
+    main.insertAdjacentHTML('beforeend', `<dialog class="file-upload-dialog" id="fileUploadDialog" aria-labelledby="uploadTitle">
+      <form id="fileUploadForm"><h2 id="uploadTitle">Upload document</h2>
+      <p>Add a document to this course.</p>
+      <label for="uploadName">Document title</label><input id="uploadName" name="title" maxlength="160" placeholder="Enter document title" required>
+      <label for="uploadDescription">Description</label><textarea id="uploadDescription" name="description" maxlength="500" rows="3" placeholder="Brief description (optional)"></textarea>
+      <label for="uploadFile">Choose file</label><input id="uploadFile" name="file" type="file" accept=".pdf,.pptx,.docx,.xlsx" required>
+      <p class="file-upload-hint">PDF, PPTX, DOCX or XLSX · Up to 20 MB</p>
+      <p id="fileUploadStatus" role="status"></p>
+      <div class="file-dialog-actions"><button class="file-action" id="cancelFileUpload" type="button">Cancel</button><button class="file-action file-upload" type="submit">${icon('fa-solid fa-arrow-up-from-bracket')}Upload document</button></div>
+      </form></dialog>`);
+    el('adminUpload').disabled = !course;
+    el('adminUpload').addEventListener('click', () => el('fileUploadDialog').showModal());
+    el('cancelFileUpload').addEventListener('click', () => el('fileUploadDialog').close());
+    el('fileUploadForm').addEventListener('submit', async event => {
+      event.preventDefault();
+      const form = event.currentTarget;
+      const button = form.querySelector('[type="submit"]');
+      button.disabled = true;
+      el('fileUploadStatus').textContent = 'Uploading…';
+      try {
+        const id = await StudyHubAdmin.upload(courseId, course, form.elements.file.files[0], form.elements.title.value, form.elements.description.value);
+        location.assign(`file.html?document=${encodeURIComponent(id)}&course=${encodeURIComponent(courseId)}`);
+      } catch (error) { el('fileUploadStatus').textContent = error.message; }
+      finally { button.disabled = false; }
+    });
+    el('adminDelete').addEventListener('click', async () => {
+      if (busy || !confirm(`Delete "${el('fileTitle').textContent}"?`)) return;
+      el('adminDelete').disabled = true;
+      try {
+        await StudyHubAdmin.remove(courseId, documentId);
+        location.assign(courseId === 'ctdl' ? 'dsa.html' : 'uit-is-cttt-subjects.html');
+      } catch (error) { setStatus(error.message, true); el('adminDelete').disabled = false; }
+    });
+  }
   function setStatus(message, error = false) {
     el('fileStatus').textContent = message;
     el('fileStatus').classList.toggle('is-error', error);
@@ -86,7 +125,13 @@
     setBusy(true);
     setStatus('Đang tải tài liệu...');
     try {
-      const data = await api.get(documentId);
+      let local;
+      try { local = await StudyHubAdmin.get(documentId); }
+      catch (error) { if (documentId.startsWith('local-')) throw error; }
+      if (local?.deleted) throw new Error('This document has been deleted from this browser.');
+      const localUrl = local?.blob ? URL.createObjectURL(local.blob) : null;
+      if (localUrl) window.addEventListener('pagehide', () => URL.revokeObjectURL(localUrl), { once: true });
+      const data = localUrl ? { ...local, fileUrl: localUrl } : await api.get(documentId);
       showRecord(data);
       setStatus(data.fileUrl || data.previewUrl ? 'Đã tải tài liệu từ nguồn đã kết nối.' : 'Tài liệu chưa có tệp đính kèm từ nguồn đã kết nối.');
     } catch (error) {

@@ -4,6 +4,13 @@
   const status = document.getElementById('formStatus');
   const toggle = document.getElementById('togglePassword');
   let registering = false;
+  let role = 'student';
+  document.querySelectorAll('[data-role]').forEach(button => button.addEventListener('click', () => {
+    role = button.dataset.role;
+    document.querySelectorAll('[data-role]').forEach(item => item.setAttribute('aria-pressed', String(item === button)));
+    document.getElementById('submitButton').textContent = role === 'admin' ? 'Sign in as Admin' : 'Login';
+    status.textContent = role === 'admin' ? 'Admin demo: upload and delete documents on course pages.' : '';
+  }));
   let inspecting = false;
   let hoveringPassword = false;
   const wrap = password.closest('.password-wrap');
@@ -57,6 +64,9 @@
   setInspecting(false);
   document.getElementById('switchMode').addEventListener('click', () => {
     registering = !registering;
+    role = 'student';
+    document.getElementById('roleOptions').hidden = registering;
+    document.querySelectorAll('[data-role]').forEach(item => item.setAttribute('aria-pressed', String(item.dataset.role === 'student')));
     setInspecting(false);
     document.getElementById('nameField').hidden = !registering;
     document.getElementById('name').required = registering;
@@ -70,7 +80,14 @@
   form.addEventListener('submit', (event) => {
     event.preventDefault();
     setInspecting(false);
-    status.textContent = registering ? 'Frontend preview: account creation is not connected yet.' : 'Frontend preview: login is not connected yet.';
+    if (registering) {
+      status.textContent = 'Frontend preview: account creation is not connected yet.';
+      return;
+    }
+    try {
+      sessionStorage.setItem('studyhub-session', JSON.stringify({ role }));
+      location.assign(role === 'admin' ? 'dsa.html' : 'dashboard.html');
+    } catch { status.textContent = 'Browser session storage is unavailable. Enable storage to sign in.'; }
   });
   document.getElementById('googleButton').addEventListener('click', () => {
     status.textContent = 'Google sign-in is not connected in this frontend preview.';

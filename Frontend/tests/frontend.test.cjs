@@ -62,12 +62,12 @@ test('all refactored HTML dependencies and data-driven links resolve locally', (
   }
 });
 
-test('course page filters type and text together and links to the reusable file page', () => {
-  const ids = Object.fromEntries(['courseDocuments', 'courseSearch', 'courseEmpty'].map(id => [id, element('')]));
+test('course page filters type and text together and links to the reusable file page', async () => {
+  const ids = Object.fromEntries(['courseDocuments', 'courseSearch', 'courseEmpty', 'adminStatus'].map(id => [id, element('')]));
   const buttons = ['all', 'PDF', 'PPTX'].map(type => ({ ...element(), dataset: { type } }));
-  const main = { ...element(), dataset: { courseId: 'ctdl' }, querySelectorAll: () => buttons };
-  const ctx = context({ document: { querySelector: () => main, getElementById: id => ids[id] } });
-  vm.runInContext(read('js/course-detail.js'), ctx);
+  const main = { ...element(), dataset: { courseId: 'ctdl' }, querySelectorAll: () => buttons, querySelector: () => ({ before() {} }) };
+  const ctx = context({ StudyHubAdmin: { merge: async (id, documents) => documents, isAdmin: () => false }, document: { createElement: () => element(), querySelector: () => main, getElementById: id => ids[id] } });
+  await vm.runInContext(read('js/course-detail.js'), ctx);
   const rows = () => (ids.courseDocuments.innerHTML.match(/<tr>/g) || []).length;
   assert.equal(rows(), 2);
   buttons[1].listeners.click(); assert.equal(rows(), 1);

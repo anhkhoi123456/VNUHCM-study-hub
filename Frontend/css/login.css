@@ -97,3 +97,9 @@ body::after { animation: purple-wave-large 24s ease-in-out infinite; }
   .check-stroke { stroke-dashoffset: 0; opacity: 1; }
   .particle { opacity: 0; }
 }
+
+.role-options { display:flex; gap:8px; margin-bottom:12px; }
+.role-options[hidden] { display:none; }
+.role-option { flex:1; padding:11px 8px; border:1px solid #ded5ef; border-radius:9px; background:transparent; color:inherit; font-size:12px; }
+.role-option[aria-pressed="true"] { background:#7d2efa; border-color:#7d2efa; color:white; }
+.role-note { font-size:12px; line-height:1.5; color:#82758f; margin:0 0 20px; }

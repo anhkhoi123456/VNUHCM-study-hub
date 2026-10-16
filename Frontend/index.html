@@ -31,6 +31,8 @@
 <section class="form-panel">
 <div class="account-switch"><span id="switchPrompt">New to StudyHub?</span><button id="switchMode" type="button">SIGN UP</button></div>
 <div class="form-content"><h1>Welcome to StudyHub!</h1><p class="subtitle" id="formSubtitle">Log in to your account</p>
+<div class="role-options" id="roleOptions" role="group" aria-label="Sign-in role"><button type="button" class="role-option" data-role="student" aria-pressed="true">Sign in as Student</button><button type="button" class="role-option" data-role="admin" aria-pressed="false">Sign in as Admin</button></div>
+<p class="role-note" id="roleNote">Demo sign-in. Documents and roles are saved in this browser only.</p>
 <form id="loginForm">
 <div class="field" id="nameField" hidden><label for="name">Name</label><input id="name" name="name" autocomplete="name" placeholder="Your name" maxlength="80"></div>
 <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" autocomplete="email" placeholder="you@example.com" required></div>

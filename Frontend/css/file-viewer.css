@@ -23,3 +23,27 @@
 .file-empty { display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 16px; width: 100%; padding: 48px 24px; text-align: center; color: #8a98ad; }.file-empty > i { font-size: 60px; color: #afbed3; }.file-empty h2 { color: #445b7a; font-size: 20px; font-weight: 600; }.file-empty p { max-width: 440px; line-height: 1.8; font-size: 13px; }
 .file-page a:focus-visible, .file-page button:focus-visible { outline: 3px solid #80aafa; outline-offset: 3px; }
 @media (max-width: 680px) { .file-body { padding: 20px 16px; gap: 18px; }.file-heading { align-items: flex-start; gap: 14px; }.file-type-icon { width: 58px; height: 70px; border-radius: 10px; }.file-type-icon > i { font-size: 30px; }.file-title-line h1 { font-size: 18px; }.file-heading-copy > p { font-size: 12px; }.file-metadata { gap: 8px 12px; font-size: 12px; }.file-control-actions { width: 100%; }.file-action { flex: 1; }.file-workspace { min-height: 500px; }.file-preview { min-height: 400px; } }
+
+/* Admin document actions */
+.file-admin-badge { display:inline-flex; align-items:center; gap:7px; padding:6px 10px; border-radius:20px; background:#eee5ff; color:#7945bf; font-size:11px; font-weight:700; }
+.file-page .file-upload { background:#8950df; border-color:#8950df; color:#fff; }
+.file-page .file-upload:hover { background:#763bc9; border-color:#763bc9; }
+.file-page .file-delete { background:#fff0f3; border-color:#f2becd; color:#c43d60; }
+.file-page .file-delete:hover { background:#ffe0e8; }
+.file-upload-dialog { width:min(480px, calc(100% - 32px)); box-sizing:border-box; padding:28px; border:1px solid #ddd2ed; border-radius:18px; background:#fff; color:#26344c; box-shadow:0 24px 80px #08031155; }
+.file-upload-dialog::backdrop { background:#090615aa; backdrop-filter:blur(5px); }
+.file-upload-dialog h2 { margin:0 0 8px; font-size:23px; }
+.file-upload-dialog p { font-size:13px; line-height:1.6; margin:8px 0 18px; }
+.file-upload-dialog label { display:block; margin:18px 0 8px; font-size:13px; font-weight:600; }
+.file-upload-dialog input,.file-upload-dialog textarea { width:100%; box-sizing:border-box; padding:11px 12px; border:1px solid #d9d0e6; border-radius:9px; background:transparent; color:inherit; font:inherit; font-size:13px; }
+.file-upload-dialog textarea { resize:vertical; }
+.file-upload-dialog input:focus-visible,.file-upload-dialog textarea:focus-visible { outline:2px solid #a97de9; outline-offset:2px; }
+.file-upload-hint { color:#7c7590; }
+.file-dialog-actions { display:flex; justify-content:flex-end; gap:10px; margin-top:22px; }
+html[data-theme="dark"] .file-admin-badge { background:#352248; color:#c9a0ff; }
+html[data-theme="dark"] .file-page .file-upload { background:#9251e6; border-color:#ad78f1; color:white; }
+html[data-theme="dark"] .file-page .file-delete { background:#3a2035; border-color:#854462; color:#ff9fba; }
+html[data-theme="dark"] .file-upload-dialog { background:#1d162b; color:#ece4f8; border-color:#684580; }
+html[data-theme="dark"] .file-upload-dialog input,html[data-theme="dark"] .file-upload-dialog textarea { border-color:#624579; }
+html[data-theme="dark"] .file-upload-hint { color:#b4a3c6; }
+@media(max-width:680px) { .file-admin-badge { align-self:center; } .file-upload-dialog { padding:22px; } }
