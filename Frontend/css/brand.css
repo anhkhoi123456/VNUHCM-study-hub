@@ -1,0 +1,17 @@
+/* Shared StudyHub identity: blue pages, cyan accent, and a clear wordmark. */
+.studyhub-mark { display: block; flex-shrink: 0; object-fit: contain; }
+.studyhub-wordmark { color: #203d91; font-weight: 800; letter-spacing: -1px; white-space: nowrap; }
+.studyhub-hub { color: #00a4e5; }
+.brand { gap: 10px; color: #1254cf; font-size: 28px; letter-spacing: normal; }
+.brand .studyhub-mark { width: 54px; height: 54px; }
+.sidebar-logo { gap: 10px; min-height: 80px; }
+.sidebar-logo .logo-icon { width: 44px; height: 44px; background: transparent; border-radius: 0; }
+.sidebar-logo .studyhub-mark { width: 44px; height: 44px; }
+.sidebar-logo .logo-text { min-width: 0; }
+.sidebar-logo .studyhub-wordmark { font-size: 25px; line-height: 1.2; }
+[data-theme="dark"] .studyhub-wordmark { color: #82b6ff; }
+[data-theme="dark"] .studyhub-hub { color: #30c7ff; }
+@media (max-width: 700px) {
+  .brand { margin: 20px 28px; font-size: 26px; }
+  .brand .studyhub-mark { width: 46px; height: 46px; }
+}
